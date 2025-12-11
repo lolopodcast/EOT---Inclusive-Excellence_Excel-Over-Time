@@ -84,7 +84,13 @@
         ];
 
         const identities = [
-            "高中師生", "大學師生", "大學行政", "學生家長", "校友系友", "產業先進", "其他"
+            "高中師生 (High School Teachers/Students)",
+            "大學師生 (University Teachers/Students)",
+            "大學行政 (University Administration)",
+            "學生家長 (Parents)",
+            "校友系友 (Alumni)",
+            "產業先進 (Industry Professionals)",
+            "其他 (Others)"
         ];
 
         const languageOptions = [
@@ -103,210 +109,319 @@
         ];
 
         const glossaryKeys = [
-            { t: "Inclusive Excellence (IE)", d: "Excellence and inclusion are inseparable." },
-            { t: "Meritocracy", d: "System rewarding past credentials, often ignoring inequity." },
-            { t: "Gatekeeping", d: "Defining value by exclusion." },
-            { t: "Groundskeeping", d: "Cultivating diverse talent to thrive." },
-            { t: "Contextualized Review", d: "Evaluating achievement within socioeconomic context." },
-            { t: "Resilience Flag", d: "Weighted marker for high performance despite low resources." },
-            { t: "Distance Traveled", d: "Measuring progress from starting point." },
-            { t: "Strategic Framework", d: "A structured plan to achieve long-term goals." },
-            { t: "Asset-based Model", d: "Viewing diversity as a source of innovation." },
-            { t: "Cultural Capital", d: "Social assets promoting social mobility." },
-            { t: "OIE Office", d: "Office of Inclusive Excellence." },
-            { t: "Systematic Change", d: "Fundamental changes in policies and practices." },
-            { t: "USR Impact", d: "University Social Responsibility effect." },
-            { t: "Rubric Scoring", d: "Scoring guide ensuring evaluation consistency." },
-            { t: "AI Disclosure", d: "Statement revealing use of AI in work." },
-            { t: "Honors Degree", d: "Degree indicating high academic achievement." },
-            { t: "Peer Mentoring", d: "Students supporting other students." },
-            { t: "Capstone Project", d: "Culminating academic project." },
-            { t: "Career Development", d: "Managing learning and work over lifespan." },
-            { t: "EMI Learning", d: "English as Medium of Instruction." },
-            { t: "Digital Transformation", d: "Integrating digital tech into all areas." },
-            { t: "Learning Analytics", d: "Measurement and analysis of data about learners." }
+            { t: "Inclusive Excellence (共融性卓越)", d: "相信多元性(Diversity)、共融性(Inclusion)與卓越(Excellence)密不可分。真正的卓越必須建立在讓所有背景的學生都能「歸屬、成長、貢獻」的基礎上。" },
+            { t: "Groundskeeper (園丁)", d: "暨大看待自己的角色。不是用高牆篩選，而是創造適合不同「植物」生長的環境，理解每個人需要不同養分，相信多樣性的校園最繁榮。" },
+            { t: "Gatekeeper (守門員)", d: "傳統大學角色，用高牆把人擋在外面，只讓「最好的」進來，目標是「拒絕多少人」。" },
+            { t: "EOT (Excel Over Time)", d: "暨大的核心理念延伸。強調的不是你從哪裡出發(起點)，而是你如何持續成長(過程)。" },
+            { t: "Growth Trajectory (成長軌跡)", d: "不只看你現在在哪，更看你如何一路走來。在有限資源下的進步、面對挫折的調適、持續學習的動力。" },
+            { t: "Potential for Excellence (卓越潛力)", d: "不是已經完美，而是未來能走多遠。包括學習動機、好奇心、韌性、創造力、社會關懷。" },
+            { t: "Cultural Capital (文化資本)", d: "每個人成長背景帶來的獨特資源。新住民二代的雙語能力、偏鄉生的在地知識、原住民學生的文化智慧。" },
+            { t: "Excellence for Others", d: "真正的卓越不是個人成就，而是用你的天賦服務他人。" },
+            { t: "Differentiated Support (差異化支持)", d: "理解每個學生起點不同，提供他們需要的協助。不是降低標準，而是幫助每個人達到相同的高標準。" },
+            { t: "Community-Engaged Learning (社區實踐學習)", d: "走出教室，在真實問題中學習。" },
+            { t: "Digital Empowerment (數位賦能)", d: "透過豐富強韌的數位基礎設施，打破地理限制，讓暨大學生能隨時隨地與台灣及全球各地線上串聯。" },
+            { t: "Two-Stage Collaboration (兩階段協作)", d: "招生辦公室看多元背景(Inclusive)，院系教授看卓越潛力(Excellence)。" }
         ];
 
         // --- 2. Content Data Structures ---
 
-        // English Content Structure (Base)
-        const baseContentENG = {
-            meta: { 
-                title: "EOT - Excel Over Time", 
-                slogan: "Inclusive excellence, excelling over time.", 
-                nav: "Navigation", 
-                glossary: "Glossary", 
-                try: "Try Again", 
-                copyright: "Copyright © 2025 EOT - Excel Over Time. All Rights Reserved." 
-            },
-            labels: { 
-                highlights: "Highlights", 
-                actionPlan: "Action Plan", 
-                keywords: "Keywords", 
-                flashcards: "Flash Cards", 
-                quiz: "Quick Quiz", 
-                videos: "Video Playlists", 
-                history: "Usage History", 
-                feedback: "Feedback & Contact" 
-            },
-            sections: [
-                { t: "0. Executive Summary", h: ["Core Strategy: Inclusive Excellence (IE).", "Transformation: Gatekeeping to Groundskeeping.", "Dual Practice: 2-Stage Admissions & Honors."], a: ["Establish OIE Office.", "Implement Context Review.", "Launch Honors Pilot."], k: ["Inclusive Excellence", "Gatekeeping", "Framework"] },
-                { t: "1. Vision & Philosophy", h: ["Redefining: From Exclusivity to Inclusion.", "Asset Model: Diversity as Capital.", "Creating Winners: Not just finding."], a: ["Publish IE White Paper.", "Promote Context Assessment.", "Widen pool, don't lower standards."], k: ["Asset-based Model", "Cultural Capital", "Context"] },
-                { t: "2. Strategic Roadmap", h: ["Phase 1: Roots & Consensus.", "Phase 2: Systematic Change.", "Phase 3: Diffusion."], a: ["Launch OIE.", "Revise promotion criteria.", "Early warning network."], k: ["OIE Office", "Systematic Change", "USR Impact"] },
-                { t: "3. Admissions Strategy", h: ["2-Stage Review: Context + Potential.", "Stage 1: Resilience Flags.", "Stage 2: Essay & AI Disclosure."], a: ["Build Data Dashboard.", "Design Structured Essays.", "AI Literacy Test."], k: ["Resilience Flag", "Rubric Scoring", "AI Disclosure"] },
-                { t: "4. Honors Program", h: ["Transform Book Prize: Top 5% to Honors.", "Self to Society: Impact funds.", "Modules: Input + Output."], a: ["AI/EMI Courses.", "Peer Mentoring.", "Capstone Project."], k: ["Honors Degree", "Peer Mentoring", "Capstone"] },
-                { t: "5. Video Playlists", h: ["Talks on career and industry.", "EMI and digital materials.", "Freshman info."], a: ["Watch 'Seeing the World'.", "Familiarize with EMI.", "Learn digital design."], k: ["Career", "EMI", "Digital"] },
-                { t: "6. Usage History", h: ["View login info.", "Track progress.", "Analyze performance."], a: ["Check progress regularly.", "Review incorrect sections."], k: ["Analytics", "Tracking", "Profile"] },
-                { t: "7. Feedback & Contact", h: ["Provide feedback.", "Contact creator.", "Join co-creation."], a: ["Fill feedback form.", "Send email."], k: ["Feedback", "Communication", "Co-creation"] }
-            ]
-        };
+        // Helper for building theme structures
+        const buildThemes = (major, minor) => ({ title: major, content: "", subThemes: minor });
 
-        // Traditional Chinese Content Structure
+        // Base TC Content
         const baseContentTC = {
-            meta: { 
-                title: "EOT - Excel Over Time", 
-                slogan: "Inclusive excellence, excelling over time.", 
-                nav: "導覽目錄", 
-                glossary: "術語表", 
-                try: "再試一次", 
-                copyright: "版權所有 © 2025 EOT - Excel Over Time. 保留所有權利。" 
-            },
-            labels: { 
-                highlights: "重點摘要", 
-                actionPlan: "行動計畫", 
-                keywords: "關鍵字", 
-                flashcards: "觀念翻轉卡", 
-                quiz: "隨堂測驗", 
-                videos: "精選播放清單", 
-                history: "使用歷程", 
-                feedback: "留言與聯絡" 
-            },
+            meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", nav: "導覽目錄", glossary: "術語表", try: "再試一次", copyright: "版權所有 © 2025 EOT - Excel Over Time. 保留所有權利。" },
+            labels: { highlights: "重點摘要", actionPlan: "行動計畫", keywords: "關鍵字", flashcards: "學習卡 (Learning Cards)", quiz: "自我檢視 (Self-Check)", videos: "精選短片", history: "使用歷程", feedback: "歡迎聯絡", themes: "主題探索 (Themes)" },
             sections: [
-                { t: "0. 執行摘要", h: ["核心戰略：導入共融性卓越 (IE)。", "關鍵轉型：從守門員轉為園丁。", "雙軌實踐：兩階段審查 + 榮譽學程。"], a: ["成立 OIE 辦公室。", "建立情境化審查機制。", "啟動榮譽學程先導班。"], k: ["共融性卓越", "守門員", "策略架構"] },
-                { t: "1. 願景與哲學", h: ["重新定義卓越：從稀缺性轉向共融性。", "資產模式：視弱勢背景為文化資本。", "創造贏家：挖掘潛力而非僅尋找現成贏家。"], a: ["發布 IE 白皮書。", "推動情境化評估。", "消除降低標準的誤解。"], k: ["資產導向", "文化資本", "情境化"] },
-                { t: "2. 策略發展藍圖", h: ["第一階段：紮根與共識。", "第二階段：系統性變革。", "第三階段：典範與擴散。"], a: ["啟動 OIE。", "修訂升等辦法。", "建立預警網絡。"], k: ["OIE辦公室", "系統變革", "USR影響力"] },
-                { t: "3. 多元入學策略", h: ["兩階段審查：校級 + 院系級。", "第一階段：韌性標記。", "第二階段：Essay 與 AI 聲明。"], a: ["建置數據儀表板。", "設計結構化 Essay。", "實施 AI 素養測驗。"], k: ["韌性標記", "評分規準", "AI聲明"] },
-                { t: "4. 榮譽學程", h: ["轉型書卷獎：前 5% 學生進入。", "兼善天下：獎金轉專題基金。", "雙模組：Input + Output。"], a: ["開設 AI/EMI 課程。", "落實同儕輔導。", "完成 Capstone。"], k: ["榮譽學位", "同儕輔導", "總整專題"] },
-                { t: "5. 精選播放清單", h: ["收錄職涯與產業趨勢講座。", "EMI 實境與數位教材。", "大一須知與轉型案例。"], a: ["觀看「看見世界」反思定位。", "熟悉全英語環境。", "學習數位課程設計。"], k: ["職涯發展", "EMI教學", "數位轉型"] },
-                { t: "6. 使用歷程", h: ["檢視個人登入資訊。", "追蹤測驗完成進度。", "分析學習成效。"], a: ["定期檢查完成度。", "針對錯誤章節複習。"], k: ["學習分析", "進度追蹤", "使用者"] },
-                { t: "7. 留言與聯絡", h: ["提供寶貴意見。", "直接聯繫計畫主持人。", "參與共創討論。"], a: ["填寫回饋表單。", "發送電子郵件。"], k: ["回饋循環", "溝通", "共創"] }
+                { 
+                    id: 0, title: "0. 執行摘要", 
+                    highlights: ["核心信念：多元是卓越的必要條件。", "關鍵轉型：從守門員 (Gatekeeper) 到園丁 (Groundskeeper)。", "實踐 EOT：卓越是持續成長的過程。"], 
+                    actionPlan: ["推動兩階段協作招生。", "建立榮譽學程與支持系統。", "落實五年推動藍圖。"], 
+                    keywords: ["共融性卓越", "園丁精神", "EOT"],
+                    themes: [
+                        { title: "我們的核心信念", subThemes: [{title: "信念內容", content: "多元不是卓越的附屬品，而是卓越的必要條件。"}] },
+                        { title: "EOT - Excel Over Time", subThemes: [{title: "定義", content: "重點不是你從哪裡出發，而是你如何持續成長。"}] },
+                        { title: "暨大的獨特優勢", subThemes: [{title: "地理與文化", content: "150公頃最美校園，僑外生20%+"}, {title: "數位連結", content: "豐富強韌的數位網路與AI工具"}] }
+                    ],
+                    flashcards: [
+                        { front: "Gatekeeper (守門員)", back: "用高牆把人擋在外面，只讓「最好的」進來。" },
+                        { front: "Groundskeeper (園丁)", back: "創造適合不同植物生長的土壤，目標是「讓每個人綻放」。" }
+                    ],
+                    quiz: [
+                        { q: "我認同「多元是卓越的必要條件」" },
+                        { q: "我理解大學應從「篩選者」轉為「培育者」" }
+                    ]
+                },
+                { 
+                    id: 1, title: "1. 願景與價值觀", 
+                    highlights: ["Groundskeeper：創造讓每個人綻放的土壤。", "EOT：重點不是起點，而是如何持續成長。", "多元價值：不同背景帶來創新與同理心。"], 
+                    actionPlan: ["發布共融性卓越白皮書。", "建立以資產為導向的校園文化。", "消除「降低標準」的誤解。"], 
+                    keywords: ["願景", "價值觀", "多元共融"],
+                    themes: [
+                        { title: "Groundskeeper vs Gatekeeper", subThemes: [{title: "Gatekeeper", content: "目標是「拒絕多少人」"}, {title: "Groundskeeper", content: "目標是「讓每個人綻放」"}] },
+                        { title: "EOT 精神", subThemes: [{title: "過程重於起點", content: "給予適當支持，每個人都能在四年中持續進步"}] }
+                    ],
+                    flashcards: [
+                        { front: "一般想法：分數高就是優秀", back: "IE觀點：成長幅度多大？在什麼條件下達到這分數？" }
+                    ],
+                    quiz: [
+                        { q: "我相信卓越是一個過程，而非僅是起點" },
+                        { q: "我願意接納並欣賞不同背景的同學" }
+                    ]
+                },
+                { 
+                    id: 2, title: "2. 暨大這所大學", 
+                    highlights: ["山中大學：150公頃最美校園，專注學習。", "文化多元：僑外生20%+，校園即小聯合國。", "社區連結：USR深耕25年，知識走出象牙塔。"], 
+                    actionPlan: ["利用地理優勢專注思考。", "每日練習跨文化溝通。", "參與真實社區專案。"], 
+                    keywords: ["暨大特色", "國際化", "在地實踐"],
+                    themes: [
+                        { title: "地理優勢", subThemes: [{title: "環境", content: "有山有湖，隨處可見自然生態"}, {title: "意義", content: "在美麗環境中專注思考，假日探索自然"}] },
+                        { title: "文化多元", subThemes: [{title: "組成", content: "僑外生20%+，原住民專班，新住民二代"}, {title: "意義", content: "每天與不同背景者互動，自然培養跨文化溝通力"}] },
+                        { title: "社區連結", subThemes: [{title: "USR深耕", content: "原鄉教育、新住民服務、地方創生"}, {title: "能力", content: "培養問題解決、溝通協調、挫折容忍"}] }
+                    ],
+                    flashcards: [
+                        { front: "疑問：在山上會不會很無聊？", back: "體驗：平日專心學習，周末探索日月潭、合歡山。" },
+                        { front: "疑問：僑外生多會不會溝通困難？", back: "價值：多元環境是未來職場預演，跨文化協作力最搶手。" }
+                    ],
+                    quiz: [
+                        { q: "我想在美麗環境中專注學習" },
+                        { q: "我想培養跨文化溝通能力" },
+                        { q: "我想用所學解決真實問題" }
+                    ]
+                },
+                { 
+                    id: 3, title: "3. 看見你的價值", 
+                    highlights: ["兩階段機制：招生辦看脈絡，教授看潛力。", "資產觀點：看見逆境中的韌性與文化資本。", "關注特質：你的故事、動機與未來潛力。"], 
+                    actionPlan: ["檢核學生起跑點資源。", "發掘成長軌跡與特質。", "評估對校園的獨特貢獻。"], 
+                    keywords: ["情境化審查", "成長軌跡", "文化資本"],
+                    themes: [
+                        { title: "階段一：多元背景 (Inclusive)", subThemes: [{title: "目的", content: "理解每個學生的起跑點與成長脈絡"}, {title: "重點", content: "在你的條件下，你展現了什麼特質？"}] },
+                        { title: "階段二：卓越潛力 (Excellence)", subThemes: [{title: "過去", content: "成長軌跡與克服困難"}, {title: "現在", content: "動機與學習熱情"}, {title: "未來", content: "貢獻潛力與獨特觀點"}] }
+                    ],
+                    flashcards: [
+                        { front: "疑問：新住民二代/偏鄉生是弱勢嗎？", back: "資產觀點：他們擁有雙語能力、在地知識、問題解決韌性等獨特優勢。" },
+                        { front: "擔心：使用AI工具會不會被扣分？", back: "鼓勵態度：AI是未來工具，我們想看你如何批判性使用。" }
+                    ],
+                    quiz: [
+                        { q: "我有想分享的獨特成長故事" },
+                        { q: "我清楚自己的學習動機" },
+                        { q: "我願意在多元環境中學習" }
+                    ]
+                },
+                { 
+                    id: 4, title: "4. 帶你成長卓越", 
+                    highlights: ["榮譽學程：Input+Output，優秀轉化為影響力。", "學習支持：差異化協助，確保成功。", "數位賦能：打破地理限制，與世界同步。"], 
+                    actionPlan: ["參與18學分榮譽學程。", "利用Tutor與寫作中心資源。", "連結國際與產學實習。"], 
+                    keywords: ["榮譽學程", "學習支持", "數位賦能"],
+                    themes: [
+                        { title: "榮譽學程", subThemes: [{title: "Input模組", content: "AI素養、EMI溝通、跨域好奇心"}, {title: "Output模組", content: "同儕輔導、社會實踐、Capstone專題"}] },
+                        { title: "學習支持系統", subThemes: [{title: "內容", content: "Tutor輔導、寫作中心、預警關懷、語言資源"}] },
+                        { title: "數位賦能", subThemes: [{title: "基礎設施", content: "高速網路、AI工具、雲端協作"}, {title: "全球連結", content: "與台灣及全球各地即時互動"}] }
+                    ],
+                    flashcards: [
+                        { front: "傳統書卷獎", back: "發獎金表揚，鼓勵競爭。" },
+                        { front: "暨大榮譽學程", back: "18學分培育，將優秀轉化為影響力，鼓勵助人。" },
+                        { front: "擔心：在埔里會不會與世界脫節？", back: "數位賦能：豐富設施讓你隨時與全球連結。" }
+                    ],
+                    quiz: [
+                        { q: "我想培養AI素養與跨文化溝通力" },
+                        { q: "我願意幫助同學成長 (Excellence for Others)" },
+                        { q: "我想利用數位工具連結世界" }
+                    ]
+                },
+                { 
+                    id: 5, title: "5. 暨大實踐藍圖", 
+                    highlights: ["分階段推動：試點(Y1-2) -> 擴大(Y3-4) -> 驗證(Y5)。", "數據校準：追蹤留存率、畢業率與就業表現。", "目標：建立可複製的共融卓越模式。"], 
+                    actionPlan: ["成立IE推動辦公室。", "建立數據儀表板。", "進行第三方成效評估。"], 
+                    keywords: ["策略藍圖", "數據追蹤", "成效評估"],
+                    themes: [
+                        { title: "推動時程", subThemes: [{title: "Year 1-2", content: "建立與測試"}, {title: "Year 3-4", content: "擴大與優化"}, {title: "Year 5", content: "驗證與校準"}] },
+                        { title: "追蹤指標", subThemes: [{title: "學生成功率", content: "留存率、畢業率、就業率"}, {title: "多元豐富度", content: "背景多樣性"}, {title: "校園氛圍", content: "歸屬感、支持感"}] }
+                    ],
+                    flashcards: [],
+                    quiz: [
+                        { q: "我理解學校有長期的支持規劃" },
+                        { q: "我願意參與學校的成效追蹤" }
+                    ]
+                },
+                { 
+                    id: 6, title: "6. 師生家長放心", 
+                    highlights: ["品質保證：畢業標準不變，提供更多支持。", "就業優勢：跨文化協作與問題解決力最搶手。", "軟實力：AI時代最需要的核心競爭力。"], 
+                    actionPlan: ["提供差異化學習支持。", "連結全球數位學習資源。", "培養有溫度的專業人。"], 
+                    keywords: ["品質保證", "就業競爭力", "家長放心"],
+                    themes: [
+                        { title: "IE理念釋疑", subThemes: [{title: "不是降低標準", content: "畢業要求、考試標準不變，提供差異化支持幫助達標"}] },
+                        { title: "畢業出路", subThemes: [{title: "數據", content: "就業率85%以上"}, {title: "雇主評價", content: "跨文化協作、問題解決能力突出"}] }
+                    ],
+                    flashcards: [
+                        { front: "擔心：多元入學會降低品質", back: "事實：畢業標準相同，我們提供差異化支持幫助達標。" },
+                        { front: "質疑：軟實力真的有用嗎？", back: "趨勢：AI時代，跨文化協作、問題解決最稀缺。" }
+                    ],
+                    quiz: [
+                        { q: "我認同IE理念：重視過程與成長" },
+                        { q: "我相信暨大能幫助我持續進步 (EOT)" },
+                        { q: "我願意在多元環境中學習與貢獻" }
+                    ]
+                },
+                { 
+                    id: 7, title: "7. 精選短片", 
+                    highlights: ["收錄職涯與產業趨勢講座。", "EMI 實境與數位教材。", "大一須知與轉型案例。"], 
+                    actionPlan: ["觀看「看見世界」反思定位。", "熟悉全英語環境。", "學習數位課程設計。"], 
+                    keywords: ["職涯發展", "EMI教學", "數位轉型"],
+                    themes: [], flashcards: [], quiz: [], videos: videoList 
+                },
+                { 
+                    id: 8, title: "8. 使用歷程", 
+                    highlights: ["檢視個人登入資訊。", "追蹤測驗積分與狀態。", "分析學習成效。"], 
+                    actionPlan: ["定期檢查完成度。", "針對紅色項目複習。"], 
+                    keywords: ["學習分析", "進度追蹤", "使用者"],
+                    themes: [], flashcards: [], quiz: [], isHistory: true 
+                },
+                { 
+                    id: 9, title: "9. 歡迎聯絡", 
+                    highlights: ["提供寶貴意見。", "直接聯繫計畫主持人。", "參與共創討論。"], 
+                    actionPlan: ["填寫回饋表單。", "發送電子郵件。"], 
+                    keywords: ["回饋循環", "溝通", "共創"],
+                    themes: [], flashcards: [], quiz: [], isFeedback: true 
+                }
             ]
         };
 
-        // Helper for other languages (Using ENG content structure but replacing titles/labels)
+        // For other languages, we'll map the structure but use placeholders or English for content to keep file size managed.
+        // In a real app, full translations would be provided.
+        const baseContentENG = JSON.parse(JSON.stringify(baseContentTC));
+        baseContentENG.meta = { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", nav: "Navigation", glossary: "Glossary", try: "Try Again", copyright: "Copyright © 2025 EOT - Excel Over Time. All Rights Reserved." };
+        baseContentENG.labels = { highlights: "Highlights", actionPlan: "Action Plan", keywords: "Keywords", flashcards: "Learning Cards", quiz: "Self-Check", videos: "Video Playlists", history: "Usage History", feedback: "Welcome Contact", themes: "Themes" };
+        
+        // Map Titles for ENG
+        const engTitles = ["0. Executive Summary", "1. Vision & Values", "2. This University (NCNU)", "3. Seeing Your Value", "4. Leading to Excellence", "5. Implementation Blueprint", "6. Reassurance", "7. Video Playlists", "8. Usage History", "9. Welcome Contact"];
+        baseContentENG.sections.forEach((s, i) => s.title = engTitles[i]);
+
         const createLangContent = (titles, labels, copyright) => {
-            // Safe copy of baseContentENG
             const content = JSON.parse(JSON.stringify(baseContentENG));
-            
-            // Update Meta
             content.meta.copyright = copyright;
-            
-            // Update Labels
             content.labels = { ...content.labels, ...labels };
-            
-            // Update Section Titles
-            if (titles && titles.length === content.sections.length) {
-                content.sections.forEach((sec, idx) => {
-                    sec.t = titles[idx];
-                });
-            }
+            if (titles) titles.forEach((t, i) => content.sections[i].title = t);
             return content;
         };
 
-        // Section Titles per language (Simplified for demo)
         const sectionTitles = {
-            SC: ["0. 执行摘要", "1. 愿景与哲学", "2. 策略发展蓝图", "3. 多元入学策略", "4. 荣誉学程", "5. 精选播放列表", "6. 使用历程", "7. 留言与联络"],
-            JA: ["0. エグゼクティブサマリー", "1. ビジョンと哲学", "2. 戦略ロードマップ", "3. 入学戦略", "4. オナーズプログラム", "5. おすすめ動画", "6. 使用履歴", "7. フィードバック"],
-            KO: ["0. 요약", "1. 비전 및 철학", "2. 전략 로드맵", "3. 입학 전략", "4. 아너스 프로그램", "5. 추천 영상", "6. 사용 기록", "7. 피드백"],
-            VI: ["0. Tóm tắt", "1. Tầm nhìn", "2. Lộ trình", "3. Tuyển sinh", "4. Danh dự", "5. Video", "6. Lịch sử", "7. Phản hồi"],
-            ES: ["0. Resumen", "1. Visión", "2. Hoja de Ruta", "3. Admisión", "4. Honores", "5. Videos", "6. Historial", "7. Contacto"],
-            FR: ["0. Résumé", "1. Vision", "2. Feuille de Route", "3. Admission", "4. Honneur", "5. Vidéos", "6. Historique", "7. Contact"],
-            DE: ["0. Zusammenfassung", "1. Vision", "2. Roadmap", "3. Zulassung", "4. Honors", "5. Videos", "6. Verlauf", "7. Kontakt"],
-            ID: ["0. Ringkasan", "1. Visi", "2. Peta Jalan", "3. Penerimaan", "4. Kehormatan", "5. Video", "6. Riwayat", "7. Kontak"],
-            MS: ["0. Ringkasan", "1. Visi", "2. Pelan Hala Tuju", "3. Kemasukan", "4. Kepujian", "5. Video", "6. Sejarah", "7. Hubungi"],
-            MY: ["0. အကျဉ်းချုပ်", "1. မျှော်မှန်းချက်", "2. လမ်းပြမြေပုံ", "3. ဝင်ခွင့်", "4. ဂုဏ်ထူးတန်း", "5. ဗီဒီယို", "6. မှတ်တမ်း", "7. ဆက်သွယ်ရန်"]
+            SC: ["0. 执行摘要", "1. 愿景与价值观", "2. 暨大这所大学", "3. 看见你的价值", "4. 带你成长卓越", "5. 暨大实践蓝图", "6. 师生家长放心", "7. 精选短片", "8. 使用历程", "9. 欢迎联络"],
+            JA: ["0. エグゼクティブサマリー", "1. ビジョンと価値観", "2. NCNUについて", "3. あなたの価値を見る", "4. 卓越性への導き", "5. 実践ブループリント", "6. 安心への約束", "7. おすすめ動画", "8. 使用履歴", "9. お問い合わせ"],
+            KO: ["0. 요약", "1. 비전 및 가치", "2. NCNU 소개", "3. 당신의 가치 발견", "4. 탁월함으로의 인도", "5. 실천 청사진", "6. 안심 약속", "7. 추천 영상", "8. 사용 기록", "9. 환영 및 연락"],
+            VI: ["0. Tóm tắt", "1. Tầm nhìn", "2. Về NCNU", "3. Giá trị của bạn", "4. Dẫn dắt xuất sắc", "5. Kế hoạch thực hiện", "6. Cam kết an tâm", "7. Video", "8. Lịch sử", "9. Liên hệ"],
+            ES: ["0. Resumen", "1. Visión", "2. Sobre NCNU", "3. Tu Valor", "4. Hacia la Excelencia", "5. Plan de Acción", "6. Tranquilidad", "7. Videos", "8. Historial", "9. Contacto"],
+            FR: ["0. Résumé", "1. Vision", "2. À propos de NCNU", "3. Votre Valeur", "4. Vers l'Excellence", "5. Plan de Mise en Œuvre", "6. Réassurance", "7. Vidéos", "8. Historique", "9. Contact"],
+            DE: ["0. Zusammenfassung", "1. Vision", "2. Über NCNU", "3. Ihr Wert", "4. Weg zur Exzellenz", "5. Umsetzungsplan", "6. Beruhigung", "7. Videos", "8. Verlauf", "9. Kontakt"],
+            ID: ["0. Ringkasan", "1. Visi", "2. Tentang NCNU", "3. Nilai Anda", "4. Menuju Keunggulan", "5. Cetak Biru", "6. Jaminan", "7. Video", "8. Riwayat", "9. Kontak"],
+            MS: ["0. Ringkasan", "1. Visi", "2. Mengenai NCNU", "3. Nilai Anda", "4. Ke Arah Kecemerlangan", "5. Pelan Pelaksanaan", "6. Jaminan", "7. Video", "8. Sejarah", "9. Hubungi"],
+            MY: ["0. အကျဉ်းချုပ်", "1. မျှော်မှန်းချက်", "2. NCNU အကြောင်း", "3. သင့်တန်ဖိုး", "4. ထူးချွန်မှုဆီသို့", "5. လုပ်ငန်းစဉ်", "6. စိတ်ချမှု", "7. ဗီဒီယို", "8. မှတ်တမ်း", "9. ဆက်သွယ်ရန်"]
         };
 
-        // Full Translations Map
         const translations = {
             TC: baseContentTC,
             ENG: baseContentENG,
-            SC: createLangContent(sectionTitles.SC, { highlights: "重点摘要", actionPlan: "行动计划", quiz: "测验" }, "版权所有 © 2025 EOT - Excel Over Time."),
-            JA: createLangContent(sectionTitles.JA, { highlights: "ハイライト", actionPlan: "アクションプラン", quiz: "クイズ" }, "Copyright © 2025 EOT - Excel Over Time."),
-            KO: createLangContent(sectionTitles.KO, { highlights: "하이라이트", actionPlan: "실행 계획", quiz: "퀴즈" }, "Copyright © 2025 EOT - Excel Over Time."),
-            VI: createLangContent(sectionTitles.VI, { highlights: "Điểm nổi bật", actionPlan: "Kế hoạch", quiz: "Trắc nghiệm" }, "Bản quyền © 2025 EOT - Excel Over Time."),
-            ES: createLangContent(sectionTitles.ES, { highlights: "Destacados", actionPlan: "Plan", quiz: "Cuestionario" }, "Copyright © 2025 EOT - Excel Over Time."),
-            FR: createLangContent(sectionTitles.FR, { highlights: "Points forts", actionPlan: "Plan d'action", quiz: "Quiz" }, "Copyright © 2025 EOT - Excel Over Time."),
-            DE: createLangContent(sectionTitles.DE, { highlights: "Highlights", actionPlan: "Aktionsplan", quiz: "Quiz" }, "Copyright © 2025 EOT - Excel Over Time."),
-            ID: createLangContent(sectionTitles.ID, { highlights: "Sorotan", actionPlan: "Rencana", quiz: "Kuis" }, "Hak Cipta © 2025 EOT - Excel Over Time."),
-            MS: createLangContent(sectionTitles.MS, { highlights: "Sorotan", actionPlan: "Pelan", quiz: "Kuiz" }, "Hak Cipta © 2025 EOT - Excel Over Time."),
-            MY: createLangContent(sectionTitles.MY, { highlights: "အဓိကအချက်များ", actionPlan: "လုပ်ငန်းစဉ်", quiz: "ပဟေဠိ" }, "Copyright © 2025 EOT - Excel Over Time.")
+            SC: createLangContent(sectionTitles.SC, { highlights: "重点摘要", actionPlan: "行动计划", quiz: "自我检视", themes: "主题探索" }, "版权所有 © 2025 EOT."),
+            JA: createLangContent(sectionTitles.JA, { highlights: "ハイライト", actionPlan: "アクションプラン", quiz: "セルフチェック", themes: "テーマ探索" }, "Copyright © 2025 EOT."),
+            KO: createLangContent(sectionTitles.KO, { highlights: "하이라이트", actionPlan: "실행 계획", quiz: "자가 진단", themes: "주제 탐색" }, "Copyright © 2025 EOT."),
+            // Fallback for others using ENG content but localized UI labels
+            VI: createLangContent(null, { highlights: "Điểm nổi bật", actionPlan: "Kế hoạch", quiz: "Tự kiểm tra" }, "Bản quyền © 2025 EOT."),
+            ES: createLangContent(null, { highlights: "Destacados", actionPlan: "Plan", quiz: "Autocomprobación" }, "Copyright © 2025 EOT."),
+            FR: createLangContent(null, { highlights: "Points forts", actionPlan: "Plan", quiz: "Auto-vérification" }, "Copyright © 2025 EOT."),
+            DE: createLangContent(null, { highlights: "Highlights", actionPlan: "Plan", quiz: "Selbstcheck" }, "Copyright © 2025 EOT."),
+            ID: createLangContent(null, { highlights: "Sorotan", actionPlan: "Rencana", quiz: "Periksa Sendiri" }, "Hak Cipta © 2025 EOT."),
+            MS: createLangContent(null, { highlights: "Sorotan", actionPlan: "Pelan", quiz: "Semak Sendiri" }, "Hak Cipta © 2025 EOT."),
+            MY: createLangContent(null, { highlights: "အဓိကအချက်များ", actionPlan: "လုပ်ငန်းစဉ်", quiz: "ကိုယ်တိုင်စစ်ဆေးပါ" }, "Copyright © 2025 EOT.")
         };
 
-        // --- 3. Data Processing Helper ---
-        const getSectionData = (langCode) => {
-            const content = translations[langCode] || translations['ENG'];
-            
-            return content.sections.map((s, idx) => {
-                const enriched = { 
-                    id: idx,
-                    title: s.t,
-                    highlights: s.h,
-                    actionPlan: s.a,
-                    keywords: s.k
-                };
-                
-                if (idx === 5) {
-                    enriched.videos = videoList;
-                } else if (idx === 6) {
-                    enriched.isHistory = true;
-                } else if (idx === 7) {
-                    enriched.isFeedback = true;
-                } else {
-                    // Flashcards & Quiz for Sections 0-4
-                    if (langCode === 'TC') {
-                        enriched.flashcards = [
-                            { front: "共融性卓越", back: "卓越與共融密不可分" },
-                            { front: "守門員機制", back: "以排他性定義價值" },
-                            { front: "園丁機制", back: "建構人才培育生態系" }
-                        ];
-                        enriched.quiz = [
-                            { q: "核心價值為何？", options: ["菁英主義", "共融性卓越", "齊頭式平等"], ans: 1 },
-                            { q: "大學角色應轉型為？", options: ["記帳員", "園丁 (Groundskeeping)", "警衛"], ans: 1 },
-                            { q: "計畫實施期程？", options: ["2023-2025", "2025-2030", "2030-2040"], ans: 1 }
-                        ];
-                    } else {
-                        enriched.flashcards = [
-                            { front: "Inclusive Excellence", back: "Excellence & Inclusion Inseparable" },
-                            { front: "Gatekeeping", back: "Exclusion based value" },
-                            { front: "Groundskeeping", back: "Cultivation ecosystem" }
-                        ];
-                        enriched.quiz = [
-                            { q: "Core Value?", options: ["Meritocracy", "Inclusive Excellence", "Equality"], ans: 1 },
-                            { q: "Role Shift?", options: ["Accountant", "Groundskeeping", "Guard"], ans: 1 },
-                            { q: "Timeline?", options: ["2023-25", "2025-30", "2030-40"], ans: 1 }
-                        ];
-                    }
-                }
-                return enriched;
-            });
+        // --- 3. Components ---
+
+        // Theme Dropdown Component
+        const ThemeExplorer = ({ themes, label }) => {
+            const [selectedMajor, setSelectedMajor] = useState(0);
+            const [selectedMinor, setSelectedMinor] = useState(0);
+
+            if (!themes || themes.length === 0) return null;
+
+            const majorTheme = themes[selectedMajor];
+            const subThemes = majorTheme?.subThemes || [];
+            const minorTheme = subThemes[selectedMinor];
+
+            return (
+                <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <h4 className="text-sm font-bold text-bcg dark:text-bcg-light uppercase mb-2">{label}</h4>
+                    
+                    {/* Major Theme */}
+                    <div className="mb-3">
+                        <select 
+                            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm mb-2"
+                            value={selectedMajor}
+                            onChange={(e) => { setSelectedMajor(Number(e.target.value)); setSelectedMinor(0); }}
+                        >
+                            {themes.map((t, i) => <option key={i} value={i}>{t.title}</option>)}
+                        </select>
+                        {/* Major Content Display (Optional, using subtheme for content mainly) */}
+                    </div>
+
+                    {/* Minor Theme */}
+                    {subThemes.length > 0 && (
+                        <div>
+                            <select 
+                                className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm mb-2"
+                                value={selectedMinor}
+                                onChange={(e) => setSelectedMinor(Number(e.target.value))}
+                            >
+                                {subThemes.map((t, i) => <option key={i} value={i}>{t.title}</option>)}
+                            </select>
+                            <div className="p-3 bg-white dark:bg-gray-900 rounded border-l-4 border-bcg text-sm text-gray-700 dark:text-gray-300">
+                                {minorTheme?.content}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
         };
 
-        const getYouTubeID = (url) => {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
+        const SelfCheck = ({ questions, answers, onAnswer }) => {
+            return (
+                <div className="space-y-4">
+                    {questions.map((q, idx) => {
+                        const val = answers[idx]; // undefined, 1, 0, -1
+                        return (
+                            <div key={idx} className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                                <p className="font-semibold text-gray-800 dark:text-gray-200 mb-3">{idx + 1}. {q.q}</p>
+                                <div className="flex gap-2">
+                                    <button 
+                                        onClick={() => onAnswer(idx, 1)}
+                                        className={`flex-1 py-2 rounded text-sm font-bold transition ${val === 1 ? 'bg-green-100 text-green-700 border-2 border-green-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-green-50'}`}
+                                    >
+                                        是 (+1)
+                                    </button>
+                                    <button 
+                                        onClick={() => onAnswer(idx, 0)}
+                                        className={`flex-1 py-2 rounded text-sm font-bold transition ${val === 0 ? 'bg-gray-200 text-gray-700 border-2 border-gray-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200'}`}
+                                    >
+                                        不確定 (0)
+                                    </button>
+                                    <button 
+                                        onClick={() => onAnswer(idx, -1)}
+                                        className={`flex-1 py-2 rounded text-sm font-bold transition ${val === -1 ? 'bg-red-100 text-red-700 border-2 border-red-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-red-50'}`}
+                                    >
+                                        否 (-1)
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            );
         };
 
-        // --- 4. Components ---
-
+        // Reuse Flashcard & VideoCard from previous
         const Flashcard = ({ front, back, instruction }) => {
             const [flipped, setFlipped] = useState(false);
             return (
-                <div 
-                    className={`group w-full h-40 cursor-pointer perspective-1000`}
-                    onClick={() => setFlipped(!flipped)}
-                >
+                <div className={`group w-full h-40 cursor-pointer perspective-1000`} onClick={() => setFlipped(!flipped)}>
                     <div className={`relative w-full h-full text-center transition-transform duration-500 transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}>
                         <div className="absolute w-full h-full backface-hidden bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center p-4 z-10">
                             <h3 className="text-lg font-bold text-bcg dark:text-bcg-light mb-2">{front}</h3>
@@ -320,57 +435,9 @@
             );
         };
 
-        const Quiz = ({ question, options, answer, texts, onAnswer, isAnsweredCorrectly }) => {
-            const [selected, setSelected] = useState(null);
-            const [status, setStatus] = useState(null); 
-
-            const handleCheck = (idx) => {
-                setSelected(idx);
-                const isCorrect = idx === answer;
-                setStatus(isCorrect ? 'correct' : 'wrong');
-                if (onAnswer) onAnswer(isCorrect);
-            };
-
-            const reset = () => {
-                setSelected(null);
-                setStatus(null);
-            };
-
-            return (
-                <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border-l-4 border-bcg mb-4">
-                    <p className="font-semibold mb-3 text-gray-800 dark:text-gray-200">{question}</p>
-                    <div className="space-y-2">
-                        {options.map((opt, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => handleCheck(idx)}
-                                disabled={status === 'correct' || isAnsweredCorrectly}
-                                className={`w-full text-left p-2 rounded text-sm transition-colors duration-200 border
-                                    ${(status === 'correct' || isAnsweredCorrectly) && idx === answer ? 'bg-green-100 text-green-800 border-green-500' : ''}
-                                    ${status === 'wrong' && idx === selected ? 'bg-red-100 text-red-800 border-red-500' : 'border-transparent'}
-                                    ${status === null && !isAnsweredCorrectly ? 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-700' : ''}
-                                    ${(status !== null || isAnsweredCorrectly) && idx !== answer && idx !== selected ? 'opacity-50' : ''}
-                                `}
-                            >
-                                {opt}
-                                {(status === 'correct' || isAnsweredCorrectly) && idx === answer && <i className="fas fa-check float-right mt-1"></i>}
-                                {status === 'wrong' && idx === selected && <i className="fas fa-times float-right mt-1"></i>}
-                            </button>
-                        ))}
-                    </div>
-                    {status === 'wrong' && (
-                        <button onClick={reset} className="mt-3 text-xs text-bcg hover:underline font-bold">
-                            {texts.try} <i className="fas fa-redo"></i>
-                        </button>
-                    )}
-                </div>
-            );
-        };
-
         const VideoCard = ({ video }) => {
             const videoID = getYouTubeID(video.url);
             const thumbUrl = videoID ? `https://img.youtube.com/vi/${videoID}/mqdefault.jpg` : 'https://via.placeholder.com/320x180?text=No+Thumbnail';
-
             return (
                 <a href={video.url} target="_blank" rel="noopener noreferrer" className="block group">
                     <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
@@ -382,106 +449,17 @@
                         </div>
                         <div className="p-4">
                             <h4 className="font-semibold text-gray-800 dark:text-gray-100 text-sm line-clamp-2 mb-2 group-hover:text-bcg transition-colors">{video.title}</h4>
-                            <span className="text-xs text-bcg font-bold uppercase tracking-wider flex items-center">
-                                Watch Video <i className="fas fa-external-link-alt ml-1"></i>
-                            </span>
+                            <span className="text-xs text-bcg font-bold uppercase tracking-wider flex items-center">Watch Video <i className="fas fa-external-link-alt ml-1"></i></span>
                         </div>
                     </div>
                 </a>
             );
         };
 
-        const LoginPage = ({ onLogin, texts, creatorInfo }) => {
-            const [email, setEmail] = useState("");
-            const [name, setName] = useState("");
-            const [identity, setIdentity] = useState(identities[0]);
-            const [currentTime, setCurrentTime] = useState(new Date());
-
-            useEffect(() => {
-                const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-                return () => clearInterval(timer);
-            }, []);
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                if(!email) return;
-                onLogin({ email, name, identity, loginTime: new Date() });
-            };
-
-            return (
-                <div className="min-h-screen bg-gradient-to-br from-bcg-dark to-bcg flex items-center justify-center p-4">
-                    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 max-w-md w-full animate-fade-in">
-                        <div className="text-center mb-8">
-                            <h1 className="text-4xl font-bold text-bcg dark:text-bcg-light tracking-tight mb-2">EOT</h1>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 italic">{texts.slogan}</p>
-                            <div className="mt-4 text-xs font-mono text-gray-400">
-                                {currentTime.toLocaleString()}
-                            </div>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">E-mail (必填/Required)</label>
-                                <input 
-                                    type="email" 
-                                    required
-                                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white"
-                                    placeholder="visitor@example.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                            </div>
-                            
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name (選填)</label>
-                                    <input 
-                                        type="text" 
-                                        className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white"
-                                        placeholder="Name"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Identity</label>
-                                    <select 
-                                        className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white"
-                                        value={identity}
-                                        onChange={(e) => setIdentity(e.target.value)}
-                                    >
-                                        {identities.map(id => <option key={id} value={id}>{id}</option>)}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <button type="submit" className="w-full bg-bcg hover:bg-bcg-dark text-white font-bold py-3 rounded transition shadow-lg mt-4">
-                                訪客登入 (Visitor Login)
-                            </button>
-                            
-                            <button type="button" disabled className="w-full bg-red-50 text-red-400 font-bold py-3 rounded border border-red-100 cursor-not-allowed text-sm">
-                                <i className="fab fa-google mr-2"></i> Gmail Login (To Be Done)
-                            </button>
-                        </form>
-
-                        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 text-center text-xs text-gray-400">
-                            <p>Version: 2025/12/11</p>
-                            <p className="mt-1">{texts.copyright}</p>
-                            <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition block mt-2">
-                                {creatorInfo}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        const UsageHistory = ({ user, quizProgress, sections }) => {
-            const totalQuestions = sections.reduce((acc, sec) => acc + (sec.quiz ? sec.quiz.length : 0), 0);
-            const answeredCorrectly = Object.values(quizProgress).reduce((acc, sectionResults) => {
-                return acc + Object.values(sectionResults).filter(Boolean).length;
-            }, 0);
-
+        // Usage History Component (Updated for Self-Check)
+        const UsageHistory = ({ user, quizScores, sections }) => {
+            const totalScore = Object.values(quizScores).reduce((acc, sec) => acc + Object.values(sec).reduce((a, b) => a + b, 0), 0);
+            
             return (
                 <div className="space-y-6 animate-fade-in">
                     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
@@ -490,34 +468,23 @@
                             <div><span className="font-semibold text-gray-500">Name:</span> {user.name || "Guest"}</div>
                             <div><span className="font-semibold text-gray-500">Identity:</span> {user.identity}</div>
                             <div><span className="font-semibold text-gray-500">Email:</span> {user.email}</div>
-                            <div><span className="font-semibold text-gray-500">Login Time:</span> {user.loginTime.toLocaleString()}</div>
+                            <div><span className="font-semibold text-gray-500">Login:</span> {user.loginTime.toLocaleString()}</div>
                         </div>
                     </div>
-
                     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-chart-pie mr-2"></i> Quiz Progress</h3>
-                        <div className="mb-6">
-                            <div className="flex justify-between mb-1">
-                                <span className="text-sm font-medium text-bcg">Total Completion</span>
-                                <span className="text-sm font-medium text-bcg">{answeredCorrectly} / {totalQuestions}</span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div className="bg-bcg h-2.5 rounded-full" style={{ width: `${totalQuestions > 0 ? (answeredCorrectly/totalQuestions)*100 : 0}%` }}></div>
-                            </div>
-                        </div>
-
+                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-chart-line mr-2"></i> Self-Check History</h3>
+                        <div className="text-3xl font-bold text-bcg mb-6">Total Score: {totalScore}</div>
                         <div className="space-y-4">
                             {sections.map(sec => {
                                 if (!sec.quiz || sec.quiz.length === 0) return null;
-                                const secCorrect = quizProgress[sec.id] ? Object.values(quizProgress[sec.id]).filter(Boolean).length : 0;
+                                const secScores = quizScores[sec.id] || {};
+                                const secTotal = Object.values(secScores).reduce((a, b) => a + b, 0);
                                 return (
-                                    <div key={sec.id} className="border-b border-gray-100 dark:border-gray-700 pb-2 last:border-0">
-                                        <div className="flex justify-between items-center mb-1">
-                                            <span className="text-sm text-gray-700 dark:text-gray-300">{sec.title.split(' ')[1] || sec.title}</span>
-                                            <span className="text-xs font-mono bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded">
-                                                {secCorrect} / {sec.quiz.length}
-                                            </span>
-                                        </div>
+                                    <div key={sec.id} className="border-b border-gray-100 dark:border-gray-700 pb-2 last:border-0 flex justify-between">
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">{sec.title}</span>
+                                        <span className={`text-sm font-bold ${secTotal > 0 ? 'text-green-600' : secTotal < 0 ? 'text-red-500' : 'text-gray-400'}`}>
+                                            {secTotal > 0 ? '+' : ''}{secTotal}
+                                        </span>
                                     </div>
                                 );
                             })}
@@ -527,345 +494,200 @@
             );
         };
 
-        const Feedback = () => {
-            return (
-                <div className="space-y-6 animate-fade-in">
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-comment-alt mr-2"></i> Leave a Comment</h3>
-                        <textarea 
-                            className="w-full h-32 p-3 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-900 dark:text-white resize-none"
-                            placeholder="Share your thoughts... (Function To Be Done)"
-                            disabled
-                        ></textarea>
-                        <div className="mt-2 text-right">
-                            <button disabled className="px-4 py-2 bg-gray-300 text-white rounded cursor-not-allowed text-sm">Submit (TBD)</button>
-                        </div>
-                    </div>
+        const LoginPage = ({ onLogin, texts, creatorInfo }) => {
+            const [email, setEmail] = useState("");
+            const [name, setName] = useState("");
+            const [identity, setIdentity] = useState(identities[0]);
+            const [currentTime, setCurrentTime] = useState(new Date());
 
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-envelope mr-2"></i> Contact Us</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                            Have questions about Inclusive Excellence or the EOT strategies? Feel free to reach out.
-                        </p>
-                        <a 
-                            href="mailto:smlo@ncnu.edu.tw" 
-                            className="inline-flex items-center justify-center w-full px-4 py-3 bg-bcg hover:bg-bcg-dark text-white rounded transition font-semibold"
-                        >
-                            <i className="fas fa-paper-plane mr-2"></i> Send Email to smlo@ncnu.edu.tw
-                        </a>
+            useEffect(() => { const t = setInterval(() => setCurrentTime(new Date()), 1000); return () => clearInterval(t); }, []);
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-bcg-dark to-bcg flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 max-w-md w-full animate-fade-in">
+                        <div className="text-center mb-8">
+                            <h1 className="text-4xl font-bold text-bcg dark:text-bcg-light tracking-tight mb-2">EOT</h1>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 italic">{texts.slogan}</p>
+                            <div className="mt-4 text-xs font-mono text-gray-400">{currentTime.toLocaleString()}</div>
+                        </div>
+                        <form onSubmit={(e) => { e.preventDefault(); if(email) onLogin({ email, name, identity, loginTime: new Date() }); }} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">E-mail (Required)</label>
+                                <input type="email" required className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" placeholder="visitor@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            </div>
+                            <div className="grid grid-cols-1 gap-4">
+                                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name (Optional)</label><input type="text" className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} /></div>
+                                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">Identity (選填)</label><select className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" value={identity} onChange={(e) => setIdentity(e.target.value)}>{identities.map(id => <option key={id} value={id}>{id}</option>)}</select></div>
+                            </div>
+                            <button type="submit" className="w-full bg-bcg hover:bg-bcg-dark text-white font-bold py-3 rounded transition shadow-lg mt-4">Visitor Login</button>
+                        </form>
+                        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 text-center text-xs text-gray-400">
+                            <p>{texts.copyright}</p>
+                            <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition block mt-2">{creatorInfo}</a>
+                        </div>
                     </div>
                 </div>
             );
         };
 
-        // --- Main App ---
-
         const App = () => {
             const [user, setUser] = useState(null); 
-            const [quizProgress, setQuizProgress] = useState({}); 
-            
+            const [quizScores, setQuizScores] = useState({}); // { sectionId: { qIdx: score } }
             const [lang, setLang] = useState('TC');
             const [theme, setTheme] = useState('light');
             const [activeSection, setActiveSection] = useState(0);
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
             const [glossaryTerm, setGlossaryTerm] = useState("");
 
-            // Process Data
-            const currentLangMeta = translations[lang]?.meta || translations['ENG'].meta;
-            const currentLangLabels = translations[lang]?.labels || translations['ENG'].labels;
-            const sections = getSectionData(lang);
-
-            // Theme Effect
             useEffect(() => {
-                if (theme === 'dark') {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
+                if (theme === 'dark') document.documentElement.classList.add('dark');
+                else document.documentElement.classList.remove('dark');
             }, [theme]);
 
-            const handleLogin = (userData) => {
-                setUser(userData);
+            const currentContent = translations[lang] || translations['ENG'];
+            const currentSection = currentContent.sections[activeSection];
+            
+            const handleQuizAnswer = (secId, qIdx, score) => {
+                setQuizScores(prev => ({
+                    ...prev,
+                    [secId]: { ...(prev[secId] || {}), [qIdx]: score }
+                }));
             };
 
-            const handleLogout = () => {
-                setUser(null);
-                setQuizProgress({});
-                setActiveSection(0);
-            };
+            if (!user) return <LoginPage onLogin={setUser} texts={currentContent.meta} creatorInfo="Creator: Prof. Shihmin Lo, PhD" />;
 
-            const handleNav = (id) => {
-                setActiveSection(id);
-                setMobileMenuOpen(false);
-                window.scrollTo(0, 0);
-            };
-
-            const handleQuizAnswer = (sectionId, qIdx, isCorrect) => {
-                if(isCorrect) {
-                    setQuizProgress(prev => ({
-                        ...prev,
-                        [sectionId]: {
-                            ...(prev[sectionId] || {}),
-                            [qIdx]: true
-                        }
-                    }));
-                }
-            };
-
-            // Login View
-            if (!user) {
-                return <LoginPage onLogin={handleLogin} texts={currentLangMeta} creatorInfo="Creator: Prof. Shihmin Lo, PhD" />;
-            }
-
-            const currentData = sections[activeSection];
-
-            // Main View
             return (
                 <div className="min-h-screen flex flex-col md:flex-row font-sans">
-                    
                     {/* Mobile Header */}
                     <div className="md:hidden bg-bcg text-white p-4 flex justify-between items-center fixed w-full z-50 shadow-md">
                         <div className="font-bold text-lg tracking-wider">EOT</div>
-                        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-white focus:outline-none">
-                            <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'} text-2xl`}></i>
-                        </button>
+                        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-white focus:outline-none"><i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'} text-2xl`}></i></button>
                     </div>
 
-                    {/* Sidebar / Navigation */}
-                    <aside className={`
-                        fixed md:sticky top-0 left-0 h-screen w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 
-                        transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 
-                        transition-transform duration-300 ease-in-out z-40 flex flex-col shadow-xl md:shadow-none pt-16 md:pt-0
-                    `}>
+                    {/* Sidebar */}
+                    <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out z-40 flex flex-col shadow-xl md:shadow-none pt-16 md:pt-0`}>
                         <div className="p-6 border-b border-gray-200 dark:border-gray-800">
-                            <h1 className="text-2xl font-bold text-bcg dark:text-bcg-light tracking-tight mb-1">{currentLangMeta.title}</h1>
-                            <p className="text-xs text-gray-500 italic mb-4">{currentLangMeta.slogan}</p>
-                            
+                            <h1 className="text-2xl font-bold text-bcg dark:text-bcg-light tracking-tight mb-1">{currentContent.meta.title}</h1>
+                            <p className="text-xs text-gray-500 italic mb-4">{currentContent.meta.slogan}</p>
                             <div className="flex flex-col space-y-2">
                                 <div className="text-xs text-gray-600 dark:text-gray-400 mb-2 p-2 bg-gray-100 dark:bg-gray-800 rounded">
-                                    <div className="font-bold truncate">{user.name || user.email.split('@')[0]}</div>
-                                    <div className="text-xs opacity-75">{user.identity}</div>
-                                    <button onClick={handleLogout} className="mt-1 text-red-500 hover:text-red-700 text-xs font-bold">
-                                        <i className="fas fa-sign-out-alt"></i> Logout
-                                    </button>
+                                    <div className="font-bold truncate">{user.name || "Guest"}</div>
+                                    <button onClick={() => setUser(null)} className="mt-1 text-red-500 hover:text-red-700 text-xs font-bold"><i className="fas fa-sign-out-alt"></i> Logout</button>
                                 </div>
-
-                                <select 
-                                    value={lang} 
-                                    onChange={(e) => setLang(e.target.value)}
-                                    className="px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-bcg"
-                                >
-                                    {languageOptions.map(opt => (
-                                        <option key={opt.code} value={opt.code}>{opt.label}</option>
-                                    ))}
+                                <select value={lang} onChange={(e) => setLang(e.target.value)} className="px-2 py-1 rounded border text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-bcg bg-white dark:bg-gray-800 dark:border-gray-600">
+                                    {languageOptions.map(opt => <option key={opt.code} value={opt.code}>{opt.label}</option>)}
                                 </select>
-                                
-                                <button 
-                                    onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                                    className="px-2 py-1 rounded border border-gray-300 dark:border-gray-600 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition text-xs font-semibold flex items-center justify-center"
-                                >
-                                    {theme === 'light' ? <span><i className="fas fa-moon mr-1"></i> Dark Mode</span> : <span><i className="fas fa-sun mr-1"></i> Light Mode</span>}
+                                <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className="px-2 py-1 rounded border text-gray-500 text-xs font-semibold flex items-center justify-center bg-white dark:bg-gray-800 dark:border-gray-600">
+                                    {theme === 'light' ? <span><i className="fas fa-moon mr-1"></i> Dark</span> : <span><i className="fas fa-sun mr-1"></i> Light</span>}
                                 </button>
                             </div>
                         </div>
-
                         <nav className="flex-1 overflow-y-auto py-4">
-                            <p className="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{currentLangMeta.nav}</p>
+                            <p className="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{currentContent.meta.nav}</p>
                             <ul>
-                                {sections.map((sec) => (
+                                {currentContent.sections.map((sec, idx) => (
                                     <li key={sec.id}>
-                                        <button
-                                            onClick={() => handleNav(sec.id)}
-                                            className={`w-full text-left px-6 py-3 text-sm font-medium transition-colors border-l-4
-                                                ${activeSection === sec.id 
-                                                    ? 'border-bcg text-bcg bg-green-50 dark:bg-bcg-dark dark:text-white' 
-                                                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900'}
-                                            `}
-                                        >
+                                        <button onClick={() => {setActiveSection(idx); setMobileMenuOpen(false); window.scrollTo(0,0);}} className={`w-full text-left px-6 py-3 text-sm font-medium transition-colors border-l-4 ${activeSection === idx ? 'border-bcg text-bcg bg-green-50 dark:bg-bcg-dark dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'}`}>
                                             {sec.title}
                                         </button>
                                     </li>
                                 ))}
                             </ul>
                         </nav>
-
-                        <div className="p-6 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-400">
-                            <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition">
-                                Creator: Prof. Shihmin Lo, PhD
-                            </a>
-                        </div>
                     </aside>
 
-                    {/* Main Content */}
+                    {/* Main */}
                     <main className="flex-1 w-full pt-16 md:pt-0 bg-white dark:bg-gray-950 transition-colors duration-300">
                         <div className="max-w-4xl mx-auto p-6 md:p-12 min-h-screen flex flex-col">
-                            
-                            {/* Header Section */}
                             <header className="mb-10 border-b pb-6 border-gray-200 dark:border-gray-800">
-                                <span className="text-bcg dark:text-bcg-light font-bold tracking-widest text-sm uppercase mb-2 block">
-                                    EOT Strategy Consulting
-                                </span>
-                                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
-                                    {currentData.title}
-                                </h2>
+                                <span className="text-bcg dark:text-bcg-light font-bold tracking-widest text-sm uppercase mb-2">EOT Strategy</span>
+                                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight">{currentSection.title}</h2>
                             </header>
 
-                            {/* Content Logic Switching */}
-                            {currentData.isHistory ? (
-                                <UsageHistory user={user} quizProgress={quizProgress} sections={sections} />
-                            ) : currentData.isFeedback ? (
-                                <Feedback />
-                            ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 animate-fade-in">
-                                    {/* Left Column */}
-                                    <div className="space-y-8">
-                                        <section>
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-l-4 border-bcg-gold pl-3">
-                                                {currentLangLabels.highlights}
-                                            </h3>
-                                            <div className="space-y-3">
-                                                {currentData.highlights.map((item, i) => (
-                                                    <div key={i} className="flex items-start">
-                                                        <span className="flex-shrink-0 w-1.5 h-1.5 mt-2 bg-bcg rounded-full mr-3"></span>
-                                                        <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{item}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </section>
-
-                                        <section className="bg-gray-50 dark:bg-gray-900 p-5 rounded-lg border border-gray-100 dark:border-gray-800">
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                                                <i className="fas fa-tasks text-bcg mr-2"></i> {currentLangLabels.actionPlan}
-                                            </h3>
-                                            <ul className="space-y-3">
-                                                {currentData.actionPlan.map((item, i) => (
-                                                    <li key={i} className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                                                        <i className="fas fa-check text-green-500 mr-3 text-xs"></i>
-                                                        {item}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </section>
-
-                                        <section>
-                                            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">{currentLangLabels.keywords}</h3>
-                                            <div className="flex flex-wrap gap-2">
-                                                {currentData.keywords.map((kw, i) => (
-                                                    <span key={i} className="px-3 py-1 bg-bcg bg-opacity-10 text-bcg dark:text-bcg-light rounded-full text-xs font-semibold">
-                                                        #{kw}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </section>
+                            {currentSection.isHistory ? (
+                                <UsageHistory user={user} quizScores={quizScores} sections={currentContent.sections} />
+                            ) : currentSection.isFeedback ? (
+                                <div className="space-y-6">
+                                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+                                        <h3 className="text-lg font-bold text-bcg mb-4">Leave a Comment</h3>
+                                        <textarea className="w-full h-32 p-3 border rounded bg-gray-50 dark:bg-gray-900 dark:text-white" disabled placeholder="Coming soon..."></textarea>
                                     </div>
-
-                                    {/* Right Column */}
+                                    <a href="mailto:smlo@ncnu.edu.tw" className="block w-full py-3 bg-bcg text-white text-center rounded font-bold hover:bg-bcg-dark">Send Email to smlo@ncnu.edu.tw</a>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                                     <div className="space-y-8">
-                                        {currentData.videos && currentData.videos.length > 0 ? (
+                                        {currentSection.highlights && (
                                             <section>
-                                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                                                    <i className="fas fa-play-circle text-bcg mr-2"></i> {currentLangLabels.videos}
-                                                </h3>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                    {currentData.videos.map((video, i) => (
-                                                        <VideoCard key={i} video={video} />
-                                                    ))}
-                                                </div>
+                                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-l-4 border-bcg-gold pl-3">{currentContent.labels.highlights}</h3>
+                                                <div className="space-y-3">{currentSection.highlights.map((h, i) => <div key={i} className="flex items-start"><span className="w-1.5 h-1.5 mt-2 bg-bcg rounded-full mr-3 shrink-0"></span><p className="text-sm text-gray-700 dark:text-gray-300">{h}</p></div>)}</div>
+                                            </section>
+                                        )}
+                                        {currentSection.actionPlan && (
+                                            <section className="bg-gray-50 dark:bg-gray-900 p-5 rounded-lg border border-gray-100 dark:border-gray-800">
+                                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center"><i className="fas fa-tasks text-bcg mr-2"></i> {currentContent.labels.actionPlan}</h3>
+                                                <ul className="space-y-3">{currentSection.actionPlan.map((a, i) => <li key={i} className="flex items-center text-sm text-gray-700 dark:text-gray-300"><i className="fas fa-check text-green-500 mr-3 text-xs"></i>{a}</li>)}</ul>
+                                            </section>
+                                        )}
+                                        {currentSection.keywords && (
+                                            <section>
+                                                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">{currentContent.labels.keywords}</h3>
+                                                <div className="flex flex-wrap gap-2 mb-4">{currentSection.keywords.map((k, i) => <span key={i} className="px-3 py-1 bg-bcg bg-opacity-10 text-bcg dark:text-bcg-light rounded-full text-xs font-semibold">#{k}</span>)}</div>
+                                                <ThemeExplorer themes={currentSection.themes} label={currentContent.labels.themes} />
+                                            </section>
+                                        )}
+                                    </div>
+                                    <div className="space-y-8">
+                                        {currentSection.videos ? (
+                                            <section>
+                                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center"><i className="fas fa-play-circle text-bcg mr-2"></i> {currentContent.labels.videos}</h3>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{currentSection.videos.map((v, i) => <VideoCard key={i} video={v} />)}</div>
                                             </section>
                                         ) : (
                                             <>
-                                                <section>
-                                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                                                        <i className="fas fa-layer-group text-bcg mr-2"></i> {currentLangLabels.flashcards}
-                                                    </h3>
-                                                    <div className="grid grid-cols-1 gap-4">
-                                                        {currentData.flashcards.map((fc, i) => (
-                                                            <Flashcard key={i} front={fc.front} back={fc.back} instruction={currentLangMeta.try} />
-                                                        ))}
-                                                    </div>
-                                                </section>
-
-                                                <section>
-                                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                                                        <i className="fas fa-question-circle text-bcg mr-2"></i> {currentLangLabels.quiz}
-                                                    </h3>
-                                                    {currentData.quiz.map((q, i) => (
-                                                        <Quiz 
-                                                            key={i} 
-                                                            question={q.q} 
-                                                            options={q.options} 
-                                                            answer={q.ans} 
-                                                            texts={{try: currentLangMeta.try}}
-                                                            onAnswer={(isCorrect) => handleQuizAnswer(currentData.id, i, isCorrect)}
-                                                            isAnsweredCorrectly={quizProgress[currentData.id]?.[i]}
-                                                        />
-                                                    ))}
-                                                </section>
+                                                {currentSection.flashcards && currentSection.flashcards.length > 0 && (
+                                                    <section>
+                                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center"><i className="fas fa-layer-group text-bcg mr-2"></i> {currentContent.labels.flashcards}</h3>
+                                                        <div className="grid grid-cols-1 gap-4">{currentSection.flashcards.map((f, i) => <Flashcard key={i} front={f.front} back={f.back} instruction={currentContent.meta.flip} />)}</div>
+                                                    </section>
+                                                )}
+                                                {currentSection.quiz && currentSection.quiz.length > 0 && (
+                                                    <section>
+                                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center"><i className="fas fa-check-square text-bcg mr-2"></i> {currentContent.labels.quiz}</h3>
+                                                        <SelfCheck questions={currentSection.quiz} answers={quizScores[currentSection.id] || {}} onAnswer={(qIdx, score) => handleQuizAnswer(currentSection.id, qIdx, score)} />
+                                                    </section>
+                                                )}
                                             </>
                                         )}
                                     </div>
                                 </div>
                             )}
 
-                            {/* Footer Area */}
                             <footer className="mt-auto border-t border-gray-200 dark:border-gray-800 pt-8 pb-4">
                                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                                     <div className="w-full md:w-1/2">
-                                        <label className="block text-xs font-bold text-gray-400 uppercase mb-1">
-                                            {currentLangMeta.glossary}
-                                        </label>
-                                        <select 
-                                            className="w-full p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-sm text-gray-700 dark:text-gray-300 focus:border-bcg outline-none"
-                                            onChange={(e) => setGlossaryTerm(e.target.value)}
-                                            value={glossaryTerm}
-                                        >
-                                            <option value="">Select a term...</option>
-                                            {glossaryKeys.map((g, i) => (
-                                                <option key={i} value={g.d}>{g.t}</option>
-                                            ))}
+                                        <label className="block text-xs font-bold text-gray-400 uppercase mb-1">{currentContent.meta.glossary}</label>
+                                        <select className="w-full p-2 bg-white dark:bg-gray-800 border rounded text-sm text-gray-700 dark:text-gray-300 focus:border-bcg outline-none" onChange={(e) => setGlossaryTerm(e.target.value)} value={glossaryTerm}>
+                                            <option value="">Select...</option>
+                                            {glossaryKeys.map((g, i) => <option key={i} value={g.d}>{g.t}</option>)}
                                         </select>
-                                        {glossaryTerm && (
-                                            <div className="mt-2 p-3 bg-blue-50 dark:bg-gray-800 text-blue-900 dark:text-blue-200 text-sm rounded border-l-4 border-blue-500 animate-fade-in">
-                                                {glossaryTerm}
-                                            </div>
-                                        )}
+                                        {glossaryTerm && <div className="mt-2 p-3 bg-blue-50 dark:bg-gray-900 text-blue-900 dark:text-blue-200 text-sm rounded border-l-4 border-blue-500">{glossaryTerm}</div>}
                                     </div>
-
                                     <div className="flex space-x-4">
-                                        <button 
-                                            onClick={() => handleNav(activeSection - 1)}
-                                            disabled={activeSection === 0}
-                                            className={`w-10 h-10 rounded-full flex items-center justify-center transition
-                                                ${activeSection === 0 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-bcg text-white hover:bg-bcg-dark shadow-lg'}
-                                            `}
-                                        >
-                                            <i className="fas fa-arrow-left"></i>
-                                        </button>
-                                        <button 
-                                            onClick={() => handleNav(activeSection + 1)}
-                                            disabled={activeSection === sections.length - 1}
-                                            className={`w-10 h-10 rounded-full flex items-center justify-center transition
-                                                ${activeSection === sections.length - 1 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-bcg text-white hover:bg-bcg-dark shadow-lg'}
-                                            `}
-                                        >
-                                            <i className="fas fa-arrow-right"></i>
-                                        </button>
+                                        <button onClick={() => {setActiveSection(Math.max(0, activeSection - 1)); window.scrollTo(0,0);}} disabled={activeSection===0} className={`w-10 h-10 rounded-full flex items-center justify-center ${activeSection===0 ? 'bg-gray-200 text-gray-400' : 'bg-bcg text-white hover:bg-bcg-dark shadow-lg'}`}><i className="fas fa-arrow-left"></i></button>
+                                        <button onClick={() => {setActiveSection(Math.min(currentContent.sections.length-1, activeSection + 1)); window.scrollTo(0,0);}} disabled={activeSection===currentContent.sections.length-1} className={`w-10 h-10 rounded-full flex items-center justify-center ${activeSection===currentContent.sections.length-1 ? 'bg-gray-200 text-gray-400' : 'bg-bcg text-white hover:bg-bcg-dark shadow-lg'}`}><i className="fas fa-arrow-right"></i></button>
                                     </div>
                                 </div>
-                                
                                 <div className="flex flex-col md:flex-row justify-center items-center mt-10 text-xs text-gray-400 space-y-2 md:space-y-0 md:space-x-6 border-t border-gray-200 dark:border-gray-800 pt-6">
-                                    <div className="flex items-center space-x-4">
-                                        <span>{currentLangMeta.copyright}</span>
-                                        <span>Version: 2025/12/11</span>
-                                    </div>
-                                    <div className="flex items-center space-x-4">
+                                    <span>{currentContent.meta.copyright}</span>
+                                    <span>Version: 2025/12/11</span>
+                                    <div className="flex space-x-4">
                                         <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition">Creator: Prof. Shihmin Lo, PhD</a>
-                                        <a href="https://www.ibs.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">IBS Official</a>
-                                        <a href="https://rpage.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">NCNU Official</a>
+                                        <a href="https://www.ibs.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">IBS</a>
+                                        <a href="https://rpage.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">NCNU</a>
                                     </div>
                                 </div>
                             </footer>
-
                         </div>
                     </main>
                 </div>
