@@ -546,7 +546,12 @@
             const [quizScores, setQuizScores] = useState({}); // { sectionId: { qIdx: score } }
             const [lang, setLang] = useState('TC');
             const [theme, setTheme] = useState('light');
-            const [activeSection, setActiveSection] = useState(0);
+            const [activeSection, setActiveSection] = useState(() => {
+                // Read initial section from URL hash
+                const hash = window.location.hash.replace('#section-', '');
+                const section = parseInt(hash);
+                return !isNaN(section) && section >= 0 ? section : 0;
+            });
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
             const [glossaryTerm, setGlossaryTerm] = useState("");
 
@@ -554,6 +559,26 @@
                 if (theme === 'dark') document.documentElement.classList.add('dark');
                 else document.documentElement.classList.remove('dark');
             }, [theme]);
+            
+            // ← 在這裡加入下面兩段
+
+            // Update URL hash when section changes
+            useEffect(() => {
+                window.location.hash = `#section-${activeSection}`;
+            }, [activeSection]);
+
+            // Listen to hash changes (browser back/forward)
+            useEffect(() => {
+                const handleHashChange = () => {
+                    const hash = window.location.hash.replace('#section-', '');
+                    const section = parseInt(hash);
+                    if (!isNaN(section) && section >= 0) {
+                        setActiveSection(section);
+                    }
+                };
+                window.addEventListener('hashchange', handleHashChange);
+                return () => window.removeEventListener('hashchange', handleHashChange);
+            }, []);
 
             const currentContent = translations[lang] || translations['ENG'];
             const currentSection = currentContent.sections[activeSection];
