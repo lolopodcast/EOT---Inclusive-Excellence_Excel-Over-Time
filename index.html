@@ -72,7 +72,8 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // --- Video Data (Shared) ---
+        // --- 1. Global Constants & Data ---
+        
         const videoList = [
             { title: "1. 看見世界, 了解產業, 塑造你自己", url: "https://youtu.be/RVeT7DyKTYE" },
             { title: "2. 以職能建立為目標的學習", url: "https://youtu.be/XQk_c0w80FQ" },
@@ -82,116 +83,25 @@
             { title: "6. 大一新鮮人須知(國企系)", url: "https://youtu.be/vozEwUakzbs" }
         ];
 
-        const getYouTubeID = (url) => {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        };
+        const identities = [
+            "高中師生", "大學師生", "大學行政", "學生家長", "校友系友", "產業先進", "其他"
+        ];
 
-        // --- Content Definitions for Multiple Languages ---
-        
-        // Helper to generate section structure
-        const createSections = (langCode, texts) => {
-            return [
-                {
-                    id: 0,
-                    title: texts.s0_title,
-                    highlights: texts.s0_highlights,
-                    actionPlan: texts.s0_actionPlan,
-                    keywords: ["Inclusive Excellence", "Gatekeeping vs Groundskeeping", "Strategic Framework"],
-                    flashcards: [
-                        { front: "Inclusive Excellence", back: texts.fc_ie },
-                        { front: "Gatekeeping", back: texts.fc_gate },
-                        { front: "Groundskeeping", back: texts.fc_ground }
-                    ],
-                    quiz: [
-                        { q: texts.q0_q, options: texts.q0_opts, ans: 1 },
-                        { q: texts.q0_q2, options: texts.q0_opts2, ans: 1 },
-                        { q: texts.q0_q3, options: texts.q0_opts3, ans: 1 }
-                    ]
-                },
-                {
-                    id: 1,
-                    title: texts.s1_title,
-                    highlights: texts.s1_highlights,
-                    actionPlan: texts.s1_actionPlan,
-                    keywords: ["Asset-based Model", "Cultural Capital", "Contextualized Review"],
-                    flashcards: [
-                        { front: "Exclusivity vs Inclusion", back: texts.fc_ex_inc },
-                        { front: "Deficit Model", back: texts.fc_deficit },
-                        { front: "Asset Model", back: texts.fc_asset }
-                    ],
-                    quiz: [
-                        { q: texts.q1_q, options: texts.q1_opts, ans: 1 },
-                        { q: texts.q1_q2, options: texts.q1_opts2, ans: 1 },
-                        { q: texts.q1_q3, options: texts.q1_opts3, ans: 0 }
-                    ]
-                },
-                {
-                    id: 2,
-                    title: texts.s2_title,
-                    highlights: texts.s2_highlights,
-                    actionPlan: texts.s2_actionPlan,
-                    keywords: ["OIE Office", "Systematic Change", "USR Impact"],
-                    flashcards: [
-                        { front: "Year 1-2", back: texts.fc_y12 },
-                        { front: "Year 3-4", back: texts.fc_y34 },
-                        { front: "Year 5", back: texts.fc_y5 }
-                    ],
-                    quiz: [
-                        { q: texts.q2_q, options: texts.q2_opts, ans: 0 },
-                        { q: texts.q2_q2, options: texts.q2_opts, ans: 1 },
-                        { q: texts.q2_q3, options: texts.q2_opts2, ans: 2 }
-                    ]
-                },
-                {
-                    id: 3,
-                    title: texts.s3_title,
-                    highlights: texts.s3_highlights,
-                    actionPlan: texts.s3_actionPlan,
-                    keywords: ["Resilience Flag", "Rubric Scoring", "AI Disclosure"],
-                    flashcards: [
-                        { front: "Stage 1", back: texts.fc_s1 },
-                        { front: "Stage 2", back: texts.fc_s2 },
-                        { front: "Distance Traveled", back: texts.fc_dist }
-                    ],
-                    quiz: [
-                        { q: texts.q3_q, options: texts.q3_opts, ans: 1 },
-                        { q: texts.q3_q2, options: texts.q3_opts2, ans: 2 },
-                        { q: texts.q3_q3, options: texts.q3_opts3, ans: 1 }
-                    ]
-                },
-                {
-                    id: 4,
-                    title: texts.s4_title,
-                    highlights: texts.s4_highlights,
-                    actionPlan: texts.s4_actionPlan,
-                    keywords: ["Honors Degree", "Peer Mentoring", "Capstone Project"],
-                    flashcards: [
-                        { front: "Total Credits", back: texts.fc_credits },
-                        { front: "Input Module", back: texts.fc_input },
-                        { front: "Output Module", back: texts.fc_output }
-                    ],
-                    quiz: [
-                        { q: texts.q4_q, options: ["12", "18", "24"], ans: 1 },
-                        { q: texts.q4_q2, options: texts.q4_opts2, ans: 2 },
-                        { q: texts.q4_q3, options: texts.q4_opts3, ans: 2 }
-                    ]
-                },
-                {
-                    id: 5,
-                    title: texts.s5_title,
-                    highlights: texts.s5_highlights,
-                    actionPlan: texts.s5_actionPlan,
-                    keywords: ["Career Development", "EMI Learning", "Digital Transformation"],
-                    flashcards: [],
-                    quiz: [],
-                    videos: videoList
-                }
-            ];
-        };
+        const languageOptions = [
+            { code: "TC", label: "繁體中文" },
+            { code: "ENG", label: "English" },
+            { code: "SC", label: "简体中文" },
+            { code: "VI", label: "Tiếng Việt" },
+            { code: "ID", label: "Bahasa Indonesia" },
+            { code: "MS", label: "Bahasa Melayu" },
+            { code: "MY", label: "Burmese (မြန်မာစာ)" },
+            { code: "ES", label: "Español" },
+            { code: "FR", label: "Français" },
+            { code: "DE", label: "Deutsch" },
+            { code: "JA", label: "日本語" },
+            { code: "KO", label: "한국어" },
+        ];
 
-        // Complete Glossary List (English terms as keys)
         const glossaryKeys = [
             { t: "Inclusive Excellence (IE)", d: "Excellence and inclusion are inseparable." },
             { t: "Meritocracy", d: "System rewarding past credentials, often ignoring inequity." },
@@ -213,521 +123,182 @@
             { t: "Capstone Project", d: "Culminating academic project." },
             { t: "Career Development", d: "Managing learning and work over lifespan." },
             { t: "EMI Learning", d: "English as Medium of Instruction." },
-            { t: "Digital Transformation", d: "Integrating digital tech into all areas." }
+            { t: "Digital Transformation", d: "Integrating digital tech into all areas." },
+            { t: "Learning Analytics", d: "Measurement and analysis of data about learners." }
         ];
 
-        // Language Data Objects
-        const langData = {
-            TC: {
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Creator: Prof. Shihmin Lo, PhD", nav: "導覽目錄", glossary: "術語表 (Glossary)", try: "再試一次", correct: "正確！", wrong: "錯誤", flip: "點擊翻轉" },
-                labels: { highlights: "重點摘要 (Highlights)", actionPlan: "行動計畫 (Action Plan)", keywords: "關鍵字 (Keywords)", flashcards: "觀念翻轉卡 (Flash Cards)", quiz: "隨堂測驗 (Quick Quiz)", videos: "精選播放清單 (Video Playlists)" },
-                texts: {
-                    s0_title: "0. 執行摘要",
-                    s0_highlights: ["核心戰略：導入共融性卓越 (IE) 為最高原則。", "關鍵轉型：從守門員 (Gatekeeping) 轉為園丁 (Groundskeeping)。", "雙軌實踐：入學兩階段審查 + 榮譽學程。"],
-                    s0_actionPlan: ["成立 OIE 辦公室。", "建立情境化審查機制。", "啟動榮譽學程先導班。"],
-                    fc_ie: "卓越與共融密不可分；多元是必要條件。", fc_gate: "以排他性和單一標準篩選學生。", fc_ground: "建構支持生態系，轉化背景為貢獻。",
-                    q0_q: "核心價值是？", q0_opts: ["菁英主義", "共融性卓越", "齊頭平等"],
-                    q0_q2: "大學角色轉型為？", q0_opts2: ["記帳員", "園丁", "管家"],
-                    q0_q3: "實施期程？", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. 願景與哲學",
-                    s1_highlights: ["重新定義卓越：從稀缺性轉向共融性。", "資產模式：視弱勢背景為文化資本。", "創造贏家：挖掘潛力而非僅尋找現成贏家。"],
-                    s1_actionPlan: ["發布 IE 白皮書。", "推動情境化評估。", "消除降低標準的誤解。"],
-                    fc_ex_inc: "舊：低錄取率。新：多元成功。", fc_deficit: "視弱勢為缺乏資源。", fc_asset: "視多元為創新來源。",
-                    q1_q: "新價值定義？", q1_opts: ["拒絕多少人", "成就多少人", "學費"],
-                    q1_q2: "對弱勢觀點？", q1_opts2: ["虧損模式", "資產模式", "忽略"],
-                    q1_q3: "評估轉向？", q1_opts3: ["看現在未來", "看背景", "看運氣"],
-                    s2_title: "2. 策略發展藍圖",
-                    s2_highlights: ["第一階段：紮根與共識。", "第二階段：系統性變革。", "第三階段：典範與擴散。"],
-                    s2_actionPlan: ["啟動 OIE。", "修訂升等辦法。", "建立預警網絡。"],
-                    fc_y12: "紮根與共識 (數據盤點)。", fc_y34: "系統變革 (招生升等)。", fc_y5: "典範擴散 (高教標竿)。",
-                    q2_q: "OIE 何時成立？", q2_opts: ["第一階段", "第二階段", "第三階段"],
-                    q2_q2: "升等改革？", q2_q3: "第五年目標？", q2_opts2: ["規劃", "測試", "典範擴散"],
-                    s3_title: "3. 多元入學策略",
-                    s3_highlights: ["兩階段審查：校級 (起跑點) + 院系級 (潛力)。", "第一階段：韌性標記。", "第二階段：Essay 與 AI 聲明。"],
-                    s3_actionPlan: ["建置數據儀表板。", "設計結構化 Essay。", "實施 AI 素養測驗。"],
-                    fc_s1: "確認起跑點 (Context)。", fc_s2: "確認跑多遠 (Potential)。", fc_dist: "看進步幅度非絕對分數。",
-                    q3_q: "誰負責第一階段？", q3_opts: ["教授", "招生辦", "教育部"],
-                    q3_q2: "韌性標記作用？", q3_opts2: ["錄取", "剔除", "加權關注"],
-                    q3_q3: "Essay 評估？", q3_opts3: ["文筆", "動機與AI", "財力"],
-                    s4_title: "4. 榮譽學程",
-                    s4_highlights: ["轉型書卷獎：前 5% 學生進入 18 學分學程。", "兼善天下：獎金轉專題基金。", "雙模組：Input + Output。"],
-                    s4_actionPlan: ["開設 AI/EMI 課程。", "落實同儕輔導。", "完成 Capstone。"],
-                    fc_credits: "18 學分 (9+9)。", fc_input: "AI, EMI, 好奇心。", fc_output: "輔導, USR, 專題。",
-                    q4_q: "總學分？", q4_q2: "Output 強調？", q4_opts2: ["考試", "論文", "貢獻"], q4_q3: "獎金轉為？", q4_opts3: ["現金", "減免", "專題基金"],
-                    s5_title: "5. 精選播放清單",
-                    s5_highlights: ["收錄職涯與產業趨勢講座。", "EMI 實境與數位教材。", "大一須知與轉型案例。"],
-                    s5_actionPlan: ["觀看「看見世界」反思定位。", "熟悉全英語環境。", "學習數位課程設計。"]
-                }
+        // --- 2. Content Data Structures ---
+
+        // English Content Structure (Base)
+        const baseContentENG = {
+            meta: { 
+                title: "EOT - Excel Over Time", 
+                slogan: "Inclusive excellence, excelling over time.", 
+                nav: "Navigation", 
+                glossary: "Glossary", 
+                try: "Try Again", 
+                copyright: "Copyright © 2025 EOT - Excel Over Time. All Rights Reserved." 
             },
-            ENG: {
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Creator: Prof. Shihmin Lo, PhD", nav: "Navigation", glossary: "Glossary", try: "Try Again", correct: "Correct!", wrong: "Incorrect", flip: "Click to Flip" },
-                labels: { highlights: "Highlights", actionPlan: "Action Plan", keywords: "Keywords", flashcards: "Flash Cards", quiz: "Quick Quiz", videos: "Video Playlists" },
-                texts: {
-                    s0_title: "0. Executive Summary",
-                    s0_highlights: ["Core Strategy: Inclusive Excellence (IE) as guiding principle.", "Key Transformation: From Gatekeeping to Groundskeeping.", "Dual Practice: 2-Stage Admissions & IE Honors Program."],
-                    s0_actionPlan: ["Establish OIE Office.", "Implement Contextualized Review.", "Launch Honors Pilot."],
-                    fc_ie: "Excellence & inclusion are inseparable.", fc_gate: "Defining value by exclusion.", fc_ground: "Ecosystem for diverse talent.",
-                    q0_q: "Core value?", q0_opts: ["Meritocracy", "Inclusive Excellence", "Equality"],
-                    q0_q2: "Role shift to?", q0_opts2: ["Bookkeeping", "Groundskeeping", "Housekeeping"],
-                    q0_q3: "Timeline?", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. Vision & Philosophy",
-                    s1_highlights: ["Redefining Excellence: From Exclusivity to Inclusion.", "Asset Model: Diversity as Cultural Capital.", "Creating Winners: Not just finding them."],
-                    s1_actionPlan: ["Publish IE White Paper.", "Promote Contextualized Assessment.", "Widen pool, don't lower standards."],
-                    fc_ex_inc: "Old: Rejection. New: Success.", fc_deficit: "Viewing students as lacking.", fc_asset: "Diversity as innovation.",
-                    q1_q: "New definition?", q1_opts: ["Excluded", "Succeeds", "Cost"],
-                    q1_q2: "View on disadvantage?", q1_opts2: ["Deficit", "Asset", "Ignore"],
-                    q1_q3: "Eval shift to?", q1_opts3: ["Future", "Background", "Luck"],
-                    s2_title: "2. Strategic Roadmap",
-                    s2_highlights: ["Phase 1: Roots & Consensus.", "Phase 2: Systematic Change.", "Phase 3: Diffusion."],
-                    s2_actionPlan: ["Launch OIE.", "Revise promotion criteria.", "Early warning network."],
-                    fc_y12: "Roots (Data).", fc_y34: "Change (Admissions).", fc_y5: "Diffusion (Model).",
-                    q2_q: "OIE established?", q2_opts: ["Phase 1", "Phase 2", "Phase 3"],
-                    q2_q2: "Faculty reform?", q2_q3: "Year 5 goal?", q2_opts2: ["Plan", "Test", "Diffusion"],
-                    s3_title: "3. Admissions Strategy",
-                    s3_highlights: ["2-Stage Review: Context + Potential.", "Stage 1: Resilience Flags.", "Stage 2: Essay & AI Disclosure."],
-                    s3_actionPlan: ["Build Data Dashboard.", "Design Structured Essays.", "AI Literacy Test."],
-                    fc_s1: "Check Starting Point.", fc_s2: "Check Distance Traveled.", fc_dist: "Progress relative to start.",
-                    q3_q: "Stage 1 reviewer?", q3_opts: ["Faculty", "Admissions Office", "Ministry"],
-                    q3_q2: "Resilience Flag?", q3_opts2: ["Admit", "Reject", "Weight"],
-                    q3_q3: "Essay assesses?", q3_opts3: ["Grammar", "Motivation", "Wealth"],
-                    s4_title: "4. Honors Program",
-                    s4_highlights: ["Transform Book Prize: Top 5% to Honors.", "Self to Society: Impact funds.", "Modules: Input + Output."],
-                    s4_actionPlan: ["AI/EMI Courses.", "Peer Mentoring.", "Capstone Project."],
-                    fc_credits: "18 Credits.", fc_input: "AI, EMI, Curiosity.", fc_output: "Mentoring, USR, Capstone.",
-                    q4_q: "Total credits?", q4_q2: "Output focus?", q4_opts2: ["Exams", "Thesis", "Contribution"], q4_q3: "Cash becomes?", q4_opts3: ["Cash", "Waiver", "Project Funds"],
-                    s5_title: "5. Video Playlists",
-                    s5_highlights: ["Talks on career and industry trends.", "EMI and digital materials.", "Freshman info and case studies."],
-                    s5_actionPlan: ["Watch 'Seeing the World'.", "Familiarize with EMI.", "Learn digital design."]
-                }
+            labels: { 
+                highlights: "Highlights", 
+                actionPlan: "Action Plan", 
+                keywords: "Keywords", 
+                flashcards: "Flash Cards", 
+                quiz: "Quick Quiz", 
+                videos: "Video Playlists", 
+                history: "Usage History", 
+                feedback: "Feedback & Contact" 
             },
-            SC: { // Simplified Chinese
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Creator: Prof. Shihmin Lo, PhD", nav: "导航目录", glossary: "术语表 (Glossary)", try: "再试一次", correct: "正确！", wrong: "错误", flip: "点击翻转" },
-                labels: { highlights: "重点摘要 (Highlights)", actionPlan: "行动计划 (Action Plan)", keywords: "关键字 (Keywords)", flashcards: "观念翻转卡 (Flash Cards)", quiz: "随堂测验 (Quick Quiz)", videos: "精选播放列表 (Video Playlists)" },
-                texts: {
-                    s0_title: "0. 执行摘要",
-                    s0_highlights: ["核心战略：导入共融性卓越 (IE) 为最高原则。", "关键转型：从守门员 (Gatekeeping) 转为园丁 (Groundskeeping)。", "双轨实践：入学两阶段审查 + 荣誉学程。"],
-                    s0_actionPlan: ["成立 OIE 办公室。", "建立情境化审查机制。", "启动荣誉学程先导班。"],
-                    fc_ie: "卓越与共融密不可分。", fc_gate: "以排他性筛选学生。", fc_ground: "建构支持生态系。",
-                    q0_q: "核心价值是？", q0_opts: ["菁英主义", "共融性卓越", "齐头平等"],
-                    q0_q2: "大学角色转型为？", q0_opts2: ["记账员", "园丁", "管家"],
-                    q0_q3: "实施期程？", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. 愿景与哲学",
-                    s1_highlights: ["重新定义卓越：从稀缺性转向共融性。", "资产模式：视弱势背景为文化资本。", "创造赢家：挖掘潜力而非仅寻找现成赢家。"],
-                    s1_actionPlan: ["发布 IE 白皮书。", "推动情境化评估。", "消除降低标准的误解。"],
-                    fc_ex_inc: "旧：低录取率。新：多元成功。", fc_deficit: "视弱势为缺乏资源。", fc_asset: "视多元为创新来源。",
-                    q1_q: "新价值定义？", q1_opts: ["拒绝多少人", "成就多少人", "学费"],
-                    q1_q2: "对弱势观点？", q1_opts2: ["亏损模式", "资产模式", "忽略"],
-                    q1_q3: "评估转向？", q1_opts3: ["看现在未来", "看背景", "看运气"],
-                    s2_title: "2. 策略发展蓝图",
-                    s2_highlights: ["第一阶段：扎根与共识。", "第二阶段：系统性变革。", "第三阶段：典范与扩散。"],
-                    s2_actionPlan: ["启动 OIE。", "修订升等办法。", "建立预警网络。"],
-                    fc_y12: "扎根与共识。", fc_y34: "系统变革。", fc_y5: "典范扩散。",
-                    q2_q: "OIE 何时成立？", q2_opts: ["第一阶段", "第二阶段", "第三阶段"],
-                    q2_q2: "升等改革？", q2_q3: "第五年目标？", q2_opts2: ["规划", "测试", "典范扩散"],
-                    s3_title: "3. 多元入学策略",
-                    s3_highlights: ["两阶段审查：校级 + 院系级。", "第一阶段：韧性标记。", "第二阶段：Essay 与 AI 声明。"],
-                    s3_actionPlan: ["建置数据仪表板。", "设计结构化 Essay。", "实施 AI 素养测验。"],
-                    fc_s1: "确认起跑点。", fc_s2: "确认跑多远。", fc_dist: "看进步幅度。",
-                    q3_q: "谁负责第一阶段？", q3_opts: ["教授", "招生办", "教育部"],
-                    q3_q2: "韧性标记作用？", q3_opts2: ["录取", "剔除", "加权关注"],
-                    q3_q3: "Essay 评估？", q3_opts3: ["文笔", "动机与AI", "财力"],
-                    s4_title: "4. 荣誉学程",
-                    s4_highlights: ["转型书卷奖：前 5% 学生进入学程。", "兼善天下：奖金转专题基金。", "双模组：Input + Output。"],
-                    s4_actionPlan: ["开设 AI/EMI 课程。", "落实同侪辅导。", "完成 Capstone。"],
-                    fc_credits: "18 学分。", fc_input: "AI, EMI, 好奇心。", fc_output: "辅导, USR, 专题。",
-                    q4_q: "总学分？", q4_q2: "Output 强调？", q4_opts2: ["考试", "论文", "贡献"], q4_q3: "奖金转为？", q4_opts3: ["现金", "减免", "专题基金"],
-                    s5_title: "5. 精选播放列表",
-                    s5_highlights: ["收录职涯与产业趋势讲座。", "EMI 实境与数字教材。", "大一须知与转型案例。"],
-                    s5_actionPlan: ["观看系列影片。", "熟悉全英语环境。", "学习数字课程设计。"]
-                }
-            },
-            JA: { // Japanese
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "作成者: Prof. Shihmin Lo, PhD", nav: "ナビゲーション", glossary: "用語集 (Glossary)", try: "再試行", correct: "正解！", wrong: "不正解", flip: "クリックして反転" },
-                labels: { highlights: "ハイライト (Highlights)", actionPlan: "アクションプラン (Action Plan)", keywords: "キーワード (Keywords)", flashcards: "フラッシュカード (Flash Cards)", quiz: "クイズ (Quick Quiz)", videos: "プレイリスト (Video Playlists)" },
-                texts: {
-                    s0_title: "0. エグゼクティブサマリー",
-                    s0_highlights: ["コア戦略：包括的卓越性 (IE) の導入。", "変革：ゲートキーパーからグラウンズキーパーへ。", "実践：2段階審査とIEオナーズプログラム。"],
-                    s0_actionPlan: ["OIEオフィスの設立。", "コンテキストレビューの実装。", "オナーズプログラムの開始。"],
-                    fc_ie: "卓越性と包摂性は不可分。", fc_gate: "排除による価値定義。", fc_ground: "多様な才能の育成。",
-                    q0_q: "コアとなる価値は？", q0_opts: ["能力主義", "包括的卓越性", "平等"],
-                    q0_q2: "大学の役割移行？", q0_opts2: ["簿記", "グラウンズキーパー", "家政婦"],
-                    q0_q3: "期間は？", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. ビジョンと哲学",
-                    s1_highlights: ["卓越性の再定義：排除から包摂へ。", "資産モデル：多様性を資本と見なす。", "勝者の創造：勝者を探すだけでなく育てる。"],
-                    s1_actionPlan: ["IE白書の発行。", "コンテキスト評価の推進。", "基準を下げずにプールを広げる。"],
-                    fc_ex_inc: "旧：拒絶。新：成功。", fc_deficit: "学生を欠陥と見なす。", fc_asset: "多様性を革新と見なす。",
-                    q1_q: "新しい定義は？", q1_opts: ["排除数", "成功者数", "学費"],
-                    q1_q2: "不利益への視点？", q1_opts2: ["欠陥モデル", "資産モデル", "無視"],
-                    q1_q3: "評価の焦点？", q1_opts3: ["未来", "背景", "運"],
-                    s2_title: "2. 戦略ロードマップ",
-                    s2_highlights: ["フェーズ1：定着と合意。", "フェーズ2：体系的変化。", "フェーズ3：普及。"],
-                    s2_actionPlan: ["OIEの立ち上げ。", "昇進基準の改訂。", "早期警告ネットワーク。"],
-                    fc_y12: "定着（データ）。", fc_y34: "変化（入試・昇進）。", fc_y5: "普及（モデル）。",
-                    q2_q: "OIE設立はいつ？", q2_opts: ["フェーズ1", "フェーズ2", "フェーズ3"],
-                    q2_q2: "教員改革？", q2_q3: "5年目の目標？", q2_opts2: ["計画", "テスト", "普及"],
-                    s3_title: "3. 入学戦略",
-                    s3_highlights: ["2段階審査：コンテキスト＋潜在能力。", "第1段階：レジリエンスフラグ。", "第2段階：エッセイとAI開示。"],
-                    s3_actionPlan: ["データダッシュボード構築。", "構造化エッセイ設計。", "AIリテラシーテスト。"],
-                    fc_s1: "出発点の確認。", fc_s2: "到達距離の確認。", fc_dist: "開始点からの進歩。",
-                    q3_q: "第1段階の審査員？", q3_opts: ["教員", "入学事務局", "省庁"],
-                    q3_q2: "レジリエンスフラグ？", q3_opts2: ["合格", "拒否", "加重評価"],
-                    q3_q3: "エッセイの評価？", q3_opts3: ["文法", "動機とAI", "富"],
-                    s4_title: "4. オナーズプログラム",
-                    s4_highlights: ["トップ5%をプログラムへ。", "賞金をプロジェクト資金へ。", "モジュール：入力＋出力。"],
-                    s4_actionPlan: ["AI/EMIコース。", "ピアメンタリング。", "キャップストーン。"],
-                    fc_credits: "18単位。", fc_input: "AI, EMI, 好奇心。", fc_output: "メンタリング, USR。",
-                    q4_q: "総単位数？", q4_q2: "出力の焦点？", q4_opts2: ["試験", "論文", "貢献"], q4_q3: "賞金は？", q4_opts3: ["現金", "免除", "資金"],
-                    s5_title: "5. おすすめ動画",
-                    s5_highlights: ["キャリアと業界トレンド。", "EMIとデジタル教材。", "新入生情報。"],
-                    s5_actionPlan: ["動画で自己分析。", "英語環境に慣れる。", "デジタル設計を学ぶ。"]
-                }
-            },
-            KO: { // Korean
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "제작자: Prof. Shihmin Lo, PhD", nav: "탐색", glossary: "용어 사전 (Glossary)", try: "다시 시도", correct: "정답!", wrong: "오답", flip: "클릭하여 뒤집기" },
-                labels: { highlights: "하이라이트 (Highlights)", actionPlan: "실행 계획 (Action Plan)", keywords: "키워드 (Keywords)", flashcards: "플래시 카드 (Flash Cards)", quiz: "퀴즈 (Quick Quiz)", videos: "비디오 재생 목록 (Video Playlists)" },
-                texts: {
-                    s0_title: "0. 요약",
-                    s0_highlights: ["핵심 전략: 포괄적 수월성(IE) 도입.", "전환: 게이트키핑에서 그라운드키핑으로.", "실천: 2단계 심사 및 IE 아너스 프로그램."],
-                    s0_actionPlan: ["OIE 사무소 설립.", "맥락적 검토 구현.", "아너스 프로그램 시작."],
-                    fc_ie: "수월성과 포용성은 불가분.", fc_gate: "배제를 통한 가치 정의.", fc_ground: "다양한 인재 육성 생태계.",
-                    q0_q: "핵심 가치는?", q0_opts: ["능력주의", "포괄적 수월성", "평등"],
-                    q0_q2: "대학의 역할 변화?", q0_opts2: ["부기", "그라운드키핑", "가사"],
-                    q0_q3: "일정은?", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. 비전 및 철학",
-                    s1_highlights: ["수월성 재정의: 배타성에서 포용성으로.", "자산 모델: 다양성을 문화 자본으로.", "승자 창출: 찾기만 하는 것이 아님."],
-                    s1_actionPlan: ["IE 백서 발간.", "맥락적 평가 추진.", "기준 유지하며 풀 확대."],
-                    fc_ex_inc: "구: 거절. 신: 성공.", fc_deficit: "학생을 결핍으로 간주.", fc_asset: "다양성을 혁신으로 간주.",
-                    q1_q: "새로운 정의?", q1_opts: ["거절 수", "성공 수", "등록금"],
-                    q1_q2: "불이익에 대한 관점?", q1_opts2: ["결핍 모델", "자산 모델", "무시"],
-                    q1_q3: "평가 초점?", q1_opts3: ["미래", "배경", "운"],
-                    s2_title: "2. 전략 로드맵",
-                    s2_highlights: ["1단계: 정착 및 합의.", "2단계: 체계적 변화.", "3단계: 확산."],
-                    s2_actionPlan: ["OIE 시작.", "승진 기준 개정.", "조기 경보 네트워크."],
-                    fc_y12: "정착 (데이터).", fc_y34: "변화 (입학/승진).", fc_y5: "확산 (모델).",
-                    q2_q: "OIE 설립 시기?", q2_opts: ["1단계", "2단계", "3단계"],
-                    q2_q2: "교원 개혁?", q2_q3: "5년차 목표?", q2_opts2: ["계획", "테스트", "확산"],
-                    s3_title: "3. 입학 전략",
-                    s3_highlights: ["2단계 심사: 맥락 + 잠재력.", "1단계: 회복력 플래그.", "2단계: 에세이 및 AI 공개."],
-                    s3_actionPlan: ["데이터 대시보드 구축.", "구조화된 에세이 설계.", "AI 리터러시 테스트."],
-                    fc_s1: "출발점 확인.", fc_s2: "이동 거리 확인.", fc_dist: "출발점 대비 진전.",
-                    q3_q: "1단계 심사자?", q3_opts: ["교수", "입학처", "교육부"],
-                    q3_q2: "회복력 플래그?", q3_opts2: ["합격", "거절", "가중치"],
-                    q3_q3: "에세이 평가?", q3_opts3: ["문법", "동기 및 AI", "재력"],
-                    s4_title: "4. 아너스 프로그램",
-                    s4_highlights: ["상위 5% 아너스 진입.", "개인에서 사회로: 상금을 기금으로.", "모듈: 입력 + 출력."],
-                    s4_actionPlan: ["AI/EMI 코스.", "동료 멘토링.", "캡스톤 프로젝트."],
-                    fc_credits: "18 학점.", fc_input: "AI, EMI, 호기심.", fc_output: "멘토링, USR, 캡스톤.",
-                    q4_q: "총 학점?", q4_q2: "출력 초점?", q4_opts2: ["시험", "논문", "기여"], q4_q3: "상금 전환?", q4_opts3: ["현금", "면제", "프로젝트 기금"],
-                    s5_title: "5. 추천 영상",
-                    s5_highlights: ["진로 및 산업 동향 강연.", "EMI 및 디지털 교재.", "신입생 정보."],
-                    s5_actionPlan: ["영상으로 자기 성찰.", "영어 환경 적응.", "디지털 설계 학습."]
-                }
-            },
-            VI: { // Vietnamese
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Người tạo: GS. Shihmin Lo, PhD", nav: "Điều hướng", glossary: "Thuật ngữ (Glossary)", try: "Thử lại", correct: "Đúng!", wrong: "Sai", flip: "Nhấn để lật" },
-                labels: { highlights: "Điểm nổi bật (Highlights)", actionPlan: "Kế hoạch hành động (Action Plan)", keywords: "Từ khóa (Keywords)", flashcards: "Thẻ ghi nhớ (Flash Cards)", quiz: "Trắc nghiệm (Quick Quiz)", videos: "Danh sách phát (Video Playlists)" },
-                texts: {
-                    s0_title: "0. Tóm tắt điều hành",
-                    s0_highlights: ["Chiến lược cốt lõi: Sự xuất sắc bao trùm (IE).", "Chuyển đổi: Từ Người gác cổng sang Người làm vườn.", "Thực hiện kép: Đánh giá 2 giai đoạn & Chương trình Danh dự."],
-                    s0_actionPlan: ["Thành lập Văn phòng OIE.", "Thực hiện Đánh giá theo bối cảnh.", "Khởi động thí điểm Danh dự."],
-                    fc_ie: "Xuất sắc & bao trùm không thể tách rời.", fc_gate: "Định giá trị bằng sự loại trừ.", fc_ground: "Hệ sinh thái cho tài năng đa dạng.",
-                    q0_q: "Giá trị cốt lõi?", q0_opts: ["Chế độ nhân tài", "Xuất sắc bao trùm", "Bình đẳng"],
-                    q0_q2: "Chuyển đổi vai trò?", q0_opts2: ["Kế toán", "Người làm vườn", "Quản gia"],
-                    q0_q3: "Thời gian?", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. Tầm nhìn & Triết lý",
-                    s1_highlights: ["Định nghĩa lại: Từ Độc quyền sang Bao trùm.", "Mô hình Tài sản: Đa dạng là Vốn văn hóa.", "Tạo ra người chiến thắng: Không chỉ tìm kiếm."],
-                    s1_actionPlan: ["Công bố Sách trắng IE.", "Thúc đẩy Đánh giá theo bối cảnh.", "Mở rộng hồ sơ, không hạ tiêu chuẩn."],
-                    fc_ex_inc: "Cũ: Từ chối. Mới: Thành công.", fc_deficit: "Xem sinh viên là thiếu hụt.", fc_asset: "Đa dạng là đổi mới.",
-                    q1_q: "Định nghĩa mới?", q1_opts: ["Bị loại trừ", "Thành công", "Học phí"],
-                    q1_q2: "Quan điểm bất lợi?", q1_opts2: ["Thiếu hụt", "Tài sản", "Bỏ qua"],
-                    q1_q3: "Trọng tâm đánh giá?", q1_opts3: ["Tương lai", "Nền tảng", "May mắn"],
-                    s2_title: "2. Lộ trình chiến lược",
-                    s2_highlights: ["GĐ 1: Gốc rễ & Đồng thuận.", "GĐ 2: Thay đổi hệ thống.", "GĐ 3: Lan tỏa."],
-                    s2_actionPlan: ["Khởi động OIE.", "Sửa đổi tiêu chí thăng chức.", "Mạng lưới cảnh báo sớm."],
-                    fc_y12: "Gốc rễ (Dữ liệu).", fc_y34: "Thay đổi (Tuyển sinh).", fc_y5: "Lan tỏa (Mô hình).",
-                    q2_q: "Thành lập OIE?", q2_opts: ["GĐ 1", "GĐ 2", "GĐ 3"],
-                    q2_q2: "Cải cách giảng viên?", q2_q3: "Mục tiêu năm 5?", q2_opts2: ["Kế hoạch", "Thử nghiệm", "Lan tỏa"],
-                    s3_title: "3. Chiến lược tuyển sinh",
-                    s3_highlights: ["Đánh giá 2 GĐ: Bối cảnh + Tiềm năng.", "GĐ 1: Cờ Kiên cường.", "GĐ 2: Bài luận & AI."],
-                    s3_actionPlan: ["Xây dựng Bảng dữ liệu.", "Thiết kế Bài luận.", "Kiểm tra năng lực AI."],
-                    fc_s1: "Kiểm tra Điểm xuất phát.", fc_s2: "Kiểm tra Quãng đường.", fc_dist: "Tiến bộ so với khởi điểm.",
-                    q3_q: "Người đánh giá GĐ 1?", q3_opts: ["Giảng viên", "Phòng tuyển sinh", "Bộ"],
-                    q3_q2: "Cờ Kiên cường?", q3_opts2: ["Nhận", "Từ chối", "Trọng số"],
-                    q3_q3: "Bài luận đánh giá?", q3_opts3: ["Ngữ pháp", "Động lực & AI", "Sự giàu có"],
-                    s4_title: "4. Chương trình Danh dự",
-                    s4_highlights: ["Top 5% vào Danh dự.", "Cá nhân sang Xã hội: Quỹ dự án.", "Mô-đun: Đầu vào + Đầu ra."],
-                    s4_actionPlan: ["Khóa học AI/EMI.", "Cố vấn đồng đẳng.", "Dự án Capstone."],
-                    fc_credits: "18 Tín chỉ.", fc_input: "AI, EMI, Tò mò.", fc_output: "Cố vấn, USR, Dự án.",
-                    q4_q: "Tổng tín chỉ?", q4_q2: "Trọng tâm đầu ra?", q4_opts2: ["Thi", "Luận văn", "Đóng góp"], q4_q3: "Tiền thưởng thành?", q4_opts3: ["Tiền mặt", "Miễn giảm", "Quỹ dự án"],
-                    s5_title: "5. Danh sách phát video",
-                    s5_highlights: ["Nói chuyện về nghề nghiệp và xu hướng.", "Tài liệu EMI và kỹ thuật số.", "Thông tin tân sinh viên."],
-                    s5_actionPlan: ["Xem 'Nhìn ra thế giới'.", "Làm quen với EMI.", "Học thiết kế kỹ thuật số."]
-                }
-            },
-            ES: { // Spanish
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Creador: Prof. Shihmin Lo, PhD", nav: "Navegación", glossary: "Glosario (Glossary)", try: "Intentar de nuevo", correct: "¡Correcto!", wrong: "Incorrecto", flip: "Clic para voltear" },
-                labels: { highlights: "Destacados (Highlights)", actionPlan: "Plan de Acción (Action Plan)", keywords: "Palabras Clave (Keywords)", flashcards: "Tarjetas (Flash Cards)", quiz: "Cuestionario (Quick Quiz)", videos: "Listas de reproducción (Video Playlists)" },
-                texts: {
-                    s0_title: "0. Resumen Ejecutivo",
-                    s0_highlights: ["Estrategia Central: Excelencia Inclusiva (IE).", "Transformación: De Portero a Jardinero.", "Práctica Dual: Admisión en 2 etapas y Programa de Honores."],
-                    s0_actionPlan: ["Establecer Oficina OIE.", "Implementar Revisión Contextual.", "Lanzar piloto de Honores."],
-                    fc_ie: "Excelencia e inclusión inseparables.", fc_gate: "Valor por exclusión.", fc_ground: "Ecosistema para talento diverso.",
-                    q0_q: "¿Valor central?", q0_opts: ["Meritocracia", "Excelencia Inclusiva", "Igualdad"],
-                    q0_q2: "¿Cambio de rol a?", q0_opts2: ["Contador", "Jardinero", "Ama de llaves"],
-                    q0_q3: "¿Cronograma?", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. Visión y Filosofía",
-                    s1_highlights: ["Redefinir Excelencia: De Exclusividad a Inclusión.", "Modelo de Activos: Diversidad como Capital Cultural.", "Crear Ganadores: No solo encontrarlos."],
-                    s1_actionPlan: ["Publicar Libro Blanco IE.", "Promover Evaluación Contextual.", "Ampliar grupo, mantener estándares."],
-                    fc_ex_inc: "Viejo: Rechazo. Nuevo: Éxito.", fc_deficit: "Estudiantes como déficit.", fc_asset: "Diversidad como innovación.",
-                    q1_q: "¿Nueva definición?", q1_opts: ["Excluidos", "Exitosos", "Matrícula"],
-                    q1_q2: "¿Vista de desventaja?", q1_opts2: ["Déficit", "Activo", "Ignorar"],
-                    q1_q3: "¿Enfoque eval?", q1_opts3: ["Futuro", "Fondo", "Suerte"],
-                    s2_title: "2. Hoja de Ruta",
-                    s2_highlights: ["Fase 1: Raíces y Consenso.", "Fase 2: Cambio Sistemático.", "Fase 3: Difusión."],
-                    s2_actionPlan: ["Lanzar OIE.", "Revisar criterios de promoción.", "Red de alerta temprana."],
-                    fc_y12: "Raíces (Datos).", fc_y34: "Cambio (Admisiones).", fc_y5: "Difusión (Modelo).",
-                    q2_q: "¿OIE establecida?", q2_opts: ["Fase 1", "Fase 2", "Fase 3"],
-                    q2_q2: "¿Reforma docente?", q2_q3: "¿Meta Año 5?", q2_opts2: ["Plan", "Prueba", "Difusión"],
-                    s3_title: "3. Estrategia de Admisión",
-                    s3_highlights: ["Revisión 2 Etapas: Contexto + Potencial.", "Etapa 1: Banderas de Resiliencia.", "Etapa 2: Ensayo y Revelación IA."],
-                    s3_actionPlan: ["Crear Panel de Datos.", "Diseñar Ensayos Estructurados.", "Prueba de Alfabetización IA."],
-                    fc_s1: "Ver Punto de Partida.", fc_s2: "Ver Distancia Recorrida.", fc_dist: "Progreso relativo al inicio.",
-                    q3_q: "¿Revisor Etapa 1?", q3_opts: ["Facultad", "Oficina Admisiones", "Ministerio"],
-                    q3_q2: "¿Bandera Resiliencia?", q3_opts2: ["Admitir", "Rechazar", "Ponderar"],
-                    q3_q3: "¿Ensayo evalúa?", q3_opts3: ["Gramática", "Motivación e IA", "Riqueza"],
-                    s4_title: "4. Programa de Honores",
-                    s4_highlights: ["Top 5% a Honores.", "Yo a Sociedad: Fondos proyecto.", "Módulos: Entrada + Salida."],
-                    s4_actionPlan: ["Cursos AI/EMI.", "Tutoría entre pares.", "Proyecto Capstone."],
-                    fc_credits: "18 Créditos.", fc_input: "IA, EMI, Curiosidad.", fc_output: "Tutoría, USR, Proyecto.",
-                    q4_q: "¿Créditos totales?", q4_q2: "¿Enfoque Salida?", q4_opts2: ["Exámenes", "Tesis", "Contribución"], q4_q3: "¿Efectivo a?", q4_opts3: ["Efectivo", "Exención", "Fondos Proyecto"],
-                    s5_title: "5. Videos Recomendados",
-                    s5_highlights: ["Charlas sobre carrera y tendencias.", "Materiales EMI y digitales.", "Info para novatos."],
-                    s5_actionPlan: ["Ver 'Viendo el Mundo'.", "Familiarizarse con EMI.", "Aprender diseño digital."]
-                }
-            },
-            FR: { // French
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Créateur: Prof. Shihmin Lo, PhD", nav: "Navigation", glossary: "Glossaire (Glossary)", try: "Réessayer", correct: "Correct!", wrong: "Incorrect", flip: "Cliquer pour retourner" },
-                labels: { highlights: "Points Forts (Highlights)", actionPlan: "Plan d'Action (Action Plan)", keywords: "Mots-clés (Keywords)", flashcards: "Cartes (Flash Cards)", quiz: "Quiz (Quick Quiz)", videos: "Listes de lecture (Video Playlists)" },
-                texts: {
-                    s0_title: "0. Résumé Exécutif",
-                    s0_highlights: ["Stratégie: Excellence Inclusive (IE).", "Transformation: De Gardien à Jardinier.", "Pratique: Examen en 2 étapes & Programme d'Honneur."],
-                    s0_actionPlan: ["Établir Bureau OIE.", "Mettre en œuvre Examen Contextuel.", "Lancer pilote Honneur."],
-                    fc_ie: "Excellence et inclusion inséparables.", fc_gate: "Valeur par exclusion.", fc_ground: "Écosystème pour talents divers.",
-                    q0_q: "Valeur centrale?", q0_opts: ["Méritocratie", "Excellence Inclusive", "Égalité"],
-                    q0_q2: "Changement de rôle?", q0_opts2: ["Comptable", "Jardinier", "Gouvernante"],
-                    q0_q3: "Calendrier?", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. Vision & Philosophie",
-                    s1_highlights: ["Redéfinir: De l'Exclusivité à l'Inclusion.", "Modèle d'Atout: Diversité comme Capital Culturel.", "Créer des Gagnants: Pas seulement les trouver."],
-                    s1_actionPlan: ["Publier Livre Blanc IE.", "Promouvoir Éval. Contextuelle.", "Élargir le bassin, garder standards."],
-                    fc_ex_inc: "Vieux: Rejet. Nouveau: Succès.", fc_deficit: "Étudiants comme déficit.", fc_asset: "Diversité comme innovation.",
-                    q1_q: "Nouvelle définition?", q1_opts: ["Exclus", "Réussites", "Frais"],
-                    q1_q2: "Vue désavantage?", q1_opts2: ["Déficit", "Atout", "Ignorer"],
-                    q1_q3: "Focus éval?", q1_opts3: ["Futur", "Fond", "Chance"],
-                    s2_title: "2. Feuille de Route",
-                    s2_highlights: ["Phase 1: Racines & Consensus.", "Phase 2: Changement Systémique.", "Phase 3: Diffusion."],
-                    s2_actionPlan: ["Lancer OIE.", "Réviser critères promotion.", "Réseau alerte précoce."],
-                    fc_y12: "Racines (Données).", fc_y34: "Changement (Admissions).", fc_y5: "Diffusion (Modèle).",
-                    q2_q: "OIE établi?", q2_opts: ["Phase 1", "Phase 2", "Phase 3"],
-                    q2_q2: "Réforme faculté?", q2_q3: "But Année 5?", q2_opts2: ["Plan", "Test", "Diffusion"],
-                    s3_title: "3. Stratégie d'Admission",
-                    s3_highlights: ["Examen 2 Étapes: Contexte + Potentiel.", "Étape 1: Drapeaux Résilience.", "Étape 2: Essai & IA."],
-                    s3_actionPlan: ["Créer Tableau de Données.", "Concevoir Essais.", "Test Littératie IA."],
-                    fc_s1: "Vérifier Point Départ.", fc_s2: "Vérifier Distance.", fc_dist: "Progrès relatif au début.",
-                    q3_q: "Réviseur Étape 1?", q3_opts: ["Faculté", "Bureau Admissions", "Ministère"],
-                    q3_q2: "Drapeau Résilience?", q3_opts2: ["Admettre", "Rejeter", "Pondérer"],
-                    q3_q3: "Essai évalue?", q3_opts3: ["Grammaire", "Motivation & IA", "Richesse"],
-                    s4_title: "4. Programme d'Honneur",
-                    s4_highlights: ["Top 5% en Honneur.", "Soi à Société: Fonds projet.", "Modules: Entrée + Sortie."],
-                    s4_actionPlan: ["Cours IA/EMI.", "Mentorat par pairs.", "Projet Capstone."],
-                    fc_credits: "18 Crédits.", fc_input: "IA, EMI, Curiosité.", fc_output: "Mentorat, USR, Projet.",
-                    q4_q: "Crédits totaux?", q4_q2: "Focus Sortie?", q4_opts2: ["Examens", "Thèse", "Contribution"], q4_q3: "Cash devient?", q4_opts3: ["Cash", "Exemption", "Fonds Projet"],
-                    s5_title: "5. Listes de lecture",
-                    s5_highlights: ["Causeries carrière et tendances.", "Matériaux EMI et numériques.", "Info nouveaux étudiants."],
-                    s5_actionPlan: ["Voir 'Voir le Monde'.", "Se familiariser avec EMI.", "Apprendre design numérique."]
-                }
-            },
-            DE: { // German
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Ersteller: Prof. Shihmin Lo, PhD", nav: "Navigation", glossary: "Glossar (Glossary)", try: "Erneut versuchen", correct: "Richtig!", wrong: "Falsch", flip: "Klicken zum Umdrehen" },
-                labels: { highlights: "Highlights", actionPlan: "Aktionsplan (Action Plan)", keywords: "Schlüsselwörter (Keywords)", flashcards: "Lernkarten (Flash Cards)", quiz: "Quiz (Quick Quiz)", videos: "Wiedergabelisten (Video Playlists)" },
-                texts: {
-                    s0_title: "0. Zusammenfassung",
-                    s0_highlights: ["Kernstrategie: Inklusive Exzellenz (IE).", "Transformation: Vom Torwächter zum Gärtner.", "Praxis: 2-Stufen-Prüfung & Honors-Programm."],
-                    s0_actionPlan: ["OIE-Büro einrichten.", "Kontextuelle Prüfung umsetzen.", "Honors-Pilot starten."],
-                    fc_ie: "Exzellenz & Inklusion untrennbar.", fc_gate: "Wert durch Ausschluss.", fc_ground: "Ökosystem für Talente.",
-                    q0_q: "Kernwert?", q0_opts: ["Meritokratie", "Inklusive Exzellenz", "Gleichheit"],
-                    q0_q2: "Rollenwechsel zu?", q0_opts2: ["Buchhalter", "Gärtner", "Haushälter"],
-                    q0_q3: "Zeitplan?", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. Vision & Philosophie",
-                    s1_highlights: ["Neudefinition: Von Exklusivität zu Inklusion.", "Asset-Modell: Vielfalt als kulturelles Kapital.", "Gewinner schaffen: Nicht nur finden."],
-                    s1_actionPlan: ["IE-Weißbuch veröffentlichen.", "Kontextbewertung fördern.", "Pool erweitern, Standards halten."],
-                    fc_ex_inc: "Alt: Ablehnung. Neu: Erfolg.", fc_deficit: "Studenten als Defizit.", fc_asset: "Vielfalt als Innovation.",
-                    q1_q: "Neue Definition?", q1_opts: ["Ausgeschlossen", "Erfolgreich", "Studiengebühr"],
-                    q1_q2: "Sicht auf Nachteil?", q1_opts2: ["Defizit", "Asset", "Ignorieren"],
-                    q1_q3: "Bewertungsfokus?", q1_opts3: ["Zukunft", "Hintergrund", "Glück"],
-                    s2_title: "2. Strategische Roadmap",
-                    s2_highlights: ["Phase 1: Wurzeln & Konsens.", "Phase 2: Systemischer Wandel.", "Phase 3: Verbreitung."],
-                    s2_actionPlan: ["OIE starten.", "Beförderungskriterien überarbeiten.", "Frühwarnnetzwerk."],
-                    fc_y12: "Wurzeln (Daten).", fc_y34: "Wandel (Zulassung).", fc_y5: "Verbreitung (Modell).",
-                    q2_q: "OIE gegründet?", q2_opts: ["Phase 1", "Phase 2", "Phase 3"],
-                    q2_q2: "Fakultätsreform?", q2_q3: "Ziel Jahr 5?", q2_opts2: ["Plan", "Test", "Verbreitung"],
-                    s3_title: "3. Zulassungsstrategie",
-                    s3_highlights: ["2-Stufen: Kontext + Potenzial.", "Stufe 1: Resilienz-Flaggen.", "Stufe 2: Essay & KI."],
-                    s3_actionPlan: ["Daten-Dashboard bauen.", "Strukturierte Essays.", "KI-Kompetenztest."],
-                    fc_s1: "Startpunkt prüfen.", fc_s2: "Distanz prüfen.", fc_dist: "Fortschritt relativ zum Start.",
-                    q3_q: "Prüfer Stufe 1?", q3_opts: ["Fakultät", "Zulassungsbüro", "Ministerium"],
-                    q3_q2: "Resilienz-Flag?", q3_opts2: ["Zulassen", "Ablehnen", "Gewichten"],
-                    q3_q3: "Essay bewertet?", q3_opts3: ["Grammatik", "Motivation & KI", "Reichtum"],
-                    s4_title: "4. Honors-Programm",
-                    s4_highlights: ["Top 5% zu Honors.", "Selbst zu Gesellschaft: Projektfonds.", "Module: Input + Output."],
-                    s4_actionPlan: ["KI/EMI-Kurse.", "Peer-Mentoring.", "Capstone-Projekt."],
-                    fc_credits: "18 Credits.", fc_input: "KI, EMI, Neugier.", fc_output: "Mentoring, USR, Projekt.",
-                    q4_q: "Gesamtcredits?", q4_q2: "Output-Fokus?", q4_opts2: ["Prüfungen", "Thesis", "Beitrag"], q4_q3: "Bargeld wird?", q4_opts3: ["Bargeld", "Erlass", "Projektfonds"],
-                    s5_title: "5. Videowiedergabelisten",
-                    s5_highlights: ["Vorträge zu Karriere & Trends.", "EMI & digitale Materialien.", "Erstsemester-Infos."],
-                    s5_actionPlan: ["'Welt sehen' schauen.", "Mit EMI vertraut machen.", "Digitales Design lernen."]
-                }
-            },
-            ID: { // Indonesian
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Pembuat: Prof. Shihmin Lo, PhD", nav: "Navigasi", glossary: "Glosarium (Glossary)", try: "Coba Lagi", correct: "Benar!", wrong: "Salah", flip: "Klik untuk Balik" },
-                labels: { highlights: "Sorotan (Highlights)", actionPlan: "Rencana Aksi (Action Plan)", keywords: "Kata Kunci (Keywords)", flashcards: "Kartu Kilat (Flash Cards)", quiz: "Kuis Cepat (Quick Quiz)", videos: "Daftar Putar (Video Playlists)" },
-                texts: {
-                    s0_title: "0. Ringkasan Eksekutif",
-                    s0_highlights: ["Strategi Inti: Keunggulan Inklusif (IE).", "Transformasi: Dari Penjaga Gerbang ke Tukang Kebun.", "Praktik Ganda: Tinjauan 2 Tahap & Program Kehormatan."],
-                    s0_actionPlan: ["Dirikan Kantor OIE.", "Terapkan Tinjauan Kontekstual.", "Luncurkan pilot Kehormatan."],
-                    fc_ie: "Keunggulan & inklusi tak terpisahkan.", fc_gate: "Nilai dari eksklusi.", fc_ground: "Ekosistem untuk bakat beragam.",
-                    q0_q: "Nilai inti?", q0_opts: ["Meritokrasi", "Keunggulan Inklusif", "Kesetaraan"],
-                    q0_q2: "Peran berubah ke?", q0_opts2: ["Akuntan", "Tukang Kebun", "Pengurus Rumah"],
-                    q0_q3: "Jadwal?", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. Visi & Filosofi",
-                    s1_highlights: ["Definisi Ulang: Dari Eksklusivitas ke Inklusi.", "Model Aset: Keragaman sebagai Modal Budaya.", "Menciptakan Pemenang: Bukan hanya mencari."],
-                    s1_actionPlan: ["Terbitkan Buku Putih IE.", "Promosikan Penilaian Kontekstual.", "Perluas kolam, jaga standar."],
-                    fc_ex_inc: "Lama: Penolakan. Baru: Sukses.", fc_deficit: "Siswa sebagai defisit.", fc_asset: "Keragaman sebagai inovasi.",
-                    q1_q: "Definisi baru?", q1_opts: ["Ditolak", "Sukses", "Biaya"],
-                    q1_q2: "Pandangan kerugian?", q1_opts2: ["Defisit", "Aset", "Abaikan"],
-                    q1_q3: "Fokus evaluasi?", q1_opts3: ["Masa Depan", "Latar Belakang", "Keberuntungan"],
-                    s2_title: "2. Peta Jalan Strategis",
-                    s2_highlights: ["Fase 1: Akar & Konsensus.", "Fase 2: Perubahan Sistematis.", "Fase 3: Difusi."],
-                    s2_actionPlan: ["Luncurkan OIE.", "Revisi kriteria promosi.", "Jaringan peringatan dini."],
-                    fc_y12: "Akar (Data).", fc_y34: "Perubahan (Penerimaan).", fc_y5: "Difusi (Model).",
-                    q2_q: "OIE didirikan?", q2_opts: ["Fase 1", "Fase 2", "Fase 3"],
-                    q2_q2: "Reformasi fakultas?", q2_q3: "Target Tahun 5?", q2_opts2: ["Rencana", "Tes", "Difusi"],
-                    s3_title: "3. Strategi Penerimaan",
-                    s3_highlights: ["Tinjauan 2 Tahap: Konteks + Potensi.", "Tahap 1: Bendera Ketahanan.", "Tahap 2: Esai & AI."],
-                    s3_actionPlan: ["Buat Dasbor Data.", "Desain Esai Terstruktur.", "Tes Literasi AI."],
-                    fc_s1: "Cek Titik Awal.", fc_s2: "Cek Jarak Tempuh.", fc_dist: "Kemajuan relatif dari awal.",
-                    q3_q: "Peninjau Tahap 1?", q3_opts: ["Fakultas", "Kantor Penerimaan", "Kementerian"],
-                    q3_q2: "Bendera Ketahanan?", q3_opts2: ["Terima", "Tolak", "Bobot"],
-                    q3_q3: "Esai menilai?", q3_opts3: ["Tata Bahasa", "Motivasi & AI", "Kekayaan"],
-                    s4_title: "4. Program Kehormatan",
-                    s4_highlights: ["5% Teratas ke Kehormatan.", "Diri ke Masyarakat: Dana proyek.", "Modul: Input + Output."],
-                    s4_actionPlan: ["Kursus AI/EMI.", "Mentoring Sebaya.", "Proyek Capstone."],
-                    fc_credits: "18 Kredit.", fc_input: "AI, EMI, Keingintahuan.", fc_output: "Mentoring, USR, Proyek.",
-                    q4_q: "Total kredit?", q4_q2: "Fokus Output?", q4_opts2: ["Ujian", "Tesis", "Kontribusi"], q4_q3: "Uang tunai jadi?", q4_opts3: ["Tunai", "Pembebasan", "Dana Proyek"],
-                    s5_title: "5. Daftar Putar Video",
-                    s5_highlights: ["Ceramah karir & tren.", "Materi EMI & digital.", "Info mahasiswa baru."],
-                    s5_actionPlan: ["Tonton 'Melihat Dunia'.", "Biasakan dengan EMI.", "Belajar desain digital."]
-                }
-            },
-            MS: { // Malay
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Pencipta: Prof. Shihmin Lo, PhD", nav: "Navigasi", glossary: "Glosari (Glossary)", try: "Cuba Lagi", correct: "Betul!", wrong: "Salah", flip: "Klik untuk Balik" },
-                labels: { highlights: "Sorotan (Highlights)", actionPlan: "Pelan Tindakan (Action Plan)", keywords: "Kata Kunci (Keywords)", flashcards: "Kad Imbas (Flash Cards)", quiz: "Kuiz Cepat (Quick Quiz)", videos: "Senarai Main (Video Playlists)" },
-                texts: {
-                    s0_title: "0. Ringkasan Eksekutif",
-                    s0_highlights: ["Strategi Teras: Kecemerlangan Inklusif (IE).", "Transformasi: Penjaga Pintu ke Pekebun.", "Amalan: Semakan 2 Peringkat & Program Kepujian."],
-                    s0_actionPlan: ["Tubuhkan Pejabat OIE.", "Laksanakan Semakan Kontekstual.", "Lancarkan rintis Kepujian."],
-                    fc_ie: "Kecemerlangan & inklusi tak terpisah.", fc_gate: "Nilai melalui pengecualian.", fc_ground: "Ekosistem untuk bakat pelbagai.",
-                    q0_q: "Nilai teras?", q0_opts: ["Meritokrasi", "Kecemerlangan Inklusif", "Kesaksamaan"],
-                    q0_q2: "Peranan berubah ke?", q0_opts2: ["Akauntan", "Pekebun", "Pengemas"],
-                    q0_q3: "Jadual masa?", q0_opts3: ["2023-25", "2025-30", "2030-40"],
-                    s1_title: "1. Visi & Falsafah",
-                    s1_highlights: ["Definisi Semula: Eksklusiviti ke Inklusi.", "Model Aset: Kepelbagaian sebagai Modal Budaya.", "Mencipta Pemenang: Bukan sekadar mencari."],
-                    s1_actionPlan: ["Terbitkan Kertas Putih IE.", "Promosikan Penilaian Kontekstual.", "Luaskan kolam, kekal standard."],
-                    fc_ex_inc: "Lama: Penolakan. Baru: Kejayaan.", fc_deficit: "Pelajar sebagai defisit.", fc_asset: "Kepelbagaian sebagai inovasi.",
-                    q1_q: "Definisi baru?", q1_opts: ["Ditolak", "Berjaya", "Yuran"],
-                    q1_q2: "Pandangan kekurangan?", q1_opts2: ["Defisit", "Aset", "Abaikan"],
-                    q1_q3: "Fokus penilaian?", q1_opts3: ["Masa Depan", "Latar Belakang", "Nasib"],
-                    s2_title: "2. Pelan Hala Tuju",
-                    s2_highlights: ["Fasa 1: Akar & Konsensus.", "Fasa 2: Perubahan Sistemik.", "Fasa 3: Penyebaran."],
-                    s2_actionPlan: ["Lancarkan OIE.", "Semak kriteria kenaikan pangkat.", "Rangkaian amaran awal."],
-                    fc_y12: "Akar (Data).", fc_y34: "Perubahan (Kemasukan).", fc_y5: "Penyebaran (Model).",
-                    q2_q: "OIE ditubuhkan?", q2_opts: ["Fasa 1", "Fasa 2", "Fasa 3"],
-                    q2_q2: "Reformasi fakulti?", q2_q3: "Sasaran Tahun 5?", q2_opts2: ["Pelan", "Ujian", "Penyebaran"],
-                    s3_title: "3. Strategi Kemasukan",
-                    s3_highlights: ["Semakan 2 Peringkat: Konteks + Potensi.", "Peringkat 1: Bendera Ketahanan.", "Peringkat 2: Esei & AI."],
-                    s3_actionPlan: ["Bina Papan Pemuka Data.", "Reka Esei Berstruktur.", "Ujian Literasi AI."],
-                    fc_s1: "Semak Titik Mula.", fc_s2: "Semak Jarak Dilalui.", fc_dist: "Kemajuan relatif dari mula.",
-                    q3_q: "Penyemak Peringkat 1?", q3_opts: ["Fakulti", "Pejabat Kemasukan", "Kementerian"],
-                    q3_q2: "Bendera Ketahanan?", q3_opts2: ["Terima", "Tolak", "Pemberat"],
-                    q3_q3: "Esei menilai?", q3_opts3: ["Tatabahasa", "Motivasi & AI", "Kekayaan"],
-                    s4_title: "4. Program Kepujian",
-                    s4_highlights: ["5% Teratas ke Kepujian.", "Diri ke Masyarakat: Dana projek.", "Modul: Input + Output."],
-                    s4_actionPlan: ["Kursus AI/EMI.", "Pementoran Rakan Sebaya.", "Projek Capstone."],
-                    fc_credits: "18 Kredit.", fc_input: "AI, EMI, Rasa Ingin Tahu.", fc_output: "Pementoran, USR, Projek.",
-                    q4_q: "Jumlah kredit?", q4_q2: "Fokus Output?", q4_opts2: ["Peperiksaan", "Tesis", "Sumbangan"], q4_q3: "Tunai jadi?", q4_opts3: ["Tunai", "Pengecualian", "Dana Projek"],
-                    s5_title: "5. Senarai Main Video",
-                    s5_highlights: ["Ceramah kerjaya & trend.", "Bahan EMI & digital.", "Info pelajar baru."],
-                    s5_actionPlan: ["Tonton 'Melihat Dunia'.", "Biasakan dengan EMI.", "Belajar reka bentuk digital."]
-                }
-            },
-            MY: { // Burmese
-                meta: { title: "EOT - Excel Over Time", slogan: "Inclusive excellence, excelling over time.", creator: "Creator: Prof. Shihmin Lo, PhD", nav: "လမ်းညွှန်", glossary: "ဝေါဟာရ (Glossary)", try: "ပြန်ကြိုးစားပါ", correct: "မှန်ပါသည်!", wrong: "မှားပါသည်", flip: "လှန်ရန်နှိပ်ပါ" },
-                labels: { highlights: "အဓိကအချက်များ (Highlights)", actionPlan: "လုပ်ငန်းစဉ် (Action Plan)", keywords: "သော့ချက်စာလုံးများ (Keywords)", flashcards: "ကတ်ပြားများ (Flash Cards)", quiz: "ပဟေဠိ (Quick Quiz)", videos: "ဗီဒီယိုများ (Video Playlists)" },
-                texts: {
-                    s0_title: "0. အမှုဆောင် အကျဉ်းချုပ်",
-                    s0_highlights: ["အဓိကမဟာဗျူဟာ - အားလုံးပါဝင်နိုင်သော ထူးချွန်မှု (IE)။", "ပြောင်းလဲမှု - တံခါးစောင့်မှ ဥယျာဉ်မှူးသို့။", "နှစ်ဆင့် ပြန်လည်သုံးသပ်ခြင်းနှင့် ဂုဏ်ထူးတန်း။"],
-                    s0_actionPlan: ["OIE ရုံးခန်း ဖွင့်လှစ်ပါ။", "အခြေအနေအရ သုံးသပ်ခြင်း။", "ဂုဏ်ထူးတန်း ရှေ့ပြေး စတင်ပါ။"],
-                    fc_ie: "ထူးချွန်မှုနှင့် ပါဝင်မှု ခွဲမရပါ။", fc_gate: "ဖယ်ထုတ်ခြင်းဖြင့် တန်ဖိုးဖြတ်ခြင်း။", fc_ground: "မတူကွဲပြားသော အရည်အချင်းများအတွက် ဂေဟစနစ်။",
-                    q0_q: "အဓိကတန်ဖိုး?", q0_opts: ["အရည်အချင်း", "အားလုံးပါဝင်သော ထူးချွန်မှု", "တန်းတူညီမျှမှု"],
-                    q0_q2: "အခန်းကဏ္ဍ ပြောင်းလဲမှု?", q0_opts2: ["စာရင်းကိုင်", "ဥယျာဉ်မှူး", "အိမ်ထိန်း"],
-                    q0_q3: "အချိန်ဇယား?", q0_opts3: ["၂၀၂၃-၂၅", "၂၀၂၅-၃၀", "၂၀၃၀-၄၀"],
-                    s1_title: "1. မျှော်မှန်းချက်နှင့် ဒဿန",
-                    s1_highlights: ["ထူးချွန်မှုကို ပြန်လည်သတ်မှတ်ခြင်း။", "ပိုင်ဆိုင်မှုပုံစံ - ကွဲပြားမှုသည် အရင်းအနှီး။", "အနိုင်ရသူများ ဖန်တီးခြင်း - ရှာဖွေခြင်းသာ မဟုတ်။"],
-                    s1_actionPlan: ["IE စက္ကူဖြူစာတမ်း ထုတ်ဝေပါ။", "အခြေအနေအရ အကဲဖြတ်ခြင်း။", "စံချိန်မလျှော့ဘဲ လူစုချဲ့ပါ။"],
-                    fc_ex_inc: "အဟောင်း - ငြင်းပယ်။ အသစ် - အောင်မြင်မှု။", fc_deficit: "ကျောင်းသားကို လိုအပ်ချက်ရှိသူအဖြစ် မြင်ခြင်း။", fc_asset: "ကွဲပြားမှုကို တီထွင်မှုအဖြစ် မြင်ခြင်း။",
-                    q1_q: "အဓိပ္ပါယ်သစ်?", q1_opts: ["ဖယ်ထုတ်ခံရသူ", "အောင်မြင်သူ", "ကျောင်းလခ"],
-                    q1_q2: "အားနည်းချက်အမြင်?", q1_opts2: ["လိုအပ်ချက်", "ပိုင်ဆိုင်မှု", "လျစ်လျူရှု"],
-                    q1_q3: "အကဲဖြတ်မှု?", q1_opts3: ["အနာဂတ်", "နောက်ခံ", "ကံ"],
-                    s2_title: "2. မဟာဗျူဟာ လမ်းပြမြေပုံ",
-                    s2_highlights: ["အဆင့် ၁ - အမြစ်တွယ်ခြင်း။", "အဆင့် ၂ - စနစ်တကျ ပြောင်းလဲခြင်း။", "အဆင့် ၃ - ပြန့်ပွားခြင်း။"],
-                    s2_actionPlan: ["OIE စတင်ပါ။", "ရာထူးတိုး စံနှုန်း ပြင်ဆင်ပါ။", "စောစီးစွာ သတိပေးစနစ်။"],
-                    fc_y12: "အမြစ် (ဒေတာ)။", fc_y34: "ပြောင်းလဲမှု (ဝင်ခွင့်)။", fc_y5: "ပြန့်ပွားမှု (ပုံစံ)။",
-                    q2_q: "OIE တည်ထောင်?", q2_opts: ["အဆင့် ၁", "အဆင့် ၂", "အဆင့် ၃"],
-                    q2_q2: "ဆရာ ပြုပြင်ပြောင်းလဲရေး?", q2_q3: "နှစ် ၅ ရည်မှန်းချက်?", q2_opts2: ["စီမံကိန်း", "စမ်းသပ်", "ပြန့်ပွား"],
-                    s3_title: "3. ဝင်ခွင့် မဟာဗျူဟာ",
-                    s3_highlights: ["၂ ဆင့် သုံးသပ်ခြင်း - အခြေအနေ + အလားအလာ။", "အဆင့် ၁ - ကြံ့ခိုင်မှု အလံ။", "အဆင့် ၂ - စာစီစာကုံးနှင့် AI။"],
-                    s3_actionPlan: ["ဒေတာ ဒက်ရှ်ဘုတ် တည်ဆောက်ပါ။", "စာစီစာကုံး ပုံစံထုတ်ပါ။", "AI စာတတ်မြောက်မှု စစ်ဆေးပါ။"],
-                    fc_s1: "စမှတ် စစ်ဆေးခြင်း။", fc_s2: "ခရီးအကွာအဝေး စစ်ဆေးခြင်း။", fc_dist: "စမှတ်မှ တိုးတက်မှု။",
-                    q3_q: "အဆင့် ၁ စစ်ဆေးသူ?", q3_opts: ["ဆရာ", "ဝင်ခွင့်ရုံး", "ဝန်ကြီးဌာန"],
-                    q3_q2: "ကြံ့ခိုင်မှု အလံ?", q3_opts2: ["လက်ခံ", "ငြင်းပယ်", "အလေးပေး"],
-                    q3_q3: "စာစီစာကုံး အကဲဖြတ်?", q3_opts3: ["သဒ္ဒါ", "စိတ်အားထက်သန်မှု", "ကြွယ်ဝမှု"],
-                    s4_title: "4. ဂုဏ်ထူးတန်း အစီအစဉ်",
-                    s4_highlights: ["ထိပ်တန်း ၅% ဂုဏ်ထူးတန်း။", "မိမိမှ လူ့အဖွဲ့အစည်းသို့။", "သင်ခန်းစာ - အဝင် + အထွက်။"],
-                    s4_actionPlan: ["AI/EMI သင်တန်းများ။", "သူငယ်ချင်း အချင်းချင်း လမ်းညွှန်ခြင်း။", "Capstone စီမံကိန်း။"],
-                    fc_credits: "၁၈ ယူနစ်။", fc_input: "AI, EMI, စူးစမ်းမှု။", fc_output: "လမ်းညွှန်, USR, စီမံကိန်း။",
-                    q4_q: "စုစုပေါင်း ယူနစ်?", q4_q2: "အထွက် ဦးတည်ချက်?", q4_opts2: ["စာမေးပွဲ", "စာတမ်း", "ပါဝင်ကူညီမှု"], q4_q3: "ငွေသား ပြောင်းလဲ?", q4_opts3: ["ငွေသား", "ကင်းလွတ်ခွင့်", "စီမံကိန်း ရန်ပုံငွေ"],
-                    s5_title: "5. ဗီဒီယို စာရင်းများ",
-                    s5_highlights: ["အလုပ်အကိုင်နှင့် ခေတ်ရေစီးကြောင်း ဟောပြောပွဲများ။", "EMI နှင့် ဒစ်ဂျစ်တယ် သင်ထောက်ကူ။", "ပထမနှစ် ကျောင်းသား သတင်းအချက်အလက်။"],
-                    s5_actionPlan: ["'ကမ္ဘာကို ကြည့်ပါ' ကြည့်ရှုပါ။", "EMI နှင့် ရင်းနှီးအောင် လုပ်ပါ။", "ဒစ်ဂျစ်တယ် ဒီဇိုင်း လေ့လာပါ။"]
-                }
-            }
+            sections: [
+                { t: "0. Executive Summary", h: ["Core Strategy: Inclusive Excellence (IE).", "Transformation: Gatekeeping to Groundskeeping.", "Dual Practice: 2-Stage Admissions & Honors."], a: ["Establish OIE Office.", "Implement Context Review.", "Launch Honors Pilot."], k: ["Inclusive Excellence", "Gatekeeping", "Framework"] },
+                { t: "1. Vision & Philosophy", h: ["Redefining: From Exclusivity to Inclusion.", "Asset Model: Diversity as Capital.", "Creating Winners: Not just finding."], a: ["Publish IE White Paper.", "Promote Context Assessment.", "Widen pool, don't lower standards."], k: ["Asset-based Model", "Cultural Capital", "Context"] },
+                { t: "2. Strategic Roadmap", h: ["Phase 1: Roots & Consensus.", "Phase 2: Systematic Change.", "Phase 3: Diffusion."], a: ["Launch OIE.", "Revise promotion criteria.", "Early warning network."], k: ["OIE Office", "Systematic Change", "USR Impact"] },
+                { t: "3. Admissions Strategy", h: ["2-Stage Review: Context + Potential.", "Stage 1: Resilience Flags.", "Stage 2: Essay & AI Disclosure."], a: ["Build Data Dashboard.", "Design Structured Essays.", "AI Literacy Test."], k: ["Resilience Flag", "Rubric Scoring", "AI Disclosure"] },
+                { t: "4. Honors Program", h: ["Transform Book Prize: Top 5% to Honors.", "Self to Society: Impact funds.", "Modules: Input + Output."], a: ["AI/EMI Courses.", "Peer Mentoring.", "Capstone Project."], k: ["Honors Degree", "Peer Mentoring", "Capstone"] },
+                { t: "5. Video Playlists", h: ["Talks on career and industry.", "EMI and digital materials.", "Freshman info."], a: ["Watch 'Seeing the World'.", "Familiarize with EMI.", "Learn digital design."], k: ["Career", "EMI", "Digital"] },
+                { t: "6. Usage History", h: ["View login info.", "Track progress.", "Analyze performance."], a: ["Check progress regularly.", "Review incorrect sections."], k: ["Analytics", "Tracking", "Profile"] },
+                { t: "7. Feedback & Contact", h: ["Provide feedback.", "Contact creator.", "Join co-creation."], a: ["Fill feedback form.", "Send email."], k: ["Feedback", "Communication", "Co-creation"] }
+            ]
         };
 
-        const languageOptions = [
-            { code: "TC", label: "繁體中文" },
-            { code: "ENG", label: "English" },
-            { code: "SC", label: "简体中文" },
-            { code: "JA", label: "日本語" },
-            { code: "KO", label: "한국어" },
-            { code: "VI", label: "Tiếng Việt" },
-            { code: "ID", label: "Bahasa Indonesia" },
-            { code: "MS", label: "Bahasa Melayu" },
-            { code: "MY", label: "မြန်မာစာ (Burmese)" },
-            { code: "ES", label: "Español" },
-            { code: "FR", label: "Français" },
-            { code: "DE", label: "Deutsch" },
-        ];
+        // Traditional Chinese Content Structure
+        const baseContentTC = {
+            meta: { 
+                title: "EOT - Excel Over Time", 
+                slogan: "Inclusive excellence, excelling over time.", 
+                nav: "導覽目錄", 
+                glossary: "術語表", 
+                try: "再試一次", 
+                copyright: "版權所有 © 2025 EOT - Excel Over Time. 保留所有權利。" 
+            },
+            labels: { 
+                highlights: "重點摘要", 
+                actionPlan: "行動計畫", 
+                keywords: "關鍵字", 
+                flashcards: "觀念翻轉卡", 
+                quiz: "隨堂測驗", 
+                videos: "精選播放清單", 
+                history: "使用歷程", 
+                feedback: "留言與聯絡" 
+            },
+            sections: [
+                { t: "0. 執行摘要", h: ["核心戰略：導入共融性卓越 (IE)。", "關鍵轉型：從守門員轉為園丁。", "雙軌實踐：兩階段審查 + 榮譽學程。"], a: ["成立 OIE 辦公室。", "建立情境化審查機制。", "啟動榮譽學程先導班。"], k: ["共融性卓越", "守門員", "策略架構"] },
+                { t: "1. 願景與哲學", h: ["重新定義卓越：從稀缺性轉向共融性。", "資產模式：視弱勢背景為文化資本。", "創造贏家：挖掘潛力而非僅尋找現成贏家。"], a: ["發布 IE 白皮書。", "推動情境化評估。", "消除降低標準的誤解。"], k: ["資產導向", "文化資本", "情境化"] },
+                { t: "2. 策略發展藍圖", h: ["第一階段：紮根與共識。", "第二階段：系統性變革。", "第三階段：典範與擴散。"], a: ["啟動 OIE。", "修訂升等辦法。", "建立預警網絡。"], k: ["OIE辦公室", "系統變革", "USR影響力"] },
+                { t: "3. 多元入學策略", h: ["兩階段審查：校級 + 院系級。", "第一階段：韌性標記。", "第二階段：Essay 與 AI 聲明。"], a: ["建置數據儀表板。", "設計結構化 Essay。", "實施 AI 素養測驗。"], k: ["韌性標記", "評分規準", "AI聲明"] },
+                { t: "4. 榮譽學程", h: ["轉型書卷獎：前 5% 學生進入。", "兼善天下：獎金轉專題基金。", "雙模組：Input + Output。"], a: ["開設 AI/EMI 課程。", "落實同儕輔導。", "完成 Capstone。"], k: ["榮譽學位", "同儕輔導", "總整專題"] },
+                { t: "5. 精選播放清單", h: ["收錄職涯與產業趨勢講座。", "EMI 實境與數位教材。", "大一須知與轉型案例。"], a: ["觀看「看見世界」反思定位。", "熟悉全英語環境。", "學習數位課程設計。"], k: ["職涯發展", "EMI教學", "數位轉型"] },
+                { t: "6. 使用歷程", h: ["檢視個人登入資訊。", "追蹤測驗完成進度。", "分析學習成效。"], a: ["定期檢查完成度。", "針對錯誤章節複習。"], k: ["學習分析", "進度追蹤", "使用者"] },
+                { t: "7. 留言與聯絡", h: ["提供寶貴意見。", "直接聯繫計畫主持人。", "參與共創討論。"], a: ["填寫回饋表單。", "發送電子郵件。"], k: ["回饋循環", "溝通", "共創"] }
+            ]
+        };
 
-        // --- Components ---
+        // Helper for other languages (Using ENG content structure but replacing titles/labels)
+        const createLangContent = (titles, labels, copyright) => {
+            // Safe copy of baseContentENG
+            const content = JSON.parse(JSON.stringify(baseContentENG));
+            
+            // Update Meta
+            content.meta.copyright = copyright;
+            
+            // Update Labels
+            content.labels = { ...content.labels, ...labels };
+            
+            // Update Section Titles
+            if (titles && titles.length === content.sections.length) {
+                content.sections.forEach((sec, idx) => {
+                    sec.t = titles[idx];
+                });
+            }
+            return content;
+        };
+
+        // Section Titles per language (Simplified for demo)
+        const sectionTitles = {
+            SC: ["0. 执行摘要", "1. 愿景与哲学", "2. 策略发展蓝图", "3. 多元入学策略", "4. 荣誉学程", "5. 精选播放列表", "6. 使用历程", "7. 留言与联络"],
+            JA: ["0. エグゼクティブサマリー", "1. ビジョンと哲学", "2. 戦略ロードマップ", "3. 入学戦略", "4. オナーズプログラム", "5. おすすめ動画", "6. 使用履歴", "7. フィードバック"],
+            KO: ["0. 요약", "1. 비전 및 철학", "2. 전략 로드맵", "3. 입학 전략", "4. 아너스 프로그램", "5. 추천 영상", "6. 사용 기록", "7. 피드백"],
+            VI: ["0. Tóm tắt", "1. Tầm nhìn", "2. Lộ trình", "3. Tuyển sinh", "4. Danh dự", "5. Video", "6. Lịch sử", "7. Phản hồi"],
+            ES: ["0. Resumen", "1. Visión", "2. Hoja de Ruta", "3. Admisión", "4. Honores", "5. Videos", "6. Historial", "7. Contacto"],
+            FR: ["0. Résumé", "1. Vision", "2. Feuille de Route", "3. Admission", "4. Honneur", "5. Vidéos", "6. Historique", "7. Contact"],
+            DE: ["0. Zusammenfassung", "1. Vision", "2. Roadmap", "3. Zulassung", "4. Honors", "5. Videos", "6. Verlauf", "7. Kontakt"],
+            ID: ["0. Ringkasan", "1. Visi", "2. Peta Jalan", "3. Penerimaan", "4. Kehormatan", "5. Video", "6. Riwayat", "7. Kontak"],
+            MS: ["0. Ringkasan", "1. Visi", "2. Pelan Hala Tuju", "3. Kemasukan", "4. Kepujian", "5. Video", "6. Sejarah", "7. Hubungi"],
+            MY: ["0. အကျဉ်းချုပ်", "1. မျှော်မှန်းချက်", "2. လမ်းပြမြေပုံ", "3. ဝင်ခွင့်", "4. ဂုဏ်ထူးတန်း", "5. ဗီဒီယို", "6. မှတ်တမ်း", "7. ဆက်သွယ်ရန်"]
+        };
+
+        // Full Translations Map
+        const translations = {
+            TC: baseContentTC,
+            ENG: baseContentENG,
+            SC: createLangContent(sectionTitles.SC, { highlights: "重点摘要", actionPlan: "行动计划", quiz: "测验" }, "版权所有 © 2025 EOT - Excel Over Time."),
+            JA: createLangContent(sectionTitles.JA, { highlights: "ハイライト", actionPlan: "アクションプラン", quiz: "クイズ" }, "Copyright © 2025 EOT - Excel Over Time."),
+            KO: createLangContent(sectionTitles.KO, { highlights: "하이라이트", actionPlan: "실행 계획", quiz: "퀴즈" }, "Copyright © 2025 EOT - Excel Over Time."),
+            VI: createLangContent(sectionTitles.VI, { highlights: "Điểm nổi bật", actionPlan: "Kế hoạch", quiz: "Trắc nghiệm" }, "Bản quyền © 2025 EOT - Excel Over Time."),
+            ES: createLangContent(sectionTitles.ES, { highlights: "Destacados", actionPlan: "Plan", quiz: "Cuestionario" }, "Copyright © 2025 EOT - Excel Over Time."),
+            FR: createLangContent(sectionTitles.FR, { highlights: "Points forts", actionPlan: "Plan d'action", quiz: "Quiz" }, "Copyright © 2025 EOT - Excel Over Time."),
+            DE: createLangContent(sectionTitles.DE, { highlights: "Highlights", actionPlan: "Aktionsplan", quiz: "Quiz" }, "Copyright © 2025 EOT - Excel Over Time."),
+            ID: createLangContent(sectionTitles.ID, { highlights: "Sorotan", actionPlan: "Rencana", quiz: "Kuis" }, "Hak Cipta © 2025 EOT - Excel Over Time."),
+            MS: createLangContent(sectionTitles.MS, { highlights: "Sorotan", actionPlan: "Pelan", quiz: "Kuiz" }, "Hak Cipta © 2025 EOT - Excel Over Time."),
+            MY: createLangContent(sectionTitles.MY, { highlights: "အဓိကအချက်များ", actionPlan: "လုပ်ငန်းစဉ်", quiz: "ပဟေဠိ" }, "Copyright © 2025 EOT - Excel Over Time.")
+        };
+
+        // --- 3. Data Processing Helper ---
+        const getSectionData = (langCode) => {
+            const content = translations[langCode] || translations['ENG'];
+            
+            return content.sections.map((s, idx) => {
+                const enriched = { 
+                    id: idx,
+                    title: s.t,
+                    highlights: s.h,
+                    actionPlan: s.a,
+                    keywords: s.k
+                };
+                
+                if (idx === 5) {
+                    enriched.videos = videoList;
+                } else if (idx === 6) {
+                    enriched.isHistory = true;
+                } else if (idx === 7) {
+                    enriched.isFeedback = true;
+                } else {
+                    // Flashcards & Quiz for Sections 0-4
+                    if (langCode === 'TC') {
+                        enriched.flashcards = [
+                            { front: "共融性卓越", back: "卓越與共融密不可分" },
+                            { front: "守門員機制", back: "以排他性定義價值" },
+                            { front: "園丁機制", back: "建構人才培育生態系" }
+                        ];
+                        enriched.quiz = [
+                            { q: "核心價值為何？", options: ["菁英主義", "共融性卓越", "齊頭式平等"], ans: 1 },
+                            { q: "大學角色應轉型為？", options: ["記帳員", "園丁 (Groundskeeping)", "警衛"], ans: 1 },
+                            { q: "計畫實施期程？", options: ["2023-2025", "2025-2030", "2030-2040"], ans: 1 }
+                        ];
+                    } else {
+                        enriched.flashcards = [
+                            { front: "Inclusive Excellence", back: "Excellence & Inclusion Inseparable" },
+                            { front: "Gatekeeping", back: "Exclusion based value" },
+                            { front: "Groundskeeping", back: "Cultivation ecosystem" }
+                        ];
+                        enriched.quiz = [
+                            { q: "Core Value?", options: ["Meritocracy", "Inclusive Excellence", "Equality"], ans: 1 },
+                            { q: "Role Shift?", options: ["Accountant", "Groundskeeping", "Guard"], ans: 1 },
+                            { q: "Timeline?", options: ["2023-25", "2025-30", "2030-40"], ans: 1 }
+                        ];
+                    }
+                }
+                return enriched;
+            });
+        };
+
+        const getYouTubeID = (url) => {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        };
+
+        // --- 4. Components ---
 
         const Flashcard = ({ front, back, instruction }) => {
             const [flipped, setFlipped] = useState(false);
@@ -737,12 +308,10 @@
                     onClick={() => setFlipped(!flipped)}
                 >
                     <div className={`relative w-full h-full text-center transition-transform duration-500 transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}>
-                        {/* Front */}
                         <div className="absolute w-full h-full backface-hidden bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center p-4 z-10">
                             <h3 className="text-lg font-bold text-bcg dark:text-bcg-light mb-2">{front}</h3>
                             <p className="text-xs text-gray-400 mt-2">({instruction})</p>
                         </div>
-                        {/* Back */}
                         <div className="absolute w-full h-full backface-hidden bg-bcg text-white rounded-lg shadow-md flex items-center justify-center p-4 rotate-y-180">
                             <p className="text-sm font-medium">{back}</p>
                         </div>
@@ -751,17 +320,15 @@
             );
         };
 
-        const Quiz = ({ question, options, answer, texts }) => {
+        const Quiz = ({ question, options, answer, texts, onAnswer, isAnsweredCorrectly }) => {
             const [selected, setSelected] = useState(null);
-            const [status, setStatus] = useState(null); // 'correct', 'wrong'
+            const [status, setStatus] = useState(null); 
 
             const handleCheck = (idx) => {
                 setSelected(idx);
-                if (idx === answer) {
-                    setStatus('correct');
-                } else {
-                    setStatus('wrong');
-                }
+                const isCorrect = idx === answer;
+                setStatus(isCorrect ? 'correct' : 'wrong');
+                if (onAnswer) onAnswer(isCorrect);
             };
 
             const reset = () => {
@@ -777,16 +344,16 @@
                             <button
                                 key={idx}
                                 onClick={() => handleCheck(idx)}
-                                disabled={status === 'correct'}
-                                className={`w-full text-left p-2 rounded text-sm transition-colors duration-200
-                                    ${status === 'correct' && idx === answer ? 'bg-green-100 text-green-800 border-green-500' : ''}
-                                    ${status === 'wrong' && idx === selected ? 'bg-red-100 text-red-800 border-red-500' : ''}
-                                    ${status === null ? 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-700' : ''}
-                                    ${status !== null && idx !== selected && idx !== answer ? 'opacity-50' : ''}
+                                disabled={status === 'correct' || isAnsweredCorrectly}
+                                className={`w-full text-left p-2 rounded text-sm transition-colors duration-200 border
+                                    ${(status === 'correct' || isAnsweredCorrectly) && idx === answer ? 'bg-green-100 text-green-800 border-green-500' : ''}
+                                    ${status === 'wrong' && idx === selected ? 'bg-red-100 text-red-800 border-red-500' : 'border-transparent'}
+                                    ${status === null && !isAnsweredCorrectly ? 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-700' : ''}
+                                    ${(status !== null || isAnsweredCorrectly) && idx !== answer && idx !== selected ? 'opacity-50' : ''}
                                 `}
                             >
                                 {opt}
-                                {status === 'correct' && idx === answer && <i className="fas fa-check float-right mt-1"></i>}
+                                {(status === 'correct' || isAnsweredCorrectly) && idx === answer && <i className="fas fa-check float-right mt-1"></i>}
                                 {status === 'wrong' && idx === selected && <i className="fas fa-times float-right mt-1"></i>}
                             </button>
                         ))}
@@ -824,23 +391,191 @@
             );
         };
 
+        const LoginPage = ({ onLogin, texts, creatorInfo }) => {
+            const [email, setEmail] = useState("");
+            const [name, setName] = useState("");
+            const [identity, setIdentity] = useState(identities[0]);
+            const [currentTime, setCurrentTime] = useState(new Date());
+
+            useEffect(() => {
+                const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+                return () => clearInterval(timer);
+            }, []);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if(!email) return;
+                onLogin({ email, name, identity, loginTime: new Date() });
+            };
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-bcg-dark to-bcg flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 max-w-md w-full animate-fade-in">
+                        <div className="text-center mb-8">
+                            <h1 className="text-4xl font-bold text-bcg dark:text-bcg-light tracking-tight mb-2">EOT</h1>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 italic">{texts.slogan}</p>
+                            <div className="mt-4 text-xs font-mono text-gray-400">
+                                {currentTime.toLocaleString()}
+                            </div>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">E-mail (必填/Required)</label>
+                                <input 
+                                    type="email" 
+                                    required
+                                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white"
+                                    placeholder="visitor@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name (選填)</label>
+                                    <input 
+                                        type="text" 
+                                        className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white"
+                                        placeholder="Name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Identity</label>
+                                    <select 
+                                        className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white"
+                                        value={identity}
+                                        onChange={(e) => setIdentity(e.target.value)}
+                                    >
+                                        {identities.map(id => <option key={id} value={id}>{id}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" className="w-full bg-bcg hover:bg-bcg-dark text-white font-bold py-3 rounded transition shadow-lg mt-4">
+                                訪客登入 (Visitor Login)
+                            </button>
+                            
+                            <button type="button" disabled className="w-full bg-red-50 text-red-400 font-bold py-3 rounded border border-red-100 cursor-not-allowed text-sm">
+                                <i className="fab fa-google mr-2"></i> Gmail Login (To Be Done)
+                            </button>
+                        </form>
+
+                        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 text-center text-xs text-gray-400">
+                            <p>Version: 2025/12/11</p>
+                            <p className="mt-1">{texts.copyright}</p>
+                            <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition block mt-2">
+                                {creatorInfo}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const UsageHistory = ({ user, quizProgress, sections }) => {
+            const totalQuestions = sections.reduce((acc, sec) => acc + (sec.quiz ? sec.quiz.length : 0), 0);
+            const answeredCorrectly = Object.values(quizProgress).reduce((acc, sectionResults) => {
+                return acc + Object.values(sectionResults).filter(Boolean).length;
+            }, 0);
+
+            return (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-id-card mr-2"></i> User Profile</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div><span className="font-semibold text-gray-500">Name:</span> {user.name || "Guest"}</div>
+                            <div><span className="font-semibold text-gray-500">Identity:</span> {user.identity}</div>
+                            <div><span className="font-semibold text-gray-500">Email:</span> {user.email}</div>
+                            <div><span className="font-semibold text-gray-500">Login Time:</span> {user.loginTime.toLocaleString()}</div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-chart-pie mr-2"></i> Quiz Progress</h3>
+                        <div className="mb-6">
+                            <div className="flex justify-between mb-1">
+                                <span className="text-sm font-medium text-bcg">Total Completion</span>
+                                <span className="text-sm font-medium text-bcg">{answeredCorrectly} / {totalQuestions}</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                <div className="bg-bcg h-2.5 rounded-full" style={{ width: `${totalQuestions > 0 ? (answeredCorrectly/totalQuestions)*100 : 0}%` }}></div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            {sections.map(sec => {
+                                if (!sec.quiz || sec.quiz.length === 0) return null;
+                                const secCorrect = quizProgress[sec.id] ? Object.values(quizProgress[sec.id]).filter(Boolean).length : 0;
+                                return (
+                                    <div key={sec.id} className="border-b border-gray-100 dark:border-gray-700 pb-2 last:border-0">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <span className="text-sm text-gray-700 dark:text-gray-300">{sec.title.split(' ')[1] || sec.title}</span>
+                                            <span className="text-xs font-mono bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded">
+                                                {secCorrect} / {sec.quiz.length}
+                                            </span>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Feedback = () => {
+            return (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-comment-alt mr-2"></i> Leave a Comment</h3>
+                        <textarea 
+                            className="w-full h-32 p-3 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-900 dark:text-white resize-none"
+                            placeholder="Share your thoughts... (Function To Be Done)"
+                            disabled
+                        ></textarea>
+                        <div className="mt-2 text-right">
+                            <button disabled className="px-4 py-2 bg-gray-300 text-white rounded cursor-not-allowed text-sm">Submit (TBD)</button>
+                        </div>
+                    </div>
+
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-envelope mr-2"></i> Contact Us</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            Have questions about Inclusive Excellence or the EOT strategies? Feel free to reach out.
+                        </p>
+                        <a 
+                            href="mailto:smlo@ncnu.edu.tw" 
+                            className="inline-flex items-center justify-center w-full px-4 py-3 bg-bcg hover:bg-bcg-dark text-white rounded transition font-semibold"
+                        >
+                            <i className="fas fa-paper-plane mr-2"></i> Send Email to smlo@ncnu.edu.tw
+                        </a>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- Main App ---
+
         const App = () => {
+            const [user, setUser] = useState(null); 
+            const [quizProgress, setQuizProgress] = useState({}); 
+            
             const [lang, setLang] = useState('TC');
             const [theme, setTheme] = useState('light');
             const [activeSection, setActiveSection] = useState(0);
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
             const [glossaryTerm, setGlossaryTerm] = useState("");
 
-            // Select data based on language, fallback to English if missing
-            const currentLangData = langData[lang] || langData['ENG'];
-            const sections = createSections(lang, currentLangData.texts);
-            const currentData = sections[activeSection];
+            // Process Data
+            const currentLangMeta = translations[lang]?.meta || translations['ENG'].meta;
+            const currentLangLabels = translations[lang]?.labels || translations['ENG'].labels;
+            const sections = getSectionData(lang);
 
-            // Build Glossary List dynamically (Terms are generally in English for academic consistency, Definitions in Lang if possible, else English)
-            // For simplicity in this demo, definitions are English. In a full app, dictionary mapping would be needed for definitions too.
-            const glossaryList = glossaryKeys;
-
-            // Toggle Theme
+            // Theme Effect
             useEffect(() => {
                 if (theme === 'dark') {
                     document.documentElement.classList.add('dark');
@@ -849,12 +584,42 @@
                 }
             }, [theme]);
 
+            const handleLogin = (userData) => {
+                setUser(userData);
+            };
+
+            const handleLogout = () => {
+                setUser(null);
+                setQuizProgress({});
+                setActiveSection(0);
+            };
+
             const handleNav = (id) => {
                 setActiveSection(id);
                 setMobileMenuOpen(false);
                 window.scrollTo(0, 0);
             };
 
+            const handleQuizAnswer = (sectionId, qIdx, isCorrect) => {
+                if(isCorrect) {
+                    setQuizProgress(prev => ({
+                        ...prev,
+                        [sectionId]: {
+                            ...(prev[sectionId] || {}),
+                            [qIdx]: true
+                        }
+                    }));
+                }
+            };
+
+            // Login View
+            if (!user) {
+                return <LoginPage onLogin={handleLogin} texts={currentLangMeta} creatorInfo="Creator: Prof. Shihmin Lo, PhD" />;
+            }
+
+            const currentData = sections[activeSection];
+
+            // Main View
             return (
                 <div className="min-h-screen flex flex-col md:flex-row font-sans">
                     
@@ -873,10 +638,18 @@
                         transition-transform duration-300 ease-in-out z-40 flex flex-col shadow-xl md:shadow-none pt-16 md:pt-0
                     `}>
                         <div className="p-6 border-b border-gray-200 dark:border-gray-800">
-                            <h1 className="text-2xl font-bold text-bcg dark:text-bcg-light tracking-tight mb-1">{currentLangData.meta.title}</h1>
-                            <p className="text-xs text-gray-500 italic mb-4">{currentLangData.meta.slogan}</p>
+                            <h1 className="text-2xl font-bold text-bcg dark:text-bcg-light tracking-tight mb-1">{currentLangMeta.title}</h1>
+                            <p className="text-xs text-gray-500 italic mb-4">{currentLangMeta.slogan}</p>
                             
                             <div className="flex flex-col space-y-2">
+                                <div className="text-xs text-gray-600 dark:text-gray-400 mb-2 p-2 bg-gray-100 dark:bg-gray-800 rounded">
+                                    <div className="font-bold truncate">{user.name || user.email.split('@')[0]}</div>
+                                    <div className="text-xs opacity-75">{user.identity}</div>
+                                    <button onClick={handleLogout} className="mt-1 text-red-500 hover:text-red-700 text-xs font-bold">
+                                        <i className="fas fa-sign-out-alt"></i> Logout
+                                    </button>
+                                </div>
+
                                 <select 
                                     value={lang} 
                                     onChange={(e) => setLang(e.target.value)}
@@ -897,7 +670,7 @@
                         </div>
 
                         <nav className="flex-1 overflow-y-auto py-4">
-                            <p className="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{currentLangData.meta.nav}</p>
+                            <p className="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{currentLangMeta.nav}</p>
                             <ul>
                                 {sections.map((sec) => (
                                     <li key={sec.id}>
@@ -918,7 +691,7 @@
 
                         <div className="p-6 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-400">
                             <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition">
-                                <i className="fas fa-external-link-alt mr-1"></i> {currentLangData.meta.creator.replace("Creator: ", "")}
+                                Creator: Prof. Shihmin Lo, PhD
                             </a>
                         </div>
                     </aside>
@@ -937,105 +710,109 @@
                                 </h2>
                             </header>
 
-                            {/* Content Body */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                                {/* Left Column: Highlights & Action Plan */}
-                                <div className="space-y-8">
-                                    
-                                    {/* Highlights */}
-                                    <section>
-                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-l-4 border-bcg-gold pl-3">
-                                            {currentLangData.labels.highlights}
-                                        </h3>
-                                        <div className="space-y-3">
-                                            {currentData.highlights.map((item, i) => (
-                                                <div key={i} className="flex items-start">
-                                                    <span className="flex-shrink-0 w-1.5 h-1.5 mt-2 bg-bcg rounded-full mr-3"></span>
-                                                    <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{item}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </section>
-
-                                    {/* Action Plan */}
-                                    <section className="bg-gray-50 dark:bg-gray-900 p-5 rounded-lg border border-gray-100 dark:border-gray-800">
-                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                                            <i className="fas fa-tasks text-bcg mr-2"></i> {currentLangData.labels.actionPlan}
-                                        </h3>
-                                        <ul className="space-y-3">
-                                            {currentData.actionPlan.map((item, i) => (
-                                                <li key={i} className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                                                    <i className="fas fa-check text-green-500 mr-3 text-xs"></i>
-                                                    {item}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </section>
-
-                                    {/* Keywords */}
-                                    <section>
-                                        <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">{currentLangData.labels.keywords}</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            {currentData.keywords.map((kw, i) => (
-                                                <span key={i} className="px-3 py-1 bg-bcg bg-opacity-10 text-bcg dark:text-bcg-light rounded-full text-xs font-semibold">
-                                                    #{kw}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </section>
-                                </div>
-
-                                {/* Right Column: Interactive Zone */}
-                                <div className="space-y-8">
-                                    
-                                    {/* Render Videos if available */}
-                                    {currentData.videos && currentData.videos.length > 0 ? (
+                            {/* Content Logic Switching */}
+                            {currentData.isHistory ? (
+                                <UsageHistory user={user} quizProgress={quizProgress} sections={sections} />
+                            ) : currentData.isFeedback ? (
+                                <Feedback />
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 animate-fade-in">
+                                    {/* Left Column */}
+                                    <div className="space-y-8">
                                         <section>
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                                                <i className="fas fa-play-circle text-bcg mr-2"></i> {currentLangData.labels.videos}
+                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-l-4 border-bcg-gold pl-3">
+                                                {currentLangLabels.highlights}
                                             </h3>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                {currentData.videos.map((video, i) => (
-                                                    <VideoCard key={i} video={video} />
+                                            <div className="space-y-3">
+                                                {currentData.highlights.map((item, i) => (
+                                                    <div key={i} className="flex items-start">
+                                                        <span className="flex-shrink-0 w-1.5 h-1.5 mt-2 bg-bcg rounded-full mr-3"></span>
+                                                        <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{item}</p>
+                                                    </div>
                                                 ))}
                                             </div>
                                         </section>
-                                    ) : (
-                                        <>
-                                            {/* Flashcards */}
+
+                                        <section className="bg-gray-50 dark:bg-gray-900 p-5 rounded-lg border border-gray-100 dark:border-gray-800">
+                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                                                <i className="fas fa-tasks text-bcg mr-2"></i> {currentLangLabels.actionPlan}
+                                            </h3>
+                                            <ul className="space-y-3">
+                                                {currentData.actionPlan.map((item, i) => (
+                                                    <li key={i} className="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                                                        <i className="fas fa-check text-green-500 mr-3 text-xs"></i>
+                                                        {item}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </section>
+
+                                        <section>
+                                            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">{currentLangLabels.keywords}</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {currentData.keywords.map((kw, i) => (
+                                                    <span key={i} className="px-3 py-1 bg-bcg bg-opacity-10 text-bcg dark:text-bcg-light rounded-full text-xs font-semibold">
+                                                        #{kw}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </section>
+                                    </div>
+
+                                    {/* Right Column */}
+                                    <div className="space-y-8">
+                                        {currentData.videos && currentData.videos.length > 0 ? (
                                             <section>
                                                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                                                    <i className="fas fa-layer-group text-bcg mr-2"></i> {currentLangData.labels.flashcards}
+                                                    <i className="fas fa-play-circle text-bcg mr-2"></i> {currentLangLabels.videos}
                                                 </h3>
-                                                <div className="grid grid-cols-1 gap-4">
-                                                    {currentData.flashcards.map((fc, i) => (
-                                                        <Flashcard key={i} front={fc.front} back={fc.back} instruction={currentLangData.meta.flip} />
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    {currentData.videos.map((video, i) => (
+                                                        <VideoCard key={i} video={video} />
                                                     ))}
                                                 </div>
                                             </section>
+                                        ) : (
+                                            <>
+                                                <section>
+                                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                                                        <i className="fas fa-layer-group text-bcg mr-2"></i> {currentLangLabels.flashcards}
+                                                    </h3>
+                                                    <div className="grid grid-cols-1 gap-4">
+                                                        {currentData.flashcards.map((fc, i) => (
+                                                            <Flashcard key={i} front={fc.front} back={fc.back} instruction={currentLangMeta.try} />
+                                                        ))}
+                                                    </div>
+                                                </section>
 
-                                            {/* Quick Quiz */}
-                                            <section>
-                                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                                                    <i className="fas fa-question-circle text-bcg mr-2"></i> {currentLangData.labels.quiz}
-                                                </h3>
-                                                {currentData.quiz.map((q, i) => (
-                                                    <Quiz key={i} question={q.q} options={q.options} answer={q.ans} texts={{try: currentLangData.meta.try}} />
-                                                ))}
-                                            </section>
-                                        </>
-                                    )}
+                                                <section>
+                                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                                                        <i className="fas fa-question-circle text-bcg mr-2"></i> {currentLangLabels.quiz}
+                                                    </h3>
+                                                    {currentData.quiz.map((q, i) => (
+                                                        <Quiz 
+                                                            key={i} 
+                                                            question={q.q} 
+                                                            options={q.options} 
+                                                            answer={q.ans} 
+                                                            texts={{try: currentLangMeta.try}}
+                                                            onAnswer={(isCorrect) => handleQuizAnswer(currentData.id, i, isCorrect)}
+                                                            isAnsweredCorrectly={quizProgress[currentData.id]?.[i]}
+                                                        />
+                                                    ))}
+                                                </section>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Footer Area */}
                             <footer className="mt-auto border-t border-gray-200 dark:border-gray-800 pt-8 pb-4">
                                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                                    
-                                    {/* Glossary Dropdown */}
                                     <div className="w-full md:w-1/2">
                                         <label className="block text-xs font-bold text-gray-400 uppercase mb-1">
-                                            {currentLangData.meta.glossary}
+                                            {currentLangMeta.glossary}
                                         </label>
                                         <select 
                                             className="w-full p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-sm text-gray-700 dark:text-gray-300 focus:border-bcg outline-none"
@@ -1043,7 +820,7 @@
                                             value={glossaryTerm}
                                         >
                                             <option value="">Select a term...</option>
-                                            {glossaryList.map((g, i) => (
+                                            {glossaryKeys.map((g, i) => (
                                                 <option key={i} value={g.d}>{g.t}</option>
                                             ))}
                                         </select>
@@ -1054,7 +831,6 @@
                                         )}
                                     </div>
 
-                                    {/* Navigation Arrows */}
                                     <div className="flex space-x-4">
                                         <button 
                                             onClick={() => handleNav(activeSection - 1)}
@@ -1079,11 +855,11 @@
                                 
                                 <div className="flex flex-col md:flex-row justify-center items-center mt-10 text-xs text-gray-400 space-y-2 md:space-y-0 md:space-x-6 border-t border-gray-200 dark:border-gray-800 pt-6">
                                     <div className="flex items-center space-x-4">
-                                        <span>&copy; 2025 EOT - Excel Over Time.</span>
+                                        <span>{currentLangMeta.copyright}</span>
                                         <span>Version: 2025/12/11</span>
                                     </div>
                                     <div className="flex items-center space-x-4">
-                                        <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition">{currentLangData.meta.creator}</a>
+                                        <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition">Creator: Prof. Shihmin Lo, PhD</a>
                                         <a href="https://www.ibs.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">IBS Official</a>
                                         <a href="https://rpage.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">NCNU Official</a>
                                     </div>
