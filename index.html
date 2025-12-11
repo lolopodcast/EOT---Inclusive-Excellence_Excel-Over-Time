@@ -301,7 +301,11 @@
             const content = JSON.parse(JSON.stringify(baseContentENG));
             content.meta.copyright = copyright;
             content.labels = { ...content.labels, ...labels };
-            if (titles) titles.forEach((t, i) => content.sections[i].title = t);
+            if (titles && titles.length === content.sections.length) {
+                content.sections.forEach((sec, idx) => {
+                    sec.t = titles[idx];
+                });
+            }
             return content;
         };
 
@@ -512,12 +516,12 @@
                         </div>
                         <form onSubmit={(e) => { e.preventDefault(); if(email) onLogin({ email, name, identity, loginTime: new Date() }); }} className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">E-mail (Required)</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">電子郵件 E-mail (必填 Required)</label>
                                 <input type="email" required className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" placeholder="visitor@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
                             </div>
                             <div className="grid grid-cols-1 gap-4">
-                                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name (Optional)</label><input type="text" className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} /></div>
-                                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">Identity (選填)</label><select className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" value={identity} onChange={(e) => setIdentity(e.target.value)}>{identities.map(id => <option key={id} value={id}>{id}</option>)}</select></div>
+                                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">用戶名稱 Name (選填 Optional)</label><input type="text" className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} /></div>
+                                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">身份類別 Identity (選填 Optional)</label><select className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" value={identity} onChange={(e) => setIdentity(e.target.value)}>{identities.map(id => <option key={id} value={id}>{id}</option>)}</select></div>
                             </div>
                             <button type="submit" className="w-full bg-bcg hover:bg-bcg-dark text-white font-bold py-3 rounded transition shadow-lg mt-4">Visitor Login</button>
                         </form>
