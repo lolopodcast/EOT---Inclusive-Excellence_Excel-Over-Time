@@ -15,10 +15,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;700&display=swap');
+        /* Import Professional Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
         
         body {
-            font-family: 'Inter', 'Noto Sans TC', 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
+            font-family: 'Montserrat', 'Noto Sans TC', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        /* Apply Serif font to Brand elements for consistency */
+        .brand-serif {
+            font-family: 'Playfair Display', serif;
         }
         
         /* BCG Color Palette & Custom Adjustments */
@@ -29,30 +36,19 @@
         }
 
         /* Flash Card 3D Flip Styles */
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        
-        .transform-style-3d {
-            transform-style: preserve-3d;
-        }
-        
-        .backface-hidden {
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-        }
-        
-        .rotate-y-180 {
-            transform: rotateY(180deg);
-        }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
 
         /* Hide scrollbar for clean sidebar */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom Gauge Animation */
+        .gauge-needle {
+            transition: transform 1s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: bottom center;
         }
     </style>
     
@@ -67,10 +63,14 @@
                             light: '#2F8365',
                             dark: '#0e3a2b',
                             gold: '#D4AF37',
-                            'brand-bg': '#D1FAE5', // Light green for EOT square
-                            'action-bg': '#D1FAE5', // Slightly deeper green for Action Plan (Emerald-100)
-                            'theme-bg': '#E5E7EB', // Slightly deeper gray for Themes (Gray-200)
+                            'brand-bg': '#E8F5E9', 
+                            'action-bg': '#F0FDF4', 
+                            'theme-bg': '#F3F4F6', 
                         }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
                     }
                 }
             }
@@ -81,7 +81,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect, useMemo, useRef } = React;
 
         // --- 1. Global Constants & Data ---
         
@@ -96,7 +96,7 @@
 
         const identities = [
             "高中師生 (High School Teachers/Students)",
-            "大學師生 (University Teachers/Students)",
+            "大學師生 (University Professors/Students)", // Updated
             "大學行政 (University Administration)",
             "學生家長 (Parents)",
             "校友系友 (Alumni)",
@@ -104,30 +104,46 @@
             "其他 (Others)"
         ];
 
-        // Simplified Language Options
-        const languageOptions = [
-            { code: "TC", label: "繁體中文" },
-            { code: "ENG", label: "ENG" }
-        ];
+        // Expanded Glossary Data - Integrated all keywords
+        const rawGlossaryData = [
+            // Core Concepts
+            { k: "Inclusive Excellence", alt: ["共融性卓越", "多元共融", "Diversity & Inclusion"], tc: "相信多元性、共融性與卓越密不可分。真正的卓越必須建立在讓所有背景的學生都能「歸屬、成長、貢獻」的基礎上。", eng: "Belief that diversity, inclusion, and excellence are inseparable. True excellence is built on allowing students of all backgrounds to belong, grow, and contribute." },
+            { k: "Groundskeeper", alt: ["園丁", "園丁精神"], tc: "暨大看待自己的角色。不是用高牆篩選，而是創造適合不同「植物」生長的環境。", eng: "NCNU's role. Not screening with high walls, but creating an environment suitable for different 'plants' to grow." },
+            { k: "Gatekeeper", alt: ["守門員"], tc: "傳統大學角色，用高牆把人擋在外面，只讓「最好的」進來。", eng: "Traditional university role, keeping people out with high walls, only letting the 'best' in." },
+            { k: "EOT", alt: ["Excel Over Time"], tc: "暨大的核心理念。強調的不是你從哪裡出發(起點)，而是你如何持續成長(過程)。", eng: "NCNU's core philosophy. Emphasizing not where you start, but how you continue to grow." },
+            
+            // Vision & Values
+            { k: "Vision", alt: ["願景"], tc: "成為一所讓每個人都能找到成長土壤的大學，不以起點論英雄。", eng: "To be a university where everyone finds soil to grow, judging not by starting points." },
+            { k: "Values", alt: ["價值觀"], tc: "尊重差異、欣賞獨特、互助共好。", eng: "Respect differences, appreciate uniqueness, and mutual prosperity." },
 
-        const glossaryKeys = [
-            { t: "Inclusive Excellence (共融性卓越)", d: "相信多元性(Diversity)、共融性(Inclusion)與卓越(Excellence)密不可分。真正的卓越必須建立在讓所有背景的學生都能「歸屬、成長、貢獻」的基礎上。" },
-            { t: "Groundskeeper (園丁)", d: "暨大看待自己的角色。不是用高牆篩選，而是創造適合不同「植物」生長的環境，理解每個人需要不同養分，相信多樣性的校園最繁榮。" },
-            { t: "Gatekeeper (守門員)", d: "傳統大學角色，用高牆把人擋在外面，只讓「最好的」進來，目標是「拒絕多少人」。" },
-            { t: "EOT (Excel Over Time)", d: "暨大的核心理念延伸。強調的不是你從哪裡出發(起點)，而是你如何持續成長(過程)。" },
-            { t: "Growth Trajectory (成長軌跡)", d: "不只看你現在在哪，更看你如何一路走來。在有限資源下的進步、面對挫折的調適、持續學習的動力。" },
-            { t: "Potential for Excellence (卓越潛力)", d: "不是已經完美，而是未來能走多遠。包括學習動機、好奇心、韌性、創造力、社會關懷。" },
-            { t: "Cultural Capital (文化資本)", d: "每個人成長背景帶來的獨特資源。新住民二代的雙語能力、偏鄉生的在地知識、原住民學生的文化智慧。" },
-            { t: "Excellence for Others", d: "真正的卓越不是個人成就，而是用你的天賦服務他人。" },
-            { t: "Differentiated Support (差異化支持)", d: "理解每個學生起點不同，提供他們需要的協助。不是降低標準，而是幫助每個人達到相同的高標準。" },
-            { t: "Community-Engaged Learning (社區實踐學習)", d: "走出教室，在真實問題中學習。" },
-            { t: "Digital Empowerment (數位賦能)", d: "透過豐富強韌的數位基礎設施，打破地理限制，讓暨大學生能隨時隨地與台灣及全球各地線上串聯。" },
-            { t: "Two-Stage Collaboration (兩階段協作)", d: "招生辦公室看多元背景(Inclusive)，院系教授看卓越潛力(Excellence)。" }
+            // NCNU Features
+            { k: "NCNU Features", alt: ["暨大特色", "地理優勢", "山中大學"], tc: "150公頃寬廣校園，結合自然環境與學術資源，提供專注學習與思考的空間。", eng: "150-hectare campus combining nature and academics, offering space for focused learning and thinking." },
+            { k: "Internationalization", alt: ["國際化", "文化多元"], tc: "校園擁有超過20%的僑外生，如同小型聯合國，提供豐富的跨文化交流機會。", eng: "With over 20% international students, the campus is like a mini UN, offering rich cross-cultural opportunities." },
+            { k: "USR", alt: ["大學社會責任", "在地實踐", "Community Link", "Local Practice"], tc: "大學走出象牙塔，將知識應用於解決在地問題，如原鄉教育、地方創生。", eng: "University Social Responsibility; applying knowledge to solve local problems like indigenous education and regional revitalization." },
+
+            // Student Value & Admissions
+            { k: "Two-Stage Collaboration", alt: ["兩階段協作", "Contextual Review", "情境化審查"], tc: "招生看多元背景(Inclusive)與成長脈絡，教授看卓越潛力(Excellence)與動機。", eng: "Admissions looks at diversity and context; professors look at excellence potential and motivation." },
+            { k: "Growth Trajectory", alt: ["成長軌跡"], tc: "不只看你現在在哪，更看你如何一路走來。在有限資源下的進步與持續學習。", eng: "Looking at how you got here, progress under limited resources, and continuous learning." },
+            { k: "Potential for Excellence", alt: ["卓越潛力"], tc: "不是已經完美，而是未來能走多遠。包括學習動機、好奇心、韌性。", eng: "Not perfection, but how far you can go. Includes motivation, curiosity, resilience." },
+            { k: "Cultural Capital", alt: ["文化資本"], tc: "每個人成長背景帶來的獨特資源。如新住民二代的雙語能力、在地知識。", eng: "Unique resources from one's background, such as bilingual abilities or local knowledge." },
+
+            // Learning & Support
+            { k: "Honors Program", alt: ["榮譽學程"], tc: "18學分培育計畫，包含AI素養、EMI溝通，將優秀轉化為社會影響力。", eng: "18-credit program including AI literacy and EMI, turning excellence into social impact." },
+            { k: "Differentiated Support", alt: ["差異化支持", "學習支持", "Support System"], tc: "理解每個學生起點不同，提供Tutor、寫作中心等客製化協助。", eng: "Understanding different starting points and providing customized assistance like Tutors and Writing Centers." },
+            { k: "Digital Empowerment", alt: ["數位賦能", "數位轉型", "Digital Transformation"], tc: "透過數位基礎設施與AI工具，打破地理限制，讓學生能與全球線上串聯。", eng: "Breaking geographic limits through digital infrastructure and AI tools to connect globally." },
+            { k: "Excellence for Others", alt: [], tc: "真正的卓越不是個人成就，而是用你的天賦服務他人。", eng: "True excellence is not individual achievement, but using your gifts to serve others." },
+            { k: "EMI", alt: ["EMI教學", "全英語授課"], tc: "English as a Medium of Instruction，以英語作為授課語言，提升國際移動力。", eng: "English as a Medium of Instruction, enhancing international mobility." },
+            { k: "Career", alt: ["職涯", "職涯發展", "就業競爭力", "Competitiveness"], tc: "連結產業趨勢與個人特質的發展路徑，強調跨文化協作與軟實力。", eng: "Development path connecting industry trends and personal traits, emphasizing cross-cultural collaboration and soft skills." },
+
+            // Management & QA
+            { k: "Strategy Blueprint", alt: ["策略藍圖", "Implementation Blueprint"], tc: "分階段推動 IE 的五年計畫：試點、擴大、驗證。", eng: "5-year plan to promote IE in phases: Pilot, Expand, Verify." },
+            { k: "Quality Assurance", alt: ["品質保證", "QA", "家長放心", "Reassurance"], tc: "堅持畢業標準不變，但提供更多支持系統確保學生達標。", eng: "Maintaining graduation standards while providing more support systems to ensure student success." },
+            { k: "Data Tracking", alt: ["數據追蹤", "Learning Analytics", "學習分析", "Evaluation", "成效評估"], tc: "利用數據儀表板追蹤學生留存率、學習成效與就業表現，以優化政策。", eng: "Using data dashboards to track retention, learning outcomes, and employment to optimize policies." }
         ];
 
         // --- 2. Content Data Structures ---
 
-        // Base TC Content
+        // Fully Translated TC Content
         const baseContentTC = {
             meta: { 
                 title: "EOT", 
@@ -135,8 +151,12 @@
                 valueProp: "Inclusive excellence, excelling over time.",
                 gateway: "Your Gateway to the University",
                 nav: "導覽目錄", 
-                glossary: "術語表", 
-                copyright: "版權所有 © 2025 EOT - Excel Over Time. 保留所有權利。" 
+                glossary: "術語表 (Glossary)", 
+                copyright: "版權所有 © 2025 EOT - Excel Over Time. 保留所有權利。",
+                glossaryPrompt: "選擇術語以查看說明...",
+                logoutConfirm: "確認登出",
+                thankYou: "感謝您的使用，歡迎再度瀏覽。",
+                backToLogin: "返回登入頁"
             },
             labels: { 
                 highlights: "重點摘要", 
@@ -152,7 +172,7 @@
                 yes: "是 (+1)",
                 unsure: "不確定 (0)",
                 no: "否 (-1)",
-                totalScore: "總分",
+                totalScore: "EOT 卓越指數",
                 userProfile: "使用者資料",
                 name: "姓名",
                 identity: "身分",
@@ -160,18 +180,18 @@
                 loginTime: "登入時間",
                 historyTitle: "自我檢視歷程",
                 leaveComment: "留言",
-                sendEmail: "寄送郵件給計畫主持人"
+                sendEmail: "寄送郵件給計畫主持人",
+                gaugeLabel: "總分"
             },
             sections: [
                 { 
-                    id: 0, title: "0. 關鍵重點摘要", // Changed from 執行摘要
+                    id: 0, title: "關鍵重點摘要", icon: "fa-star",
                     highlights: ["核心信念：多元是卓越的必要條件。", "關鍵轉型：從守門員 (Gatekeeper) 到園丁 (Groundskeeper)。", "實踐 EOT：卓越是持續成長的過程。"], 
                     actionPlan: ["推動兩階段協作招生。", "建立榮譽學程與支持系統。", "落實五年推動藍圖。"], 
-                    keywords: ["共融性卓越", "園丁精神", "EOT"],
+                    keywords: ["共融性卓越", "園丁", "EOT"], // Translated
                     themes: [
                         { title: "我們的核心信念", subThemes: [{title: "信念內容", content: "多元不是卓越的附屬品，而是卓越的必要條件。"}] },
-                        { title: "EOT - Excel Over Time", subThemes: [{title: "定義", content: "重點不是你從哪裡出發，而是你如何持續成長。"}] },
-                        { title: "暨大的獨特優勢", subThemes: [{title: "地理與文化", content: "150公頃最美校園，僑外生20%+"}, {title: "數位連結", content: "豐富強韌的數位網路與AI工具"}] }
+                        { title: "EOT - Excel Over Time", subThemes: [{title: "定義", content: "重點不是你從哪裡出發，而是你如何持續成長。"}] }
                     ],
                     flashcards: [
                         { front: "Gatekeeper (守門員)", back: "用高牆把人擋在外面，只讓「最好的」進來。" },
@@ -183,13 +203,12 @@
                     ]
                 },
                 { 
-                    id: 1, title: "1. 願景與價值觀", 
+                    id: 1, title: "願景與價值觀", icon: "fa-eye",
                     highlights: ["Groundskeeper：創造讓每個人綻放的土壤。", "EOT：重點不是起點，而是如何持續成長。", "多元價值：不同背景帶來創新與同理心。"], 
                     actionPlan: ["發布共融性卓越白皮書。", "建立以資產為導向的校園文化。", "消除「降低標準」的誤解。"], 
-                    keywords: ["願景", "價值觀", "多元共融"],
+                    keywords: ["願景", "價值觀", "多元共融"], // Translated
                     themes: [
-                        { title: "Groundskeeper vs Gatekeeper", subThemes: [{title: "Gatekeeper", content: "目標是「拒絕多少人」"}, {title: "Groundskeeper", content: "目標是「讓每個人綻放」"}] },
-                        { title: "EOT 精神", subThemes: [{title: "過程重於起點", content: "給予適當支持，每個人都能在四年中持續進步"}] }
+                        { title: "園丁 vs 守門員", subThemes: [{title: "守門員", content: "目標是「拒絕多少人」"}, {title: "園丁", content: "目標是「讓每個人綻放」"}] }
                     ],
                     flashcards: [
                         { front: "一般想法：分數高就是優秀", back: "IE觀點：成長幅度多大？在什麼條件下達到這分數？" }
@@ -200,14 +219,13 @@
                     ]
                 },
                 { 
-                    id: 2, title: "2. 暨大這所大學", 
+                    id: 2, title: "暨大這所大學", icon: "fa-university",
                     highlights: ["山中大學：150公頃最美校園，專注學習。", "文化多元：僑外生20%+，校園即小聯合國。", "社區連結：USR深耕25年，知識走出象牙塔。"], 
                     actionPlan: ["利用地理優勢專注思考。", "每日練習跨文化溝通。", "參與真實社區專案。"], 
-                    keywords: ["暨大特色", "國際化", "在地實踐"],
+                    keywords: ["暨大特色", "國際化", "在地實踐"], // Translated
                     themes: [
-                        { title: "地理優勢", subThemes: [{title: "環境", content: "有山有湖，隨處可見自然生態"}, {title: "意義", content: "在美麗環境中專注思考，假日探索自然"}] },
-                        { title: "文化多元", subThemes: [{title: "組成", content: "僑外生20%+，原住民專班，新住民二代"}, {title: "意義", content: "每天與不同背景者互動，自然培養跨文化溝通力"}] },
-                        { title: "社區連結", subThemes: [{title: "USR深耕", content: "原鄉教育、新住民服務、地方創生"}, {title: "能力", content: "培養問題解決、溝通協調、挫折容忍"}] }
+                        { title: "地理優勢", subThemes: [{title: "環境", content: "有山有湖，隨處可見自然生態"}] },
+                        { title: "文化多元", subThemes: [{title: "組成", content: "僑外生20%+，原住民專班，新住民二代"}] }
                     ],
                     flashcards: [
                         { front: "疑問：在山上會不會很無聊？", back: "體驗：平日專心學習，周末探索日月潭、合歡山。" },
@@ -220,17 +238,16 @@
                     ]
                 },
                 { 
-                    id: 3, title: "3. 看見你的價值", 
+                    id: 3, title: "看見你的價值", icon: "fa-gem",
                     highlights: ["兩階段機制：招生辦看脈絡，教授看潛力。", "資產觀點：看見逆境中的韌性與文化資本。", "關注特質：你的故事、動機與未來潛力。"], 
                     actionPlan: ["檢核學生起跑點資源。", "發掘成長軌跡與特質。", "評估對校園的獨特貢獻。"], 
-                    keywords: ["情境化審查", "成長軌跡", "文化資本"],
+                    keywords: ["情境化審查", "成長軌跡", "文化資本"], // Translated
                     themes: [
-                        { title: "階段一：多元背景 (Inclusive)", subThemes: [{title: "目的", content: "理解每個學生的起跑點與成長脈絡"}, {title: "重點", content: "在你的條件下，你展現了什麼特質？"}] },
-                        { title: "階段二：卓越潛力 (Excellence)", subThemes: [{title: "過去", content: "成長軌跡與克服困難"}, {title: "現在", content: "動機與學習熱情"}, {title: "未來", content: "貢獻潛力與獨特觀點"}] }
+                        { title: "階段一：多元背景", subThemes: [{title: "目的", content: "理解每個學生的起跑點與成長脈絡"}] },
+                        { title: "階段二：卓越潛力", subThemes: [{title: "重點", content: "動機、學習熱情與未來潛力"}] }
                     ],
                     flashcards: [
-                        { front: "疑問：新住民二代/偏鄉生是弱勢嗎？", back: "資產觀點：他們擁有雙語能力、在地知識、問題解決韌性等獨特優勢。" },
-                        { front: "擔心：使用AI工具會不會很扣分？", back: "鼓勵態度：AI是未來工具，我們想看你如何批判性使用。" }
+                        { front: "疑問：新住民二代/偏鄉生是弱勢嗎？", back: "資產觀點：他們擁有雙語能力、在地知識、問題解決韌性等獨特優勢。" }
                     ],
                     quiz: [
                         { q: "我有想分享的獨特成長故事" },
@@ -239,17 +256,15 @@
                     ]
                 },
                 { 
-                    id: 4, title: "4. 帶你成長卓越", 
+                    id: 4, title: "帶你成長卓越", icon: "fa-chart-line",
                     highlights: ["榮譽學程：Input+Output，優秀轉化為影響力。", "學習支持：差異化協助，確保成功。", "數位賦能：打破地理限制，與世界同步。"], 
                     actionPlan: ["參與18學分榮譽學程。", "利用Tutor與寫作中心資源。", "連結國際與產學實習。"], 
-                    keywords: ["榮譽學程", "學習支持", "數位賦能"],
+                    keywords: ["榮譽學程", "學習支持", "數位賦能"], // Translated
                     themes: [
-                        { title: "榮譽學程", subThemes: [{title: "Input模組", content: "AI素養、EMI溝通、跨域好奇心"}, {title: "Output模組", content: "同儕輔導、社會實踐、Capstone專題"}] },
-                        { title: "學習支持系統", subThemes: [{title: "內容", content: "Tutor輔導、寫作中心、預警關懷、語言資源"}] },
-                        { title: "數位賦能", subThemes: [{title: "基礎設施", content: "高速網路、AI工具、雲端協作"}, {title: "全球連結", content: "與台灣及全球各地即時互動"}] }
+                        { title: "榮譽學程", subThemes: [{title: "模組", content: "AI素養、EMI溝通、同儕輔導、社會實踐"}] },
+                        { title: "數位賦能", subThemes: [{title: "設施", content: "高速網路、AI工具、雲端協作、全球連結"}] }
                     ],
                     flashcards: [
-                        { front: "傳統書卷獎", back: "發獎金表揚，鼓勵競爭。" },
                         { front: "暨大榮譽學程", back: "18學分培育，將優秀轉化為影響力，鼓勵助人。" },
                         { front: "擔心：在埔里會不會與世界脫節？", back: "數位賦能：豐富設施讓你隨時與全球連結。" }
                     ],
@@ -260,13 +275,12 @@
                     ]
                 },
                 { 
-                    id: 5, title: "5. 暨大實踐藍圖", 
-                    highlights: ["分階段推動：試點(Y1-2) -> 擴大(Y3-4) -> 驗證(Y5)。", "數據校準：追蹤留存率、畢業率與就業表現。", "目標：建立可複製的共融卓越模式。"], 
+                    id: 5, title: "暨大實踐藍圖", icon: "fa-map",
+                    highlights: ["分階段推動：試點 -> 擴大 -> 驗證。", "數據校準：追蹤留存率、畢業率與就業表現。", "目標：建立可複製的共融卓越模式。"], 
                     actionPlan: ["成立IE推動辦公室。", "建立數據儀表板。", "進行第三方成效評估。"], 
-                    keywords: ["策略藍圖", "數據追蹤", "成效評估"],
+                    keywords: ["策略藍圖", "數據追蹤", "成效評估"], // Translated
                     themes: [
-                        { title: "推動時程", subThemes: [{title: "Year 1-2", content: "建立與測試"}, {title: "Year 3-4", content: "擴大與優化"}, {title: "Year 5", content: "驗證與校準"}] },
-                        { title: "追蹤指標", subThemes: [{title: "學生成功率", content: "留存率、畢業率、就業率"}, {title: "多元豐富度", content: "背景多樣性"}, {title: "校園氛圍", content: "歸屬感、支持感"}] }
+                        { title: "推動時程", subThemes: [{title: "五年計畫", content: "建立測試 -> 擴大優化 -> 驗證校準"}] }
                     ],
                     flashcards: [],
                     quiz: [
@@ -275,49 +289,46 @@
                     ]
                 },
                 { 
-                    id: 6, title: "6. 師生家長放心", 
+                    id: 6, title: "師生家長放心", icon: "fa-hand-holding-heart",
                     highlights: ["品質保證：畢業標準不變，提供更多支持。", "就業優勢：跨文化協作與問題解決力最搶手。", "軟實力：AI時代最需要的核心競爭力。"], 
                     actionPlan: ["提供差異化學習支持。", "連結全球數位學習資源。", "培養有溫度的專業人。"], 
-                    keywords: ["品質保證", "就業競爭力", "家長放心"],
+                    keywords: ["品質保證", "就業競爭力", "家長放心"], // Translated
                     themes: [
-                        { title: "IE理念釋疑", subThemes: [{title: "不是降低標準", content: "畢業要求、考試標準不變，提供差異化支持幫助達標"}] },
-                        { title: "畢業出路", subThemes: [{title: "數據", content: "就業率85%以上"}, {title: "雇主評價", content: "跨文化協作、問題解決能力突出"}] }
+                        { title: "IE理念釋疑", subThemes: [{title: "不降標準", content: "畢業要求不變，提供差異化支持幫助達標"}] }
                     ],
                     flashcards: [
-                        { front: "擔心：多元入學會降低品質", back: "事實：畢業標準相同，我們提供差異化支持幫助達標。" },
-                        { front: "質疑：軟實力真的有用嗎？", back: "趨勢：AI時代，跨文化協作、問題解決最稀缺。" }
+                        { front: "擔心：多元入學會降低品質", back: "事實：畢業標準相同，我們提供差異化支持幫助達標。" }
                     ],
                     quiz: [
                         { q: "我認同IE理念：重視過程與成長" },
-                        { q: "我相信暨大能幫助我持續進步 (EOT)" },
+                        { q: "我相信暨大能幫助我持續進步" },
                         { q: "我願意在多元環境中學習與貢獻" }
                     ]
                 },
                 { 
-                    id: 7, title: "7. 精選短片", 
+                    id: 7, title: "精選短片", icon: "fa-video",
                     highlights: ["收錄職涯與產業趨勢講座。", "EMI 實境與數位教材。", "大一須知與轉型案例。"], 
                     actionPlan: ["觀看「看見世界」反思定位。", "熟悉全英語環境。", "學習數位課程設計。"], 
-                    keywords: ["職涯發展", "EMI教學", "數位轉型"],
+                    keywords: ["職涯發展", "EMI教學", "數位轉型"], // Translated
                     themes: [], flashcards: [], quiz: [], videos: videoList 
                 },
                 { 
-                    id: 8, title: "8. 使用歷程", 
+                    id: 8, title: "使用歷程", icon: "fa-tachometer-alt",
                     highlights: ["檢視個人登入資訊。", "追蹤測驗積分與狀態。", "分析學習成效。"], 
                     actionPlan: ["定期檢查完成度。", "針對紅色項目複習。"], 
-                    keywords: ["學習分析", "進度追蹤", "使用者"],
+                    keywords: ["學習分析", "進度追蹤", "使用者"], // Translated
                     themes: [], flashcards: [], quiz: [], isHistory: true 
                 },
                 { 
-                    id: 9, title: "9. 歡迎聯絡", 
+                    id: 9, title: "歡迎聯絡", icon: "fa-envelope",
                     highlights: ["提供寶貴意見。", "直接聯繫計畫主持人。", "參與共創討論。"], 
                     actionPlan: ["填寫回饋表單。", "發送電子郵件。"], 
-                    keywords: ["回饋循環", "溝通", "共創"],
+                    keywords: ["回饋循環", "溝通", "共創"], // Translated
                     themes: [], flashcards: [], quiz: [], isFeedback: true 
                 }
             ]
         };
 
-        // --- English Content (Fully Translated) ---
         const baseContentENG = {
             meta: { 
                 title: "EOT", 
@@ -326,7 +337,11 @@
                 gateway: "Your Gateway to the University",
                 nav: "Navigation", 
                 glossary: "Glossary", 
-                copyright: "Copyright © 2025 EOT - Excel Over Time. All Rights Reserved." 
+                copyright: "Copyright © 2025 EOT - Excel Over Time. All Rights Reserved.",
+                glossaryPrompt: "Select a term to define...",
+                logoutConfirm: "Confirm Logout",
+                thankYou: "Thank you for visiting, see you again.",
+                backToLogin: "Back to Login"
             },
             labels: { 
                 highlights: "Highlights", 
@@ -342,7 +357,7 @@
                 yes: "Yes (+1)",
                 unsure: "Unsure (0)",
                 no: "No (-1)",
-                totalScore: "Total Score",
+                totalScore: "EOT Index",
                 userProfile: "User Profile",
                 name: "Name",
                 identity: "Identity",
@@ -350,157 +365,145 @@
                 loginTime: "Login Time",
                 historyTitle: "Self-Check History",
                 leaveComment: "Leave a Comment",
-                sendEmail: "Email Project Lead"
+                sendEmail: "Email Project Lead",
+                gaugeLabel: "Score"
             },
             sections: [
                 { 
-                    id: 0, title: "0. Key Takeaways", 
-                    highlights: ["Core Belief: Diversity is essential for excellence.", "Key Shift: From Gatekeeper to Groundskeeper.", "Practicing EOT: Excellence is a process of continuous growth."], 
-                    actionPlan: ["Promote two-stage collaborative admissions.", "Establish honors programs and support systems.", "Implement the 5-year roadmap."], 
+                    id: 0, title: "Key Takeaways", icon: "fa-star",
+                    highlights: ["Core Belief: Diversity is essential for excellence.", "Key Shift: From Gatekeeper to Groundskeeper.", "Practicing EOT: Excellence is a process."], 
+                    actionPlan: ["Promote two-stage collaborative admissions.", "Establish honors programs.", "Implement 5-year roadmap."], 
                     keywords: ["Inclusive Excellence", "Groundskeeper", "EOT"],
                     themes: [
-                        { title: "Our Core Belief", subThemes: [{title: "Belief Content", content: "Diversity is not an accessory to excellence, but a prerequisite."}] },
-                        { title: "EOT - Excel Over Time", subThemes: [{title: "Definition", content: "It's not where you start, but how you grow over time."}] },
-                        { title: "Unique Strengths of NCNU", subThemes: [{title: "Geography & Culture", content: "150-hectare beautiful campus, 20%+ international students."}, {title: "Digital Connection", content: "Resilient digital network and AI tools."}] }
+                        { title: "Our Core Belief", subThemes: [{title: "Content", content: "Diversity is not an accessory, but a prerequisite."}] }
                     ],
                     flashcards: [
-                        { front: "Gatekeeper", back: "Uses high walls to keep people out, only letting the 'best' in." },
-                        { front: "Groundskeeper", back: "Creates soil suitable for different plants, aiming to 'let everyone bloom'." }
+                        { front: "Gatekeeper", back: "Keeps people out, only lets the 'best' in." },
+                        { front: "Groundskeeper", back: "Creates soil for everyone to bloom." }
                     ],
                     quiz: [
                         { q: "I agree that 'diversity is essential for excellence'." },
-                        { q: "I understand the university should shift from 'screener' to 'nurturer'." }
+                        { q: "I understand the university should shift to a 'nurturer' role." }
                     ]
                 },
                 { 
-                    id: 1, title: "1. Vision & Values", 
-                    highlights: ["Groundskeeper: Creating soil for everyone to bloom.", "EOT: Focus on growth, not just the starting point.", "Diverse Values: Different backgrounds bring innovation and empathy."], 
-                    actionPlan: ["Publish Inclusive Excellence White Paper.", "Build an asset-based campus culture.", "Eliminate misconceptions about 'lowering standards'."], 
+                    id: 1, title: "Vision & Values", icon: "fa-eye",
+                    highlights: ["Groundskeeper: Creating soil for everyone.", "EOT: Focus on growth.", "Diverse Values: Innovation and empathy."], 
+                    actionPlan: ["Publish IE White Paper.", "Build asset-based culture.", "Eliminate 'lowering standards' myth."], 
                     keywords: ["Vision", "Values", "Diversity & Inclusion"],
                     themes: [
-                        { title: "Groundskeeper vs Gatekeeper", subThemes: [{title: "Gatekeeper", content: "Goal: How many to reject?"}, {title: "Groundskeeper", content: "Goal: Let everyone bloom."}] },
-                        { title: "EOT Spirit", subThemes: [{title: "Process over Origin", content: "With proper support, everyone can progress over four years."}] }
+                        { title: "Groundskeeper vs Gatekeeper", subThemes: [{title: "Gatekeeper", content: "Rejection focused"}, {title: "Groundskeeper", content: "Growth focused"}] }
                     ],
                     flashcards: [
-                        { front: "Common Idea: High scores = Excellence", back: "IE View: How much growth? Under what conditions?" }
+                        { front: "Idea: High scores = Excellence", back: "IE View: Growth & Context matter more." }
                     ],
                     quiz: [
-                        { q: "I believe excellence is a process, not just a starting point." },
-                        { q: "I am willing to accept and appreciate students from different backgrounds." }
+                        { q: "I believe excellence is a process." },
+                        { q: "I appreciate students from different backgrounds." }
                     ]
                 },
                 { 
-                    id: 2, title: "2. This University (NCNU)", 
-                    highlights: ["Mountain University: 150ha campus, focused learning.", "Cultural Diversity: 20%+ int'l students, a mini UN.", "Community Link: 25 years of USR, knowledge beyond the ivory tower."], 
-                    actionPlan: ["Use geographical advantage for focused thinking.", "Practice cross-cultural communication daily.", "Participate in real community projects."], 
+                    id: 2, title: "This University (NCNU)", icon: "fa-university",
+                    highlights: ["Mountain University: Focused learning.", "Cultural Diversity: 20%+ int'l students.", "Community Link: USR knowledge."], 
+                    actionPlan: ["Use geographical advantage.", "Practice cross-cultural communication.", "Real community projects."], 
                     keywords: ["NCNU Features", "Internationalization", "Local Practice"],
                     themes: [
-                        { title: "Geographical Advantage", subThemes: [{title: "Environment", content: "Mountains and lakes, nature everywhere."}, {title: "Meaning", content: "Focused thinking in a beautiful environment."}] },
-                        { title: "Cultural Diversity", subThemes: [{title: "Composition", content: "20%+ Overseas students, Indigenous programs."}, {title: "Meaning", content: "Daily interaction with diverse backgrounds builds cross-cultural skills."}] },
-                        { title: "Community Link", subThemes: [{title: "USR Deep Dive", content: "Indigenous education, new immigrant services."}, {title: "Skills", content: "Problem-solving, communication, resilience."}] }
+                        { title: "Geographical Advantage", subThemes: [{title: "Environment", content: "Focused thinking in nature."}] }
                     ],
                     flashcards: [
-                        { front: "Doubt: Is it boring in the mountains?", back: "Experience: Focus on learning on weekdays, explore nature on weekends." },
-                        { front: "Doubt: Will communication be hard?", back: "Value: A diverse environment is a rehearsal for the future workplace." }
+                        { front: "Doubt: Boring in mountains?", back: "Experience: Focus weekdays, explore weekends." }
                     ],
                     quiz: [
                         { q: "I want to focus on learning in a beautiful environment." },
-                        { q: "I want to cultivate cross-cultural communication skills." },
-                        { q: "I want to use what I learn to solve real problems." }
+                        { q: "I want to cultivate cross-cultural skills." },
+                        { q: "I want to solve real problems." }
                     ]
                 },
                 { 
-                    id: 3, title: "3. Seeing Your Value", 
-                    highlights: ["Two-Stage Mechanism: Context + Potential.", "Asset View: Seeing resilience and cultural capital.", "Focus on Traits: Your story, motivation, and future potential."], 
-                    actionPlan: ["Check starting point resources.", "Discover growth trajectory and traits.", "Evaluate unique contributions to campus."], 
+                    id: 3, title: "Seeing Your Value", icon: "fa-gem",
+                    highlights: ["Two-Stage Mechanism: Context + Potential.", "Asset View: Resilience & cultural capital.", "Focus: Story & Motivation."], 
+                    actionPlan: ["Check resources.", "Discover growth trajectory.", "Evaluate unique contributions."], 
                     keywords: ["Contextual Review", "Growth Trajectory", "Cultural Capital"],
                     themes: [
-                        { title: "Stage 1: Diversity (Inclusive)", subThemes: [{title: "Purpose", content: "Understand starting points and growth context."}, {title: "Focus", content: "What traits have you shown under your conditions?"}] },
-                        { title: "Stage 2: Excellence Potential", subThemes: [{title: "Past", content: "Growth trajectory and overcoming difficulties."}, {title: "Present", content: "Motivation and passion for learning."}, {title: "Future", content: "Potential for contribution and unique perspectives."}] }
+                        { title: "Stage 1: Diversity", subThemes: [{title: "Purpose", content: "Understand starting points."}] },
+                        { title: "Stage 2: Potential", subThemes: [{title: "Future", content: "Contribution & Perspective."}] }
                     ],
                     flashcards: [
-                        { front: "Doubt: Are rural students disadvantaged?", back: "Asset View: They possess unique strengths like resilience and local knowledge." },
-                        { front: "Worry: Will using AI tools penalize me?", back: "Encouragement: AI is a future tool; we look at critical usage." }
+                        { front: "Doubt: Rural students disadvantaged?", back: "Asset: Resilience & local knowledge." }
                     ],
                     quiz: [
-                        { q: "I have a unique growth story to share." },
-                        { q: "I am clear about my learning motivation." },
+                        { q: "I have a unique growth story." },
+                        { q: "I am clear about my motivation." },
                         { q: "I am willing to learn in a diverse environment." }
                     ]
                 },
                 { 
-                    id: 4, title: "4. Leading to Excellence", 
-                    highlights: ["Honors Program: Input+Output, turning excellence into impact.", "Learning Support: Differentiated assistance ensuring success.", "Digital Empowerment: Breaking geographic limits."], 
-                    actionPlan: ["Join the 18-credit Honors Program.", "Use Tutor and Writing Center resources.", "Connect with international internships."], 
+                    id: 4, title: "Leading to Excellence", icon: "fa-chart-line",
+                    highlights: ["Honors Program: Input+Output.", "Support: Differentiated assistance.", "Digital: Breaking limits."], 
+                    actionPlan: ["Join Honors Program.", "Use Tutor/Writing Center.", "Int'l internships."], 
                     keywords: ["Honors Program", "Support System", "Digital Empowerment"],
                     themes: [
-                        { title: "Honors Program", subThemes: [{title: "Input Module", content: "AI literacy, EMI communication, curiosity."}, {title: "Output Module", content: "Peer tutoring, social practice, Capstone projects."}] },
-                        { title: "Support System", subThemes: [{title: "Content", content: "Tutors, Writing Center, Early Warning, Language Resources."}] },
-                        { title: "Digital Empowerment", subThemes: [{title: "Infrastructure", content: "High-speed network, AI tools, cloud collaboration."}, {title: "Global Link", content: "Real-time interaction with the world."}] }
+                        { title: "Honors Program", subThemes: [{title: "Modules", content: "AI, EMI, Peer Tutoring, Capstone."}] }
                     ],
                     flashcards: [
-                        { front: "Traditional Award", back: "Cash prize, encourages competition." },
-                        { front: "NCNU Honors", back: "18-credit training, turning excellence into impact." },
-                        { front: "Worry: Disconnected from the world?", back: "Digital Empowerment: Rich facilities connect you globally." }
+                        { front: "NCNU Honors", back: "Turning excellence into impact." },
+                        { front: "Worry: Disconnected?", back: "Digital Empowerment connects globally." }
                     ],
                     quiz: [
-                        { q: "I want to cultivate AI literacy and cross-cultural skills." },
-                        { q: "I am willing to help classmates grow (Excellence for Others)." },
-                        { q: "I want to use digital tools to connect with the world." }
+                        { q: "I want AI & cross-cultural skills." },
+                        { q: "I want to help others grow." },
+                        { q: "I want to connect with the world." }
                     ]
                 },
                 { 
-                    id: 5, title: "5. Implementation Blueprint", 
-                    highlights: ["Phased Approach: Pilot (Y1-2) -> Expand (Y3-4) -> Verify (Y5).", "Data Calibration: Track retention, graduation, and employment.", "Goal: Build a replicable model."], 
-                    actionPlan: ["Establish IE Office.", "Build data dashboard.", "Conduct third-party evaluation."], 
+                    id: 5, title: "Implementation Blueprint", icon: "fa-map",
+                    highlights: ["Phased Approach: Pilot -> Expand -> Verify.", "Data Calibration: Track success.", "Goal: Replicable model."], 
+                    actionPlan: ["IE Office.", "Data dashboard.", "External evaluation."], 
                     keywords: ["Strategy Blueprint", "Data Tracking", "Evaluation"],
                     themes: [
-                        { title: "Timeline", subThemes: [{title: "Year 1-2", content: "Establish & Test"}, {title: "Year 3-4", content: "Expand & Optimize"}, {title: "Year 5", content: "Verify & Calibrate"}] },
-                        { title: "Tracking Metrics", subThemes: [{title: "Success Rates", content: "Retention, Graduation, Employment"}, {title: "Diversity", content: "Background variety"}, {title: "Campus Climate", content: "Sense of belonging/support"}] }
+                        { title: "Timeline", subThemes: [{title: "5 Years", content: "Test, Expand, Verify."}] }
                     ],
                     flashcards: [],
                     quiz: [
-                        { q: "I understand the school has a long-term support plan." },
-                        { q: "I am willing to participate in tracking effectiveness." }
+                        { q: "I understand the long-term plan." },
+                        { q: "I will participate in tracking." }
                     ]
                 },
                 { 
-                    id: 6, title: "6. Reassurance", 
-                    highlights: ["Quality Assurance: Graduation standards remain high.", "Employment Edge: Cross-cultural & problem-solving skills.", "Soft Power: Core competitiveness in the AI era."], 
-                    actionPlan: ["Provide differentiated learning support.", "Connect global digital resources.", "Cultivate professionals with warmth."], 
+                    id: 6, title: "Reassurance", icon: "fa-hand-holding-heart",
+                    highlights: ["QA: High standards maintained.", "Employment: Soft skills demanded.", "Soft Power: Core competitiveness."], 
+                    actionPlan: ["Differentiated support.", "Global resources.", "Warm professionals."], 
                     keywords: ["Quality Assurance", "Competitiveness", "Reassurance"],
                     themes: [
-                        { title: "IE Concept Clarification", subThemes: [{title: "Not Lowering Standards", content: "Requirements remain unchanged; support is provided to reach them."}] },
-                        { title: "Career Prospects", subThemes: [{title: "Data", content: "Employment rate 85%+"}, {title: "Employer Feedback", content: "Outstanding collaboration and problem-solving skills."}] }
+                        { title: "Clarification", subThemes: [{title: "Standards", content: "Same requirements, more support."}] }
                     ],
                     flashcards: [
-                        { front: "Worry: Diversity lowers quality?", back: "Fact: Standards are the same; we provide support to reach them." },
-                        { front: "Doubt: Are soft skills useful?", back: "Trend: In the AI era, collaboration is scarce and valuable." }
+                        { front: "Worry: Lower quality?", back: "Fact: Same standards, better support." }
                     ],
                     quiz: [
-                        { q: "I agree with the IE concept: Focus on process and growth." },
-                        { q: "I believe NCNU can help me continue to improve (EOT)." },
-                        { q: "I am willing to learn and contribute in a diverse environment." }
+                        { q: "I agree with focusing on growth." },
+                        { q: "I believe NCNU can help me improve." },
+                        { q: "I will contribute." }
                     ]
                 },
                 { 
-                    id: 7, title: "7. Video Playlists", 
-                    highlights: ["Career and industry trend lectures.", "EMI reality and digital materials.", "Freshman guide and transformation cases."], 
-                    actionPlan: ["Watch 'Seeing the World' to reflect.", "Familiarize with full English environment.", "Learn digital course design."], 
+                    id: 7, title: "Video Playlists", icon: "fa-video",
+                    highlights: ["Career lectures.", "EMI materials.", "Freshman guide."], 
+                    actionPlan: ["Watch videos.", "Reflect on positioning.", "Learn digital design."], 
                     keywords: ["Career", "EMI Teaching", "Digital Transformation"],
                     themes: [], flashcards: [], quiz: [], videos: videoList 
                 },
                 { 
-                    id: 8, title: "8. Usage History", 
-                    highlights: ["View personal login info.", "Track quiz scores.", "Analyze learning effectiveness."], 
-                    actionPlan: ["Check completion regularly.", "Review red items."], 
+                    id: 8, title: "Usage History", icon: "fa-tachometer-alt",
+                    highlights: ["View login info.", "Track scores.", "Analyze effectiveness."], 
+                    actionPlan: ["Check completion.", "Review red items."], 
                     keywords: ["Learning Analytics", "Tracking", "User"],
                     themes: [], flashcards: [], quiz: [], isHistory: true 
                 },
                 { 
-                    id: 9, title: "9. Contact Us", 
-                    highlights: ["Provide valuable feedback.", "Contact project lead directly.", "Join co-creation discussions."], 
-                    actionPlan: ["Fill out feedback form.", "Send email."], 
+                    id: 9, title: "Contact Us", icon: "fa-envelope",
+                    highlights: ["Feedback.", "Contact lead.", "Co-creation."], 
+                    actionPlan: ["Form.", "Email."], 
                     keywords: ["Feedback Loop", "Communication", "Co-creation"],
                     themes: [], flashcards: [], quiz: [], isFeedback: true 
                 }
@@ -514,21 +517,77 @@
 
         // --- 3. Components ---
 
-        // Brand Component (Used in Header and Login)
         const BrandLogo = ({ showSlogan = true }) => (
-            <div className="flex items-center">
-                <div className="w-10 h-10 bg-bcg-brand-bg flex items-center justify-center rounded-sm mr-2 shrink-0">
-                    <span className="text-bcg font-extrabold text-xl tracking-tighter">EOT</span>
+            <div className="flex items-start">
+                <div className="w-12 h-12 bg-bcg flex items-center justify-center rounded-lg mr-3 shrink-0 border border-bcg border-opacity-10 shadow-sm">
+                    <span className="text-white brand-serif font-bold text-lg tracking-wide">EOT</span>
                 </div>
                 {showSlogan && (
-                    <span className="text-bcg dark:text-bcg-light font-bold text-lg md:text-xl whitespace-nowrap">
-                        Excel Over Time
-                    </span>
+                    <div className="flex flex-col justify-center h-12">
+                        <span className="text-bcg brand-serif font-bold text-sm md:text-base leading-none mb-1 tracking-wide">
+                            Excel Over Time
+                        </span>
+                        <span className="text-bcg-light brand-serif text-[10px] md:text-xs leading-none font-medium opacity-90 italic">
+                            Inclusive excellence, excelling over time
+                        </span>
+                    </div>
                 )}
             </div>
         );
 
-        // Theme Dropdown Component
+        const GaugeChart = ({ score, max = 18, label }) => {
+            const segments = [
+                { color: "#EF4444", range: "0-3" }, 
+                { color: "#F97316", range: "3-6" }, 
+                { color: "#EAB308", range: "6-9" }, 
+                { color: "#9CA3AF", range: "9-12" }, 
+                { color: "#10B981", range: "12-15" }, 
+                { color: "#3B82F6", range: "15-18" }  
+            ];
+            const radius = 80;
+            const stroke = 20;
+            const normalizedScore = Math.min(Math.max(score, 0), max);
+            const angle = (normalizedScore / max) * 180 - 90; 
+
+            const createArc = (startAngle, endAngle) => {
+                const start = polarToCartesian(100, 100, radius, endAngle);
+                const end = polarToCartesian(100, 100, radius, startAngle);
+                const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+                return ["M", start.x, start.y, "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(" ");
+            };
+
+            const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+                const angleInRadians = (angleInDegrees - 180) * Math.PI / 180.0;
+                return { x: centerX + (radius * Math.cos(angleInRadians)), y: centerY + (radius * Math.sin(angleInRadians)) };
+            }
+
+            return (
+                <div className="flex flex-col items-center justify-center p-4">
+                    <div className="relative w-64 h-32 overflow-hidden mb-4">
+                        <svg viewBox="0 0 200 110" className="w-full h-full">
+                            {segments.map((seg, i) => {
+                                const start = (i * 30);
+                                const end = ((i + 1) * 30);
+                                return <path key={i} d={createArc(start, end)} fill="none" stroke={seg.color} strokeWidth={stroke} strokeDasharray="1 1" />;
+                            })}
+                            <g className="gauge-needle" style={{ transform: `rotate(${angle}deg)`, transformOrigin: "100px 100px" }}>
+                                <polygon points="100,100 95,20 100,10 105,20" fill="#1F5C46" />
+                                <circle cx="100" cy="100" r="5" fill="#1F5C46" />
+                            </g>
+                        </svg>
+                        <div className="absolute bottom-0 w-full text-center">
+                            <span className="text-3xl font-bold text-bcg brand-serif">{score}</span>
+                            <span className="text-xs text-gray-500 ml-1">/ {max}</span>
+                        </div>
+                    </div>
+                    <div className="flex gap-1 text-[10px] uppercase font-bold text-gray-400">
+                        {segments.map((s,i) => <span key={i} style={{color: s.color}}>{s.range}</span>)}
+                    </div>
+                    <p className="mt-2 text-sm font-bold text-gray-600">{label}</p>
+                </div>
+            );
+        };
+
         const ThemeExplorer = ({ themes, label }) => {
             const [selectedMajor, setSelectedMajor] = useState(0);
             const [selectedMinor, setSelectedMinor] = useState(0);
@@ -540,37 +599,23 @@
             const minorTheme = subThemes[selectedMinor];
 
             return (
-                <div className="mt-8 p-5 bg-bcg-theme-bg dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-700 shadow-sm">
-                    <div className="flex items-center mb-4">
-                        <i className="fas fa-compass text-bcg dark:text-bcg-light text-xl mr-2"></i>
-                        <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100 uppercase">{label}</h4>
+                <div className="mt-8 p-6 bg-bcg-theme-bg dark:bg-gray-800 rounded-lg border-l-4 border-bcg shadow-sm">
+                    <div className="flex items-center mb-5">
+                        <i className="fas fa-compass text-bcg dark:text-bcg-light text-xl mr-3"></i>
+                        <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100 uppercase tracking-wider brand-serif">{label}</h4>
                     </div>
-                    
-                    {/* Major Theme */}
                     <div className="mb-4">
-                        <select 
-                            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm font-medium"
-                            value={selectedMajor}
-                            onChange={(e) => { setSelectedMajor(Number(e.target.value)); setSelectedMinor(0); }}
-                        >
+                        <select className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm font-medium focus:ring-1 focus:ring-bcg outline-none" value={selectedMajor} onChange={(e) => { setSelectedMajor(Number(e.target.value)); setSelectedMinor(0); }}>
                             {themes.map((t, i) => <option key={i} value={i}>{t.title}</option>)}
                         </select>
                     </div>
-
-                    {/* Minor Theme */}
                     {subThemes.length > 0 && (
                         <div className="animate-fade-in">
-                            <select 
-                                className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm mb-3"
-                                value={selectedMinor}
-                                onChange={(e) => setSelectedMinor(Number(e.target.value))}
-                            >
+                            <select className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm mb-4 outline-none" value={selectedMinor} onChange={(e) => setSelectedMinor(Number(e.target.value))}>
                                 {subThemes.map((t, i) => <option key={i} value={i}>{t.title}</option>)}
                             </select>
-                            <div className="p-4 bg-white dark:bg-gray-900 rounded border-l-4 border-bcg shadow-sm">
-                                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                                    {minorTheme?.content}
-                                </p>
+                            <div className="p-5 bg-white dark:bg-gray-900 rounded shadow-inner text-gray-700 dark:text-gray-300 leading-relaxed brand-serif text-sm border border-gray-100 dark:border-gray-700">
+                                {minorTheme?.content}
                             </div>
                         </div>
                     )}
@@ -584,27 +629,14 @@
                     {questions.map((q, idx) => {
                         const val = answers[idx];
                         return (
-                            <div key={idx} className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                                <p className="font-semibold text-gray-800 dark:text-gray-200 mb-3">{idx + 1}. {q.q}</p>
-                                <div className="flex gap-2">
-                                    <button 
-                                        onClick={() => onAnswer(idx, 1)}
-                                        className={`flex-1 py-2 rounded text-sm font-bold transition ${val === 1 ? 'bg-green-100 text-green-700 border-2 border-green-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-green-50'}`}
-                                    >
-                                        {labels.yes}
-                                    </button>
-                                    <button 
-                                        onClick={() => onAnswer(idx, 0)}
-                                        className={`flex-1 py-2 rounded text-sm font-bold transition ${val === 0 ? 'bg-gray-200 text-gray-700 border-2 border-gray-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200'}`}
-                                    >
-                                        {labels.unsure}
-                                    </button>
-                                    <button 
-                                        onClick={() => onAnswer(idx, -1)}
-                                        className={`flex-1 py-2 rounded text-sm font-bold transition ${val === -1 ? 'bg-red-100 text-red-700 border-2 border-red-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-red-50'}`}
-                                    >
-                                        {labels.no}
-                                    </button>
+                            <div key={idx} className="bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+                                <p className="font-semibold text-gray-800 dark:text-gray-200 mb-4 brand-serif">{idx + 1}. {q.q}</p>
+                                <div className="flex gap-3">
+                                    {[{ v: 1, l: labels.yes, c: 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100' }, { v: 0, l: labels.unsure, c: 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' }, { v: -1, l: labels.no, c: 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100' }].map(opt => (
+                                        <button key={opt.v} onClick={() => onAnswer(idx, opt.v)} className={`flex-1 py-2 rounded text-xs font-bold transition border ${val === opt.v ? 'ring-2 ring-bcg ring-offset-1 ' + opt.c : 'opacity-70 ' + opt.c}`}>
+                                            {opt.l}
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
                         );
@@ -615,48 +647,40 @@
 
         const Flashcard = ({ front, back }) => {
             const [flipped, setFlipped] = useState(false);
-            
             return (
-                <div 
-                    className={`group w-full h-32 cursor-pointer perspective-1000`} 
-                    onClick={() => setFlipped(!flipped)}
-                    onMouseLeave={() => setFlipped(false)}
-                >
-                    <div className={`relative w-full h-full text-center transition-transform duration-500 transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}>
-                        {/* Front */}
-                        <div className="absolute w-full h-full backface-hidden bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center p-4 z-10">
-                            <h3 className="text-base font-bold text-bcg dark:text-bcg-light leading-snug">{front}</h3>
+                <div className={`group w-full h-40 cursor-pointer perspective-1000`} onClick={() => setFlipped(!flipped)} onMouseLeave={() => setFlipped(false)}>
+                    <div className={`relative w-full h-full text-center transition-transform duration-700 transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}>
+                        <div className="absolute w-full h-full backface-hidden bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center p-6 z-10 group-hover:shadow-md transition-shadow">
+                            <h3 className="text-lg font-bold text-bcg dark:text-bcg-light brand-serif">{front}</h3>
                         </div>
-                        {/* Back */}
-                        <div className="absolute w-full h-full backface-hidden bg-bcg text-white rounded-lg shadow-md flex items-center justify-center p-4 rotate-y-180">
-                            <p className="text-sm font-medium leading-relaxed">{back}</p>
+                        <div className="absolute w-full h-full backface-hidden bg-bcg text-white rounded-lg shadow-sm flex items-center justify-center p-6 rotate-y-180">
+                            <p className="text-sm font-medium leading-relaxed font-sans">{back}</p>
                         </div>
                     </div>
                 </div>
             );
         };
 
-        const getYouTubeID = (url) => {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        };
-
         const VideoCard = ({ video, label }) => {
+            const getYouTubeID = (url) => {
+                const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+                return (match && match[2].length === 11) ? match[2] : null;
+            };
             const videoID = getYouTubeID(video.url);
-            const thumbUrl = videoID ? `https://img.youtube.com/vi/${videoID}/mqdefault.jpg` : 'https://via.placeholder.com/320x180?text=No+Thumbnail';
+            const thumbUrl = videoID ? `https://img.youtube.com/vi/${videoID}/mqdefault.jpg` : 'https://via.placeholder.com/320x180';
+            
             return (
                 <a href={video.url} target="_blank" rel="noopener noreferrer" className="block group">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-                        <div className="relative aspect-video bg-gray-200 dark:bg-gray-700 overflow-hidden">
-                            <img src={thumbUrl} alt={video.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300">
-                                <i className="fas fa-play-circle text-4xl text-white opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300">
+                        <div className="relative aspect-video bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                            <img src={thumbUrl} alt={video.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" />
+                            <div className="absolute inset-0 flex items-center justify-center bg-bcg bg-opacity-0 group-hover:bg-opacity-20 transition-all">
+                                <i className="fas fa-play-circle text-4xl text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300"></i>
                             </div>
                         </div>
                         <div className="p-4">
-                            <h4 className="font-semibold text-gray-800 dark:text-gray-100 text-sm line-clamp-2 mb-2 group-hover:text-bcg transition-colors">{video.title}</h4>
-                            <span className="text-xs text-bcg font-bold uppercase tracking-wider flex items-center">{label} <i className="fas fa-external-link-alt ml-1"></i></span>
+                            <h4 className="font-semibold text-gray-800 dark:text-gray-100 text-sm line-clamp-2 mb-2 group-hover:text-bcg transition-colors brand-serif">{video.title}</h4>
+                            <span className="text-xs text-bcg font-bold uppercase tracking-wider flex items-center">{label} <i className="fas fa-arrow-right ml-1 text-[10px]"></i></span>
                         </div>
                     </div>
                 </a>
@@ -665,30 +689,39 @@
 
         const UsageHistory = ({ user, quizScores, sections, labels }) => {
             const totalScore = Object.values(quizScores).reduce((acc, sec) => acc + Object.values(sec).reduce((a, b) => a + b, 0), 0);
-            
             return (
                 <div className="space-y-6 animate-fade-in">
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-id-card mr-2"></i> {labels.userProfile}</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                            <div><span className="font-semibold text-gray-500">{labels.name}:</span> {user.name || "Guest"}</div>
-                            <div><span className="font-semibold text-gray-500">{labels.identity}:</span> {user.identity}</div>
-                            <div><span className="font-semibold text-gray-500">{labels.email}:</span> {user.email}</div>
-                            <div><span className="font-semibold text-gray-500">{labels.loginTime}:</span> {user.loginTime.toLocaleString()}</div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center">
+                            <h3 className="text-lg font-bold text-bcg mb-2 brand-serif w-full text-left border-b pb-2">{labels.totalScore}</h3>
+                            <GaugeChart score={totalScore} label={labels.gaugeLabel} />
+                        </div>
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                            <h3 className="text-lg font-bold text-bcg mb-4 brand-serif border-b pb-2"><i className="fas fa-id-card mr-2"></i> {labels.userProfile}</h3>
+                            <div className="space-y-3 text-sm font-sans">
+                                <div className="flex justify-between"><span className="text-gray-500">{labels.name}</span> <span className="font-semibold">{user.name || "Guest"}</span></div>
+                                <div className="flex justify-between"><span className="text-gray-500">{labels.identity}</span> <span className="font-semibold text-right">{user.identity}</span></div>
+                                <div className="flex justify-between"><span className="text-gray-500">{labels.email}</span> <span className="font-semibold">{user.email}</span></div>
+                                <div className="flex justify-between"><span className="text-gray-500">{labels.loginTime}</span> <span className="font-semibold">{user.loginTime.toLocaleTimeString()}</span></div>
+                            </div>
                         </div>
                     </div>
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-bold text-bcg mb-4"><i className="fas fa-chart-line mr-2"></i> {labels.historyTitle}</h3>
-                        <div className="text-3xl font-bold text-bcg mb-6">{labels.totalScore}: {totalScore}</div>
-                        <div className="space-y-4">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                        <h3 className="text-lg font-bold text-bcg mb-4 brand-serif"><i className="fas fa-list-ul mr-2"></i> {labels.historyTitle}</h3>
+                        <div className="space-y-0 divide-y divide-gray-100 dark:divide-gray-700">
                             {sections.map(sec => {
                                 if (!sec.quiz || sec.quiz.length === 0) return null;
                                 const secScores = quizScores[sec.id] || {};
                                 const secTotal = Object.values(secScores).reduce((a, b) => a + b, 0);
                                 return (
-                                    <div key={sec.id} className="border-b border-gray-100 dark:border-gray-700 pb-2 last:border-0 flex justify-between">
-                                        <span className="text-sm text-gray-700 dark:text-gray-300">{sec.title}</span>
-                                        <span className={`text-sm font-bold ${secTotal > 0 ? 'text-green-600' : secTotal < 0 ? 'text-red-500' : 'text-gray-400'}`}>
+                                    <div key={sec.id} className="py-3 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-900 px-2 transition-colors">
+                                        <div className="flex items-center">
+                                            <div className="w-8 h-8 rounded bg-gray-100 dark:bg-gray-700 flex items-center justify-center mr-3 text-bcg text-sm">
+                                                <i className={`fas ${sec.icon}`}></i>
+                                            </div>
+                                            <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">{sec.title}</span>
+                                        </div>
+                                        <span className={`text-sm font-bold px-2 py-1 rounded ${secTotal > 0 ? 'bg-green-100 text-green-700' : secTotal < 0 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-500'}`}>
                                             {secTotal > 0 ? '+' : ''}{secTotal}
                                         </span>
                                     </div>
@@ -703,51 +736,70 @@
         const LoginPage = ({ onLogin, texts, creatorInfo }) => {
             const [email, setEmail] = useState("");
             const [name, setName] = useState("");
-            const [identity, setIdentity] = useState(identities[0]);
-            const [currentTime, setCurrentTime] = useState(new Date());
-
-            useEffect(() => { const t = setInterval(() => setCurrentTime(new Date()), 1000); return () => clearInterval(t); }, []);
-
+            const [identity, setIdentity] = useState(identities[1]); // Default to Uni Prof/Student
+            
             return (
-                <div className="min-h-screen bg-gradient-to-br from-bcg-dark to-bcg flex items-center justify-center p-4">
-                    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 max-w-md w-full animate-fade-in relative overflow-hidden">
-                        {/* Top decorative bar */}
-                        <div className="absolute top-0 left-0 w-full h-2 bg-bcg-gold"></div>
-                        
-                        <div className="text-center mb-8">
-                            <p className="text-xs text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase mb-4">{texts.gateway}</p>
-                            
-                            <div className="flex justify-center mb-6">
-                                <BrandLogo />
+                <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col items-center justify-center p-6">
+                    <div className="max-w-md w-full animate-fade-in">
+                        <div className="text-center mb-10">
+                            <p className="text-xs text-gray-400 font-bold tracking-[0.2em] uppercase mb-6">{texts.gateway}</p>
+                            <div className="flex justify-center mb-6 transform scale-125">
+                                <BrandLogo showSlogan={true} />
                             </div>
-                            
-                            <p className="text-sm text-gray-500 dark:text-gray-400 italic">{texts.valueProp}</p>
-                            <div className="mt-4 text-xs font-mono text-gray-400">{currentTime.toLocaleString()}</div>
                         </div>
-                        
-                        <form onSubmit={(e) => { e.preventDefault(); if(email) onLogin({ email, name, identity, loginTime: new Date() }); }} className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">電子郵件 E-mail (必填 Required)</label>
-                                <input type="email" required className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" placeholder="visitor@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
-                            </div>
-                            <div className="grid grid-cols-1 gap-4">
-                                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">用戶名稱 Name (選填 Optional)</label><input type="text" className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} /></div>
+                        <div className="bg-white dark:bg-gray-900 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-gray-100 dark:border-gray-800 rounded-xl">
+                            <form onSubmit={(e) => { e.preventDefault(); if(email) onLogin({ email, name, identity, loginTime: new Date() }); }} className="space-y-5">
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">身份類別 Identity (選填 Optional)</label>
-                                    <select 
-                                        className="w-full p-3 border rounded focus:ring-2 focus:ring-bcg outline-none bg-gray-50 dark:bg-gray-800 dark:text-white text-sm" 
-                                        value={identity} 
-                                        onChange={(e) => setIdentity(e.target.value)}
-                                    >
-                                        {identities.map(id => <option key={id} value={id}>{id}</option>)}
-                                    </select>
+                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">E-mail (Required)</label>
+                                    <input type="email" required className="w-full p-3 border-b-2 border-gray-200 focus:border-bcg outline-none bg-transparent transition-colors brand-serif" placeholder="visitor@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
                                 </div>
-                            </div>
-                            <button type="submit" className="w-full bg-bcg hover:bg-bcg-dark text-white font-bold py-3 rounded transition shadow-lg mt-4">Visitor Login</button>
-                        </form>
-                        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 text-center text-xs text-gray-400">
+                                <div className="grid grid-cols-1 gap-5">
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Name (Optional)</label>
+                                        <input type="text" className="w-full p-3 border-b-2 border-gray-200 focus:border-bcg outline-none bg-transparent transition-colors brand-serif" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Identity (Optional)</label>
+                                        <select className="w-full p-3 border-b-2 border-gray-200 focus:border-bcg outline-none bg-transparent brand-serif text-sm" value={identity} onChange={(e) => setIdentity(e.target.value)}>
+                                            {identities.map(id => <option key={id} value={id}>{id}</option>)}
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" className="w-full bg-bcg hover:bg-bcg-dark text-white font-bold py-4 rounded shadow-lg hover:shadow-xl transition-all mt-6 uppercase tracking-widest text-xs">Login</button>
+                            </form>
+                        </div>
+                        <div className="mt-8 text-center text-[10px] text-gray-400 space-y-2 font-sans">
                             <p>{texts.copyright}</p>
-                            <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition block mt-2">{creatorInfo}</a>
+                            <a href="#" className="hover:text-bcg transition block">{creatorInfo}</a>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const LogoutConfirmPage = ({ onConfirm, texts, creatorInfo }) => {
+            return (
+                <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center p-6 animate-fade-in">
+                    <div className="max-w-lg w-full text-center">
+                        <div className="mb-12 transform scale-125 flex justify-center">
+                            <BrandLogo showSlogan={true} />
+                        </div>
+                        <div className="bg-white dark:bg-gray-900 p-10 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 mb-8">
+                            <h3 className="text-xl font-bold text-bcg dark:text-bcg-light mb-6 brand-serif">{texts.logoutConfirm}</h3>
+                            <p className="text-gray-600 dark:text-gray-300 mb-8 font-serif italic text-lg">{texts.thankYou}</p>
+                            <button onClick={onConfirm} className="w-full bg-bcg hover:bg-bcg-dark text-white font-bold py-3 rounded shadow-md transition-all uppercase tracking-widest text-xs">
+                                {texts.backToLogin}
+                            </button>
+                        </div>
+                        <div className="text-[10px] text-gray-400 space-y-2 font-sans">
+                            <p>{texts.copyright}</p>
+                            <div className="flex justify-center space-x-4">
+                                <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition">Creator: Prof. Shihmin Lo, PhD</a>
+                                <span>|</span>
+                                <a href="https://www.ibs.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">IBS</a>
+                                <span>|</span>
+                                <a href="https://rpage.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">NCNU</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -756,16 +808,17 @@
 
         const App = () => {
             const [user, setUser] = useState(null); 
+            const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
             const [quizScores, setQuizScores] = useState({});
             const [lang, setLang] = useState('TC');
             const [theme, setTheme] = useState('light');
-            const [activeSection, setActiveSection] = useState(() => {
-                const hash = window.location.hash.replace('#section-', '');
-                const section = parseInt(hash);
-                return !isNaN(section) && section >= 0 ? section : 0;
-            });
-            const [sidebarOpen, setSidebarOpen] = useState(true); // Default open on Desktop
-            const [glossaryTerm, setGlossaryTerm] = useState("");
+            const [activeSection, setActiveSection] = useState(0);
+            const [sidebarOpen, setSidebarOpen] = useState(true);
+            const [selectedGlossaryKey, setSelectedGlossaryKey] = useState("");
+            
+            // Refs for scrolling
+            const footerRef = useRef(null);
+            const mainContentRef = useRef(null);
 
             useEffect(() => {
                 if (theme === 'dark') document.documentElement.classList.add('dark');
@@ -773,22 +826,32 @@
             }, [theme]);
 
             useEffect(() => {
-                window.location.hash = `#section-${activeSection}`;
-            }, [activeSection]);
-
-            useEffect(() => {
                 const handleResize = () => {
-                    if (window.innerWidth < 768) setSidebarOpen(false);
+                    if (window.innerWidth < 1024) setSidebarOpen(false);
                     else setSidebarOpen(true);
                 };
                 window.addEventListener('resize', handleResize);
-                handleResize(); // Init
+                handleResize(); 
                 return () => window.removeEventListener('resize', handleResize);
             }, []);
 
             const currentContent = translations[lang] || translations['ENG'];
             const currentSection = currentContent.sections[activeSection];
             
+            const displayGlossary = useMemo(() => {
+                return rawGlossaryData.map(item => ({
+                    key: item.k,
+                    t: item.k, // Display Key in dropdown
+                    d: lang === 'TC' ? item.tc : item.eng
+                })).sort((a,b) => a.t.localeCompare(b.t));
+            }, [lang]);
+
+            const currentGlossaryDefinition = useMemo(() => {
+                if(!selectedGlossaryKey) return null;
+                const item = rawGlossaryData.find(g => g.k === selectedGlossaryKey);
+                return item ? (lang === 'TC' ? item.tc : item.eng) : null;
+            }, [selectedGlossaryKey, lang]);
+
             const handleQuizAnswer = (secId, qIdx, score) => {
                 setQuizScores(prev => ({
                     ...prev,
@@ -796,151 +859,200 @@
                 }));
             };
 
-            if (!user) return <LoginPage onLogin={setUser} texts={currentContent.meta} creatorInfo="Creator: Prof. Shihmin Lo, PhD" />;
+            const toggleLang = () => {
+                setLang(prev => prev === 'TC' ? 'ENG' : 'TC');
+            };
+
+            const handleLogin = (userInfo) => {
+                setUser(userInfo);
+                // Reset to first section and scroll top
+                setActiveSection(0);
+                window.scrollTo(0, 0);
+                if(mainContentRef.current) mainContentRef.current.scrollTop = 0;
+            };
+
+            const handleLogoutClick = () => {
+                setShowLogoutConfirm(true);
+            };
+
+            const confirmLogout = () => {
+                setUser(null);
+                setShowLogoutConfirm(false);
+                setSelectedGlossaryKey("");
+            };
+
+            // Keyword Click Handler
+            const handleKeywordClick = (keyword) => {
+                // Find matching glossary key (fuzzy match or direct match)
+                const found = rawGlossaryData.find(g => 
+                    g.k === keyword || 
+                    (g.alt && g.alt.includes(keyword))
+                );
+
+                if (found) {
+                    setSelectedGlossaryKey(found.k);
+                    // Scroll to footer
+                    if (footerRef.current) {
+                        footerRef.current.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            };
+
+            if (!user) return <LoginPage onLogin={handleLogin} texts={currentContent.meta} creatorInfo="Creator: Prof. Shihmin Lo, PhD" />;
+
+            if (showLogoutConfirm) {
+                return <LogoutConfirmPage onConfirm={confirmLogout} texts={currentContent.meta} creatorInfo="Creator: Prof. Shihmin Lo, PhD" />;
+            }
 
             return (
                 <div className="min-h-screen flex flex-col font-sans bg-gray-50 dark:bg-gray-950">
                     
                     {/* Fixed Header */}
-                    <header className="fixed top-0 left-0 w-full h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm z-50 flex items-center px-4 justify-between">
-                        <div className="flex items-center gap-4">
-                            {/* Hamburger - Always Left */}
-                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-600 dark:text-gray-300 hover:text-bcg focus:outline-none">
-                                <i className={`fas ${sidebarOpen ? 'fa-times' : 'fa-bars'} text-xl`}></i>
+                    <header className="fixed top-0 left-0 w-full h-20 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-[0_2px_10px_rgba(0,0,0,0.03)] z-50 flex items-center px-6 justify-between transition-all">
+                        <div className="flex items-center gap-6">
+                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-500 hover:text-bcg focus:outline-none transition-colors">
+                                <i className={`fas fa-bars-staggered text-xl`}></i>
                             </button>
-                            
-                            {/* Brand Group */}
-                            <div className="flex items-center gap-4">
-                                <BrandLogo />
-                                <div className="hidden md:block h-6 w-px bg-gray-300 dark:bg-gray-600 mx-2"></div>
-                                <span className="hidden lg:block text-xs md:text-sm text-gray-500 dark:text-gray-400 italic font-medium">
-                                    {currentContent.meta.valueProp}
-                                </span>
-                            </div>
+                            <BrandLogo />
                         </div>
 
-                        {/* Right Controls */}
-                        <div className="flex items-center gap-3 md:gap-4">
-                            {/* User Info (Hidden on very small screens) */}
+                        <div className="flex items-center gap-6">
                             <div className="hidden md:flex flex-col items-end text-right">
-                                <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{user.name || "Guest"}</span>
-                                <button onClick={() => setUser(null)} className="text-xs text-red-500 hover:text-red-700 font-bold">Logout</button>
+                                <span className="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wide">{user.name || "Guest"}</span>
+                                <button onClick={handleLogoutClick} className="text-gray-400 hover:text-red-500 transition-colors" title="Logout">
+                                    <i className="fas fa-sign-out-alt text-lg"></i>
+                                </button>
                             </div>
-
-                            {/* Language */}
-                            <select value={lang} onChange={(e) => setLang(e.target.value)} className="px-2 py-1 rounded border text-xs font-bold focus:outline-none focus:ring-1 focus:ring-bcg bg-gray-100 dark:bg-gray-800 dark:border-gray-600">
-                                {languageOptions.map(opt => <option key={opt.code} value={opt.code}>{opt.label}</option>)}
-                            </select>
-
-                            {/* Theme */}
-                            <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                                <i className={`fas ${theme === 'light' ? 'fa-moon' : 'fa-sun'} text-xs text-gray-600 dark:text-gray-300`}></i>
+                            <div className="h-8 w-px bg-gray-200 dark:bg-gray-700 mx-2 hidden md:block"></div>
+                            <button onClick={toggleLang} className="text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-bcg transition-colors tracking-wide uppercase">
+                                {lang === 'TC' ? 'ENG' : '繁中'}
+                            </button>
+                            <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className="text-gray-400 hover:text-bcg transition-colors">
+                                <i className={`fas ${theme === 'light' ? 'fa-moon' : 'fa-sun'} text-sm`}></i>
                             </button>
                         </div>
                     </header>
 
-                    <div className="flex pt-16 min-h-screen">
-                        {/* Sidebar Drawer */}
-                        <aside className={`fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out z-40 flex flex-col overflow-hidden`}>
+                    <div className="flex pt-20 min-h-screen">
+                        {/* Sidebar */}
+                        <aside className={`fixed top-20 left-0 h-[calc(100vh-5rem)] w-auto max-w-[18rem] bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out z-40 flex flex-col overflow-hidden shadow-[4px_0_24px_rgba(0,0,0,0.02)]`}>
                             <div className="flex-1 overflow-y-auto no-scrollbar py-6">
-                                <p className="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{currentContent.meta.nav}</p>
-                                <ul>
+                                <p className="px-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6 ml-1">{currentContent.meta.nav}</p>
+                                <ul className="space-y-1 px-3">
                                     {currentContent.sections.map((sec, idx) => (
                                         <li key={sec.id}>
                                             <button 
                                                 onClick={() => {
                                                     setActiveSection(idx); 
-                                                    if(window.innerWidth < 768) setSidebarOpen(false);
+                                                    if(window.innerWidth < 1024) setSidebarOpen(false);
                                                     window.scrollTo(0,0);
                                                 }} 
-                                                className={`w-full text-left px-6 py-3 text-sm font-medium transition-colors border-l-4 ${activeSection === idx ? 'border-bcg text-bcg bg-green-50 dark:bg-bcg-dark dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+                                                className={`w-full text-left px-4 py-3 text-sm font-medium rounded-md transition-all flex items-center whitespace-nowrap ${activeSection === idx ? 'bg-bcg-brand-bg text-bcg dark:bg-gray-800 dark:text-bcg-light shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-800'}`}
                                             >
-                                                {sec.title}
+                                                <i className={`fas ${sec.icon} w-6 text-center text-xs mr-3 opacity-70`}></i>
+                                                <span className="truncate">{sec.title}</span>
                                             </button>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
-                            
-                            {/* Mobile User Control (Visible only in sidebar on mobile) */}
-                            <div className="md:hidden p-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-bold text-gray-700 dark:text-gray-300">{user.name || "Guest"}</span>
-                                    <button onClick={() => setUser(null)} className="text-xs text-red-500 font-bold">Logout</button>
-                                </div>
-                            </div>
                         </aside>
 
                         {/* Main Content */}
-                        <main className={`flex-1 w-full transition-all duration-300 ${sidebarOpen ? 'md:ml-64' : 'ml-0'}`}>
-                            <div className="max-w-4xl mx-auto p-6 md:p-12 pb-24">
-                                <header className="mb-10 text-center">
-                                    <span className="text-bcg dark:text-bcg-light font-bold tracking-widest text-xs uppercase mb-2 block">{currentContent.meta.gateway}</span>
-                                    <h2 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight">{currentSection.title}</h2>
-                                    <div className="h-1 w-16 bg-bcg-gold mx-auto mt-4 rounded"></div>
+                        <main ref={mainContentRef} className={`flex-1 w-full transition-all duration-300 ${sidebarOpen ? 'lg:ml-[16rem]' : 'ml-0'}`}>
+                            <div className="max-w-5xl mx-auto p-8 md:p-16 pb-32">
+                                <header className="mb-12">
+                                    <span className="text-gray-400 font-bold tracking-[0.2em] text-[10px] uppercase mb-3 block">{currentContent.meta.gateway}</span>
+                                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight brand-serif flex items-center">
+                                        <div className="w-10 h-10 rounded-full bg-bcg text-white flex items-center justify-center text-lg mr-4 shadow-md shrink-0">
+                                            <i className={`fas ${currentSection.icon}`}></i>
+                                        </div>
+                                        {currentSection.title}
+                                    </h2>
+                                    <div className="h-1 w-24 bg-bcg-gold mt-6 rounded-full opacity-80"></div>
                                 </header>
 
                                 {currentSection.isHistory ? (
                                     <UsageHistory user={user} quizScores={quizScores} sections={currentContent.sections} labels={currentContent.labels} />
                                 ) : currentSection.isFeedback ? (
-                                    <div className="space-y-6 animate-fade-in">
-                                        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
-                                            <h3 className="text-lg font-bold text-bcg mb-4">{currentContent.labels.leaveComment}</h3>
-                                            <textarea className="w-full h-32 p-3 border rounded bg-gray-50 dark:bg-gray-900 dark:text-white" disabled placeholder="Coming soon..."></textarea>
+                                    <div className="max-w-2xl mx-auto animate-fade-in">
+                                        <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 text-center">
+                                            <div className="text-bcg text-5xl mb-6 opacity-20"><i className="fas fa-paper-plane"></i></div>
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 brand-serif">{currentContent.labels.leaveComment}</h3>
+                                            <p className="text-gray-500 text-sm mb-6">Your feedback helps us improve the EOT experience.</p>
+                                            <a href="mailto:smlo@ncnu.edu.tw" className="inline-block px-8 py-3 bg-bcg text-white rounded-full font-bold hover:bg-bcg-dark transition-all shadow-lg hover:shadow-xl text-sm tracking-wide">
+                                                {currentContent.labels.sendEmail}
+                                            </a>
                                         </div>
-                                        <a href="mailto:smlo@ncnu.edu.tw" className="block w-full py-3 bg-bcg text-white text-center rounded font-bold hover:bg-bcg-dark">{currentContent.labels.sendEmail}</a>
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 animate-fade-in">
-                                        {/* Left Column */}
-                                        <div className="space-y-8">
-                                            {/* Highlights */}
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 animate-fade-in">
+                                        <div className="lg:col-span-7 space-y-10">
                                             {currentSection.highlights && (
                                                 <section>
-                                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-l-4 border-bcg-gold pl-3">{currentContent.labels.highlights}</h3>
-                                                    <div className="space-y-3">{currentSection.highlights.map((h, i) => <div key={i} className="flex items-start"><span className="w-1.5 h-1.5 mt-2 bg-bcg rounded-full mr-3 shrink-0"></span><p className="text-sm text-gray-700 dark:text-gray-300">{h}</p></div>)}</div>
+                                                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-5">{currentContent.labels.highlights}</h3>
+                                                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border-l-4 border-bcg shadow-sm space-y-4">
+                                                        {currentSection.highlights.map((h, i) => (
+                                                            <div key={i} className="flex items-start">
+                                                                <i className="fas fa-check text-bcg mt-1 mr-3 text-xs"></i>
+                                                                <p className="text-base text-gray-700 dark:text-gray-300 brand-serif leading-relaxed">{h}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
                                                 </section>
                                             )}
-                                            
-                                            {/* Action Plan */}
                                             {currentSection.actionPlan && (
-                                                <section className="bg-bcg-action-bg dark:bg-gray-900 p-6 rounded-lg border border-green-200 dark:border-gray-800 shadow-sm">
-                                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center"><i className="fas fa-tasks text-bcg mr-2"></i> {currentContent.labels.actionPlan}</h3>
-                                                    <ul className="space-y-3">{currentSection.actionPlan.map((a, i) => <li key={i} className="flex items-center text-sm text-gray-800 dark:text-gray-300"><i className="fas fa-check text-green-600 mr-3 text-xs"></i>{a}</li>)}</ul>
+                                                <section>
+                                                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-5">{currentContent.labels.actionPlan}</h3>
+                                                    <div className="bg-bcg-action-bg dark:bg-gray-900 p-6 rounded-lg border border-green-100 dark:border-gray-800">
+                                                        <ul className="space-y-3">
+                                                            {currentSection.actionPlan.map((a, i) => (
+                                                                <li key={i} className="flex items-center text-sm font-medium text-gray-800 dark:text-gray-200">
+                                                                    <span className="w-6 h-6 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-green-600 text-xs mr-3 shadow-sm border border-green-100 dark:border-gray-700">
+                                                                        {i + 1}
+                                                                    </span>
+                                                                    {a}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
                                                 </section>
                                             )}
-
-                                            {/* Keywords & Themes */}
                                             {currentSection.keywords && (
                                                 <section>
-                                                    <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">{currentContent.labels.keywords}</h3>
-                                                    <div className="flex flex-wrap gap-2 mb-8">{currentSection.keywords.map((k, i) => <span key={i} className="px-3 py-1 bg-bcg bg-opacity-10 text-bcg dark:text-bcg-light rounded-full text-xs font-semibold">#{k}</span>)}</div>
+                                                    <div className="flex flex-wrap gap-2 mb-2">
+                                                        {currentSection.keywords.map((k, i) => (
+                                                            <button 
+                                                                key={i} 
+                                                                onClick={() => handleKeywordClick(k)}
+                                                                className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs font-semibold uppercase tracking-wide hover:bg-bcg hover:text-white transition-colors cursor-pointer"
+                                                            >
+                                                                #{k}
+                                                            </button>
+                                                        ))}
+                                                    </div>
                                                     <ThemeExplorer themes={currentSection.themes} label={currentContent.labels.themes} />
                                                 </section>
                                             )}
                                         </div>
-
-                                        {/* Right Column */}
-                                        <div className="space-y-8">
+                                        <div className="lg:col-span-5 space-y-10">
                                             {currentSection.videos ? (
                                                 <section>
-                                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center"><i className="fas fa-play-circle text-bcg mr-2"></i> {currentContent.labels.videos}</h3>
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{currentSection.videos.map((v, i) => <VideoCard key={i} video={v} label={currentContent.labels.watchVideo} />)}</div>
+                                                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-5">{currentContent.labels.videos}</h3>
+                                                    <div className="grid gap-5">{currentSection.videos.map((v, i) => <VideoCard key={i} video={v} label={currentContent.labels.watchVideo} />)}</div>
                                                 </section>
                                             ) : (
                                                 <>
-                                                    {/* Flashcards */}
                                                     {currentSection.flashcards && currentSection.flashcards.length > 0 && (
                                                         <section>
-                                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center"><i className="fas fa-layer-group text-bcg mr-2"></i> {currentContent.labels.flashcards}</h3>
-                                                            <div className="grid grid-cols-1 gap-4">{currentSection.flashcards.map((f, i) => <Flashcard key={i} front={f.front} back={f.back} />)}</div>
+                                                            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-5">{currentContent.labels.flashcards}</h3>
+                                                            {/* RWD Grid for Flashcards */}
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">{currentSection.flashcards.map((f, i) => <Flashcard key={i} front={f.front} back={f.back} />)}</div>
                                                         </section>
                                                     )}
-                                                    
-                                                    {/* Quiz */}
                                                     {currentSection.quiz && currentSection.quiz.length > 0 && (
                                                         <section>
-                                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center"><i className="fas fa-check-square text-bcg mr-2"></i> {currentContent.labels.quiz}</h3>
+                                                            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-5">{currentContent.labels.quiz}</h3>
                                                             <SelfCheck questions={currentSection.quiz} answers={quizScores[currentSection.id] || {}} onAnswer={(qIdx, score) => handleQuizAnswer(currentSection.id, qIdx, score)} labels={currentContent.labels} />
                                                         </section>
                                                     )}
@@ -950,26 +1062,36 @@
                                     </div>
                                 )}
 
-                                <footer className="mt-auto border-t border-gray-200 dark:border-gray-800 pt-8 pb-4">
-                                    <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                                        <div className="w-full md:w-1/2">
-                                            <label className="block text-xs font-bold text-gray-400 uppercase mb-1">{currentContent.meta.glossary}</label>
-                                            <select className="w-full p-2 bg-white dark:bg-gray-800 border rounded text-sm text-gray-700 dark:text-gray-300 focus:border-bcg outline-none" onChange={(e) => setGlossaryTerm(e.target.value)} value={glossaryTerm}>
-                                                <option value="">Select...</option>
-                                                {glossaryKeys.map((g, i) => <option key={i} value={g.d}>{g.t}</option>)}
-                                            </select>
-                                            {glossaryTerm && <div className="mt-2 p-3 bg-blue-50 dark:bg-gray-900 text-blue-900 dark:text-blue-200 text-sm rounded border-l-4 border-blue-500 animate-fade-in">{glossaryTerm}</div>}
+                                <footer ref={footerRef} className="mt-20 border-t border-gray-100 dark:border-gray-800 pt-10">
+                                    <div className="flex flex-col md:flex-row justify-between items-start gap-10">
+                                        <div className="w-full md:w-2/3">
+                                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{currentContent.meta.glossary}</label>
+                                            <div className="relative">
+                                                <select 
+                                                    className="w-full p-4 pl-12 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-bcg outline-none appearance-none shadow-sm cursor-pointer brand-serif" 
+                                                    onChange={(e) => setSelectedGlossaryKey(e.target.value)} 
+                                                    value={selectedGlossaryKey}
+                                                >
+                                                    <option value="">{currentContent.meta.glossaryPrompt}</option>
+                                                    {displayGlossary.map((g, i) => <option key={i} value={g.key}>{g.t}</option>)}
+                                                </select>
+                                                <i className="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                            </div>
+                                            {currentGlossaryDefinition && (
+                                                <div className="mt-4 p-5 bg-bcg bg-opacity-5 rounded-lg border-l-4 border-bcg text-bcg-dark dark:text-bcg-light text-sm brand-serif leading-relaxed animate-fade-in shadow-sm">
+                                                    {currentGlossaryDefinition}
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="flex space-x-4">
-                                            <button onClick={() => {setActiveSection(Math.max(0, activeSection - 1)); window.scrollTo(0,0);}} disabled={activeSection===0} className={`w-10 h-10 rounded-full flex items-center justify-center ${activeSection===0 ? 'bg-gray-200 text-gray-400' : 'bg-bcg text-white hover:bg-bcg-dark shadow-lg'}`}><i className="fas fa-arrow-left"></i></button>
-                                            <button onClick={() => {setActiveSection(Math.min(currentContent.sections.length-1, activeSection + 1)); window.scrollTo(0,0);}} disabled={activeSection===currentContent.sections.length-1} className={`w-10 h-10 rounded-full flex items-center justify-center ${activeSection===currentContent.sections.length-1 ? 'bg-gray-200 text-gray-400' : 'bg-bcg text-white hover:bg-bcg-dark shadow-lg'}`}><i className="fas fa-arrow-right"></i></button>
+                                        <div className="flex space-x-4 pt-8">
+                                            <button onClick={() => {setActiveSection(Math.max(0, activeSection - 1)); window.scrollTo(0,0);}} disabled={activeSection===0} className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${activeSection===0 ? 'bg-gray-100 text-gray-300' : 'bg-white text-bcg border border-gray-200 hover:border-bcg hover:bg-bcg hover:text-white shadow-md'}`}><i className="fas fa-arrow-left"></i></button>
+                                            <button onClick={() => {setActiveSection(Math.min(currentContent.sections.length-1, activeSection + 1)); window.scrollTo(0,0);}} disabled={activeSection===currentContent.sections.length-1} className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${activeSection===currentContent.sections.length-1 ? 'bg-gray-100 text-gray-300' : 'bg-bcg text-white hover:bg-bcg-dark shadow-md hover:shadow-lg'}`}><i className="fas fa-arrow-right"></i></button>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col md:flex-row justify-center items-center mt-10 text-xs text-gray-400 space-y-2 md:space-y-0 md:space-x-6 border-t border-gray-200 dark:border-gray-800 pt-6">
-                                        <span>{currentContent.meta.copyright}</span>
-                                        <span>Version: 2025/12/12</span>
-                                        <div className="flex space-x-4">
-                                            <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition">Creator: Prof. Shihmin Lo, PhD</a>
+                                    <div className="flex flex-col md:flex-row justify-between items-center mt-12 text-[10px] text-gray-400 border-t border-gray-50 dark:border-gray-800 pt-6 font-sans">
+                                        <span className="mb-2 md:mb-0">{currentContent.meta.copyright}</span>
+                                        <div className="flex space-x-6 tracking-wide uppercase">
+                                            <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" className="hover:text-bcg transition">Creator: Prof. Shihmin Lo</a>
                                             <a href="https://www.ibs.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">IBS</a>
                                             <a href="https://rpage.ncnu.edu.tw/" target="_blank" className="hover:text-bcg transition">NCNU</a>
                                         </div>
