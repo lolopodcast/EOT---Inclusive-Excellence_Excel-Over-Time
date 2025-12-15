@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EOT - Excel Over Time</title>
+    <title>EOT - 共融卓越, 不斷成長</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -96,7 +96,7 @@
 
         const identities = [
             "高中師生 (High School Teachers/Students)",
-            "大學師生 (University Professors/Students)", // Updated
+            "大學師生 (University Professors/Students)",
             "大學行政 (University Administration)",
             "學生家長 (Parents)",
             "校友系友 (Alumni)",
@@ -110,7 +110,7 @@
             { k: "Inclusive Excellence", alt: ["共融性卓越", "多元共融", "Diversity & Inclusion"], tc: "相信多元性、共融性與卓越密不可分。真正的卓越必須建立在讓所有背景的學生都能「歸屬、成長、貢獻」的基礎上。", eng: "Belief that diversity, inclusion, and excellence are inseparable. True excellence is built on allowing students of all backgrounds to belong, grow, and contribute." },
             { k: "Groundskeeper", alt: ["園丁", "園丁精神"], tc: "暨大看待自己的角色。不是用高牆篩選，而是創造適合不同「植物」生長的環境。", eng: "NCNU's role. Not screening with high walls, but creating an environment suitable for different 'plants' to grow." },
             { k: "Gatekeeper", alt: ["守門員"], tc: "傳統大學角色，用高牆把人擋在外面，只讓「最好的」進來。", eng: "Traditional university role, keeping people out with high walls, only letting the 'best' in." },
-            { k: "EOT", alt: ["Excel Over Time"], tc: "暨大的核心理念。強調的不是你從哪裡出發(起點)，而是你如何持續成長(過程)。", eng: "NCNU's core philosophy. Emphasizing not where you start, but how you continue to grow." },
+            { k: "EOT", alt: ["Excel Over Time", "共融卓越, 不斷成長"], tc: "暨大的核心理念。強調的不是你從哪裡出發(起點)，而是你如何持續成長(過程)。", eng: "NCNU's core philosophy. Emphasizing not where you start, but how you continue to grow." },
             
             // Vision & Values
             { k: "Vision", alt: ["願景"], tc: "成為一所讓每個人都能找到成長土壤的大學，不以起點論英雄。", eng: "To be a university where everyone finds soil to grow, judging not by starting points." },
@@ -143,13 +143,12 @@
 
         // --- 2. Content Data Structures ---
 
-        // Fully Translated TC Content
         const baseContentTC = {
             meta: { 
                 title: "EOT", 
-                slogan: "Excel Over Time", 
+                slogan: "共融卓越, 不斷成長", // Updated
                 valueProp: "Inclusive excellence, excelling over time.",
-                gateway: "Your Gateway to the University",
+                gateway: "開啟大學學習 YOUR GATEWAY TO THE UNIVERSITY", // Updated
                 nav: "導覽目錄", 
                 glossary: "術語表 (Glossary)", 
                 copyright: "版權所有 © 2025 EOT - Excel Over Time. 保留所有權利。",
@@ -188,7 +187,7 @@
                     id: 0, title: "關鍵重點摘要", icon: "fa-star",
                     highlights: ["核心信念：多元是卓越的必要條件。", "關鍵轉型：從守門員 (Gatekeeper) 到園丁 (Groundskeeper)。", "實踐 EOT：卓越是持續成長的過程。"], 
                     actionPlan: ["推動兩階段協作招生。", "建立榮譽學程與支持系統。", "落實五年推動藍圖。"], 
-                    keywords: ["共融性卓越", "園丁", "EOT"], // Translated
+                    keywords: ["共融性卓越", "園丁", "EOT"],
                     themes: [
                         { title: "我們的核心信念", subThemes: [{title: "信念內容", content: "多元不是卓越的附屬品，而是卓越的必要條件。"}] },
                         { title: "EOT - Excel Over Time", subThemes: [{title: "定義", content: "重點不是你從哪裡出發，而是你如何持續成長。"}] }
@@ -206,12 +205,13 @@
                     id: 1, title: "願景與價值觀", icon: "fa-eye",
                     highlights: ["Groundskeeper：創造讓每個人綻放的土壤。", "EOT：重點不是起點，而是如何持續成長。", "多元價值：不同背景帶來創新與同理心。"], 
                     actionPlan: ["發布共融性卓越白皮書。", "建立以資產為導向的校園文化。", "消除「降低標準」的誤解。"], 
-                    keywords: ["願景", "價值觀", "多元共融"], // Translated
+                    keywords: ["願景", "價值觀", "多元共融"],
                     themes: [
                         { title: "園丁 vs 守門員", subThemes: [{title: "守門員", content: "目標是「拒絕多少人」"}, {title: "園丁", content: "目標是「讓每個人綻放」"}] }
                     ],
                     flashcards: [
-                        { front: "一般想法：分數高就是優秀", back: "IE觀點：成長幅度多大？在什麼條件下達到這分數？" }
+                        { front: "一般想法：分數高就是優秀", back: "IE觀點：成長幅度多大？在什麼條件下達到這分數？" },
+                        { front: "Diversity (多元)", back: "不只是數字，而是豐富的觀點與生命經驗。" } // Added to make 2
                     ],
                     quiz: [
                         { q: "我相信卓越是一個過程，而非僅是起點" },
@@ -222,7 +222,7 @@
                     id: 2, title: "暨大這所大學", icon: "fa-university",
                     highlights: ["山中大學：150公頃最美校園，專注學習。", "文化多元：僑外生20%+，校園即小聯合國。", "社區連結：USR深耕25年，知識走出象牙塔。"], 
                     actionPlan: ["利用地理優勢專注思考。", "每日練習跨文化溝通。", "參與真實社區專案。"], 
-                    keywords: ["暨大特色", "國際化", "在地實踐"], // Translated
+                    keywords: ["暨大特色", "國際化", "在地實踐"],
                     themes: [
                         { title: "地理優勢", subThemes: [{title: "環境", content: "有山有湖，隨處可見自然生態"}] },
                         { title: "文化多元", subThemes: [{title: "組成", content: "僑外生20%+，原住民專班，新住民二代"}] }
@@ -241,13 +241,14 @@
                     id: 3, title: "看見你的價值", icon: "fa-gem",
                     highlights: ["兩階段機制：招生辦看脈絡，教授看潛力。", "資產觀點：看見逆境中的韌性與文化資本。", "關注特質：你的故事、動機與未來潛力。"], 
                     actionPlan: ["檢核學生起跑點資源。", "發掘成長軌跡與特質。", "評估對校園的獨特貢獻。"], 
-                    keywords: ["情境化審查", "成長軌跡", "文化資本"], // Translated
+                    keywords: ["情境化審查", "成長軌跡", "文化資本"],
                     themes: [
                         { title: "階段一：多元背景", subThemes: [{title: "目的", content: "理解每個學生的起跑點與成長脈絡"}] },
                         { title: "階段二：卓越潛力", subThemes: [{title: "重點", content: "動機、學習熱情與未來潛力"}] }
                     ],
                     flashcards: [
-                        { front: "疑問：新住民二代/偏鄉生是弱勢嗎？", back: "資產觀點：他們擁有雙語能力、在地知識、問題解決韌性等獨特優勢。" }
+                        { front: "疑問：新住民二代/偏鄉生是弱勢嗎？", back: "資產觀點：他們擁有雙語能力、在地知識、問題解決韌性等獨特優勢。" },
+                        { front: "擔心：沒有亮麗的活動經歷？", back: "價值：我們看重你在有限資源下展現的「成長軌跡」與「動機」。" } // Added to make 2
                     ],
                     quiz: [
                         { q: "我有想分享的獨特成長故事" },
@@ -259,7 +260,7 @@
                     id: 4, title: "帶你成長卓越", icon: "fa-chart-line",
                     highlights: ["榮譽學程：Input+Output，優秀轉化為影響力。", "學習支持：差異化協助，確保成功。", "數位賦能：打破地理限制，與世界同步。"], 
                     actionPlan: ["參與18學分榮譽學程。", "利用Tutor與寫作中心資源。", "連結國際與產學實習。"], 
-                    keywords: ["榮譽學程", "學習支持", "數位賦能"], // Translated
+                    keywords: ["榮譽學程", "學習支持", "數位賦能"],
                     themes: [
                         { title: "榮譽學程", subThemes: [{title: "模組", content: "AI素養、EMI溝通、同儕輔導、社會實踐"}] },
                         { title: "數位賦能", subThemes: [{title: "設施", content: "高速網路、AI工具、雲端協作、全球連結"}] }
@@ -278,11 +279,14 @@
                     id: 5, title: "暨大實踐藍圖", icon: "fa-map",
                     highlights: ["分階段推動：試點 -> 擴大 -> 驗證。", "數據校準：追蹤留存率、畢業率與就業表現。", "目標：建立可複製的共融卓越模式。"], 
                     actionPlan: ["成立IE推動辦公室。", "建立數據儀表板。", "進行第三方成效評估。"], 
-                    keywords: ["策略藍圖", "數據追蹤", "成效評估"], // Translated
+                    keywords: ["策略藍圖", "數據追蹤", "成效評估"],
                     themes: [
                         { title: "推動時程", subThemes: [{title: "五年計畫", content: "建立測試 -> 擴大優化 -> 驗證校準"}] }
                     ],
-                    flashcards: [],
+                    flashcards: [
+                        { front: "試點期 (Pilot Phase)", back: "第1-2年：成立推動辦公室，建立榮譽學程與支持機制。" }, // Added
+                        { front: "擴大期 (Expansion Phase)", back: "第3-4年：擴大至各學院，建立數據追蹤儀表板。" } // Added
+                    ],
                     quiz: [
                         { q: "我理解學校有長期的支持規劃" },
                         { q: "我願意參與學校的成效追蹤" }
@@ -292,12 +296,13 @@
                     id: 6, title: "師生家長放心", icon: "fa-hand-holding-heart",
                     highlights: ["品質保證：畢業標準不變，提供更多支持。", "就業優勢：跨文化協作與問題解決力最搶手。", "軟實力：AI時代最需要的核心競爭力。"], 
                     actionPlan: ["提供差異化學習支持。", "連結全球數位學習資源。", "培養有溫度的專業人。"], 
-                    keywords: ["品質保證", "就業競爭力", "家長放心"], // Translated
+                    keywords: ["品質保證", "就業競爭力", "家長放心"],
                     themes: [
                         { title: "IE理念釋疑", subThemes: [{title: "不降標準", content: "畢業要求不變，提供差異化支持幫助達標"}] }
                     ],
                     flashcards: [
-                        { front: "擔心：多元入學會降低品質", back: "事實：畢業標準相同，我們提供差異化支持幫助達標。" }
+                        { front: "擔心：多元入學會降低品質", back: "事實：畢業標準相同，我們提供差異化支持幫助達標。" },
+                        { front: "就業優勢 (Career Edge)", back: "企業需要具備跨文化溝通與問題解決能力的「有溫度」人才。" } // Added to make 2
                     ],
                     quiz: [
                         { q: "我認同IE理念：重視過程與成長" },
@@ -309,21 +314,21 @@
                     id: 7, title: "精選短片", icon: "fa-video",
                     highlights: ["收錄職涯與產業趨勢講座。", "EMI 實境與數位教材。", "大一須知與轉型案例。"], 
                     actionPlan: ["觀看「看見世界」反思定位。", "熟悉全英語環境。", "學習數位課程設計。"], 
-                    keywords: ["職涯發展", "EMI教學", "數位轉型"], // Translated
+                    keywords: ["職涯發展", "EMI教學", "數位轉型"],
                     themes: [], flashcards: [], quiz: [], videos: videoList 
                 },
                 { 
                     id: 8, title: "使用歷程", icon: "fa-tachometer-alt",
                     highlights: ["檢視個人登入資訊。", "追蹤測驗積分與狀態。", "分析學習成效。"], 
                     actionPlan: ["定期檢查完成度。", "針對紅色項目複習。"], 
-                    keywords: ["學習分析", "進度追蹤", "使用者"], // Translated
+                    keywords: ["學習分析", "進度追蹤", "使用者"],
                     themes: [], flashcards: [], quiz: [], isHistory: true 
                 },
                 { 
                     id: 9, title: "歡迎聯絡", icon: "fa-envelope",
                     highlights: ["提供寶貴意見。", "直接聯繫計畫主持人。", "參與共創討論。"], 
                     actionPlan: ["填寫回饋表單。", "發送電子郵件。"], 
-                    keywords: ["回饋循環", "溝通", "共創"], // Translated
+                    keywords: ["回饋循環", "溝通", "共創"],
                     themes: [], flashcards: [], quiz: [], isFeedback: true 
                 }
             ]
@@ -332,9 +337,9 @@
         const baseContentENG = {
             meta: { 
                 title: "EOT", 
-                slogan: "Excel Over Time", 
+                slogan: "共融卓越, 不斷成長", // Updated
                 valueProp: "Inclusive excellence, excelling over time.",
-                gateway: "Your Gateway to the University",
+                gateway: "開啟大學學習 YOUR GATEWAY TO THE UNIVERSITY", // Updated
                 nav: "Navigation", 
                 glossary: "Glossary", 
                 copyright: "Copyright © 2025 EOT - Excel Over Time. All Rights Reserved.",
@@ -395,7 +400,8 @@
                         { title: "Groundskeeper vs Gatekeeper", subThemes: [{title: "Gatekeeper", content: "Rejection focused"}, {title: "Groundskeeper", content: "Growth focused"}] }
                     ],
                     flashcards: [
-                        { front: "Idea: High scores = Excellence", back: "IE View: Growth & Context matter more." }
+                        { front: "Idea: High scores = Excellence", back: "IE View: Growth & Context matter more." },
+                        { front: "Diversity", back: "Not just numbers, but the richness of perspectives." }
                     ],
                     quiz: [
                         { q: "I believe excellence is a process." },
@@ -429,7 +435,8 @@
                         { title: "Stage 2: Potential", subThemes: [{title: "Future", content: "Contribution & Perspective."}] }
                     ],
                     flashcards: [
-                        { front: "Doubt: Rural students disadvantaged?", back: "Asset: Resilience & local knowledge." }
+                        { front: "Doubt: Rural students disadvantaged?", back: "Asset: Resilience & local knowledge." },
+                        { front: "Worry: No flashy activities?", back: "Value: We look at your 'growth trajectory' and 'motivation' under limited resources." }
                     ],
                     quiz: [
                         { q: "I have a unique growth story." },
@@ -463,7 +470,10 @@
                     themes: [
                         { title: "Timeline", subThemes: [{title: "5 Years", content: "Test, Expand, Verify."}] }
                     ],
-                    flashcards: [],
+                    flashcards: [
+                        { front: "Pilot Phase", back: "Year 1-2: Establish office and mechanisms." },
+                        { front: "Expansion Phase", back: "Year 3-4: Scale up and track data." }
+                    ],
                     quiz: [
                         { q: "I understand the long-term plan." },
                         { q: "I will participate in tracking." }
@@ -478,7 +488,8 @@
                         { title: "Clarification", subThemes: [{title: "Standards", content: "Same requirements, more support."}] }
                     ],
                     flashcards: [
-                        { front: "Worry: Lower quality?", back: "Fact: Same standards, better support." }
+                        { front: "Worry: Lower quality?", back: "Fact: Same standards, better support." },
+                        { front: "Career Edge", back: "Employers need 'warm' talents with soft skills." }
                     ],
                     quiz: [
                         { q: "I agree with focusing on growth." },
@@ -517,15 +528,19 @@
 
         // --- 3. Components ---
 
-        const BrandLogo = ({ showSlogan = true }) => (
-            <div className="flex items-start">
+        const BrandLogo = ({ showSlogan = true, onClick }) => (
+            <div 
+                className={`flex items-start ${onClick ? 'cursor-pointer' : ''}`} 
+                onClick={onClick}
+                title={onClick ? "Back to Top" : ""}
+            >
                 <div className="w-12 h-12 bg-bcg flex items-center justify-center rounded-lg mr-3 shrink-0 border border-bcg border-opacity-10 shadow-sm">
                     <span className="text-white brand-serif font-bold text-lg tracking-wide">EOT</span>
                 </div>
                 {showSlogan && (
                     <div className="flex flex-col justify-center h-12">
                         <span className="text-bcg brand-serif font-bold text-sm md:text-base leading-none mb-1 tracking-wide">
-                            Excel Over Time
+                            共融卓越, 不斷成長
                         </span>
                         <span className="text-bcg-light brand-serif text-[10px] md:text-xs leading-none font-medium opacity-90 italic">
                             Inclusive excellence, excelling over time
@@ -748,22 +763,20 @@
                             </div>
                         </div>
                         <div className="bg-white dark:bg-gray-900 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-gray-100 dark:border-gray-800 rounded-xl">
-                            <form onSubmit={(e) => { e.preventDefault(); if(email) onLogin({ email, name, identity, loginTime: new Date() }); }} className="space-y-5">
+                            <form onSubmit={(e) => { e.preventDefault(); if(name) onLogin({ email, name, identity, loginTime: new Date() }); }} className="space-y-5">
                                 <div>
-                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">E-mail (Required)</label>
-                                    <input type="email" required className="w-full p-3 border-b-2 border-gray-200 focus:border-bcg outline-none bg-transparent transition-colors brand-serif" placeholder="visitor@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">NAME (REQUIRED)</label>
+                                    <input type="text" required className="w-full p-3 border-b-2 border-gray-200 focus:border-bcg outline-none bg-transparent transition-colors brand-serif" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
                                 </div>
-                                <div className="grid grid-cols-1 gap-5">
-                                    <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Name (Optional)</label>
-                                        <input type="text" className="w-full p-3 border-b-2 border-gray-200 focus:border-bcg outline-none bg-transparent transition-colors brand-serif" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
-                                    </div>
-                                    <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Identity (Optional)</label>
-                                        <select className="w-full p-3 border-b-2 border-gray-200 focus:border-bcg outline-none bg-transparent brand-serif text-sm" value={identity} onChange={(e) => setIdentity(e.target.value)}>
-                                            {identities.map(id => <option key={id} value={id}>{id}</option>)}
-                                        </select>
-                                    </div>
+                                <div>
+                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">E-MAIL (OPTIONAL)</label>
+                                    <input type="email" className="w-full p-3 border-b-2 border-gray-200 focus:border-bcg outline-none bg-transparent transition-colors brand-serif" placeholder="visitor@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Identity (Optional)</label>
+                                    <select className="w-full p-3 border-b-2 border-gray-200 focus:border-bcg outline-none bg-transparent brand-serif text-sm" value={identity} onChange={(e) => setIdentity(e.target.value)}>
+                                        {identities.map(id => <option key={id} value={id}>{id}</option>)}
+                                    </select>
                                 </div>
                                 <button type="submit" className="w-full bg-bcg hover:bg-bcg-dark text-white font-bold py-4 rounded shadow-lg hover:shadow-xl transition-all mt-6 uppercase tracking-widest text-xs">Login</button>
                             </form>
@@ -781,6 +794,7 @@
             return (
                 <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center p-6 animate-fade-in">
                     <div className="max-w-lg w-full text-center">
+                        <p className="text-xs text-gray-400 font-bold tracking-[0.2em] uppercase mb-6">{texts.gateway}</p>
                         <div className="mb-12 transform scale-125 flex justify-center">
                             <BrandLogo showSlogan={true} />
                         </div>
@@ -881,6 +895,11 @@
                 setSelectedGlossaryKey("");
             };
 
+            const scrollToTop = () => {
+                window.scrollTo(0,0);
+                if(mainContentRef.current) mainContentRef.current.scrollTop = 0;
+            };
+
             // Keyword Click Handler
             const handleKeywordClick = (keyword) => {
                 // Find matching glossary key (fuzzy match or direct match)
@@ -913,7 +932,7 @@
                             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-500 hover:text-bcg focus:outline-none transition-colors">
                                 <i className={`fas fa-bars-staggered text-xl`}></i>
                             </button>
-                            <BrandLogo />
+                            <BrandLogo onClick={scrollToTop} />
                         </div>
 
                         <div className="flex items-center gap-6">
@@ -963,12 +982,31 @@
                             <div className="max-w-5xl mx-auto p-8 md:p-16 pb-32">
                                 <header className="mb-12">
                                     <span className="text-gray-400 font-bold tracking-[0.2em] text-[10px] uppercase mb-3 block">{currentContent.meta.gateway}</span>
-                                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight brand-serif flex items-center">
-                                        <div className="w-10 h-10 rounded-full bg-bcg text-white flex items-center justify-center text-lg mr-4 shadow-md shrink-0">
-                                            <i className={`fas ${currentSection.icon}`}></i>
+                                    <div className="flex justify-between items-center">
+                                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight brand-serif flex items-center">
+                                            <div className="w-10 h-10 rounded-full bg-bcg text-white flex items-center justify-center text-lg mr-4 shadow-md shrink-0">
+                                                <i className={`fas ${currentSection.icon}`}></i>
+                                            </div>
+                                            {currentSection.title}
+                                        </h2>
+                                        {/* Nav Arrows */}
+                                        <div className="flex space-x-2 shrink-0 ml-4">
+                                            <button 
+                                                onClick={() => {setActiveSection(Math.max(0, activeSection - 1)); window.scrollTo(0,0);}} 
+                                                disabled={activeSection===0} 
+                                                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${activeSection===0 ? 'bg-gray-100 text-gray-300' : 'bg-white text-bcg border border-gray-200 hover:bg-bcg hover:text-white shadow-sm'}`}
+                                            >
+                                                <i className="fas fa-arrow-left text-xs"></i>
+                                            </button>
+                                            <button 
+                                                onClick={() => {setActiveSection(Math.min(currentContent.sections.length-1, activeSection + 1)); window.scrollTo(0,0);}} 
+                                                disabled={activeSection===currentContent.sections.length-1} 
+                                                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${activeSection===currentContent.sections.length-1 ? 'bg-gray-100 text-gray-300' : 'bg-bcg text-white hover:bg-bcg-dark shadow-sm'}`}
+                                            >
+                                                <i className="fas fa-arrow-right text-xs"></i>
+                                            </button>
                                         </div>
-                                        {currentSection.title}
-                                    </h2>
+                                    </div>
                                     <div className="h-1 w-24 bg-bcg-gold mt-6 rounded-full opacity-80"></div>
                                 </header>
 
